@@ -299,16 +299,16 @@ body.modal-open .cursor, body.modal-open .cursor-ring{display:none !important;}
 body.modal-open{cursor:auto !important;}
 </style>
 </head>
-<body>
+<body class="edit-mode modal-open">
 
 <!-- ── CURSORS ── -->
-<div class="cursor" id="cursor" style="left: 1155px; top: 4px; transform: translate(-50%, -50%) scale(1); background: var(--cyan);"></div>
-<div class="cursor-ring" id="cursorRing" style="left: 1155px; top: 4px; width: 36px; height: 36px;"></div>
+<div class="cursor" id="cursor" style="left: 973px; top: 660px; transform: translate(-50%, -50%) scale(1); background: var(--cyan);"></div>
+<div class="cursor-ring" id="cursorRing" style="left: 973.006px; top: 659.989px; width: 36px; height: 36px;"></div>
 
 <!-- ══════════════════════════════
      PASSWORD MODAL (login)
 ══════════════════════════════ -->
-<div id="pw-overlay">
+<div id="pw-overlay" class="">
   <div id="pw-box">
     <span class="pw-tag">// ACCESS CONTROL</span>
     <div class="pw-title">编辑模式 · 验证</div>
@@ -352,10 +352,10 @@ body.modal-open{cursor:auto !important;}
 </div>
 
 <!-- ── EDIT TOGGLE ── -->
-<button id="edit-toggle" onclick="openPwModal()">🔒 编辑内容</button>
+<button id="edit-toggle" onclick="openPwModal()">✏ 编辑中</button>
 
 <!-- ── EDIT TOOLBAR ── -->
-<div id="edit-toolbar">
+<div id="edit-toolbar" style="display: flex;">
   <span class="tb-label">// 编辑模式</span>
   <div class="tb-sep"></div>
   <span class="tb-hint">⠿ 拖动排序 · 点击文字修改</span>
@@ -369,7 +369,7 @@ body.modal-open{cursor:auto !important;}
 <div id="save-toast">// 已保存为 index.html</div>
 
 <!-- ── GITHUB PUSH MODAL ── -->
-<div id="gh-overlay">
+<div id="gh-overlay" class="show">
   <div id="gh-box">
     <span class="gh-tag">// GITHUB DEPLOY</span>
     <div class="gh-title">推送到 GitHub</div>
@@ -390,15 +390,15 @@ body.modal-open{cursor:auto !important;}
       <label>PERSONAL ACCESS TOKEN</label>
       <input id="gh-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxx" autocomplete="off">
     </div>
-    <button id="gh-push-btn" onclick="pushToGithub()">⬆ 立即推送</button>
+    <button id="gh-push-btn" onclick="pushToGithub()" disabled="">⬆ 立即推送</button>
     <button id="gh-cancel-btn" onclick="closeGhModal()">取消</button>
-    <div id="gh-log"></div>
+    <div id="gh-log" class="show"><div class="log-spin">⟳ 正在生成网页内容...</div></div>
   </div>
 </div>
 
 <!-- ── NAV ── -->
 <nav>
-  <a class="nav-logo" href="/">_<span>DEV</span>.LOG</a>
+  <a class="nav-logo" href="/" contenteditable="true" spellcheck="false">_<span contenteditable="true" spellcheck="false">DEV</span>.LOG</a>
   <div class="nav-links">
     <a href="/blog/">博客</a>
     <a href="/works/">项目</a>
@@ -410,12 +410,12 @@ body.modal-open{cursor:auto !important;}
 
 <!-- ── HERO ── -->
 <section id="hero">
-  <div class="hero-tag">// INDEPENDENT DEVELOPER · GAME MAKER · CREATOR</div>
+  <div class="hero-tag" contenteditable="true" spellcheck="false">// INDEPENDENT DEVELOPER · GAME MAKER · CREATOR</div>
   <h1 class="hero-name">
     <span class="glitch-wrap" data-text="HELLO,">HELLO,</span>
-    <span class="line2">WORLD.</span>
+    <span class="line2" contenteditable="true" spellcheck="false">WORLD.</span>
   </h1>
-  <p id="hero-sub" class="hero-sub">独立开发者 · 卡牌游戏制作中<br><span class="hl">明日方舟</span> 开服老玩家 · 同人创作者<br>代码 / 像素 / 故事</p>
+  <p id="hero-sub" class="hero-sub" contenteditable="true" spellcheck="false">独立开发者 · 卡牌游戏制作中<br><span class="hl" contenteditable="true" spellcheck="false">明日方舟</span> 开服老玩家 · 同人创作者<br>代码 / 像素 / 故事</p>
   <div class="hero-btns">
     <a href="#sec-projects" class="btn-primary">查看项目</a>
     <a href="#sec-blog" class="btn-sec">最新文章</a>
@@ -434,32 +434,32 @@ body.modal-open{cursor:auto !important;}
   </div>
   <div class="sec-header">
     <span class="sec-num">01</span>
-    <h2 class="sec-title">游戏开发</h2>
+    <h2 class="sec-title" contenteditable="true" spellcheck="false">游戏开发</h2>
     <div class="sec-line"></div>
   </div>
   <div class="projects-grid">
     <div class="proj-card">
       <div class="card-controls"><div class="card-drag-handle">⠿⠿</div><button class="card-delete" onclick="this.closest('.proj-card').remove()">✕</button></div>
-      <div class="proj-tag">// IN PROGRESS</div>
-      <div class="proj-name">卡牌 DEMO</div>
-      <div class="proj-desc">受《杀戮尖塔》启发的独立卡牌 Roguelike。探索卡组构建与随机性的平衡边界。</div>
-      <div class="proj-meta"><span class="tag">ROGUELIKE</span><span class="tag">CARD GAME</span><span class="tag">INDIE</span></div>
+      <div class="proj-tag" contenteditable="true" spellcheck="false">// IN PROGRESS</div>
+      <div class="proj-name" contenteditable="true" spellcheck="false">卡牌 DEMO</div>
+      <div class="proj-desc" contenteditable="true" spellcheck="false">受《杀戮尖塔》启发的独立卡牌 Roguelike。探索卡组构建与随机性的平衡边界。</div>
+      <div class="proj-meta"><span class="tag" contenteditable="true" spellcheck="false">ROGUELIKE</span><span class="tag" contenteditable="true" spellcheck="false">CARD GAME</span><span class="tag" contenteditable="true" spellcheck="false">INDIE</span></div>
       <div class="proj-link-row"><input class="proj-link-input" type="url" placeholder="项目链接 https://..."></div>
     </div>
     <div class="proj-card">
       <div class="card-controls"><div class="card-drag-handle">⠿⠿</div><button class="card-delete" onclick="this.closest('.proj-card').remove()">✕</button></div>
-      <div class="proj-tag">// PROTOTYPE</div>
-      <div class="proj-name">项目 · 占位</div>
-      <div class="proj-desc">在这里添加你的下一个游戏项目，或者过去的作品展示。</div>
-      <div class="proj-meta"><span class="tag">GAME</span><span class="tag">UNITY</span></div>
+      <div class="proj-tag" contenteditable="true" spellcheck="false">// PROTOTYPE</div>
+      <div class="proj-name" contenteditable="true" spellcheck="false">项目 · 占位</div>
+      <div class="proj-desc" contenteditable="true" spellcheck="false">在这里添加你的下一个游戏项目，或者过去的作品展示。</div>
+      <div class="proj-meta"><span class="tag" contenteditable="true" spellcheck="false">GAME</span><span class="tag" contenteditable="true" spellcheck="false">UNITY</span></div>
       <div class="proj-link-row"><input class="proj-link-input" type="url" placeholder="项目链接 https://..."></div>
     </div>
     <div class="proj-card">
       <div class="card-controls"><div class="card-drag-handle">⠿⠿</div><button class="card-delete" onclick="this.closest('.proj-card').remove()">✕</button></div>
-      <div class="proj-tag">// ARCHIVE</div>
-      <div class="proj-name">项目 · 占位</div>
-      <div class="proj-desc">Game jam 作品、练习项目或实验性 demo 都可以放这里。</div>
-      <div class="proj-meta"><span class="tag">JAM</span><span class="tag">EXPERIMENT</span></div>
+      <div class="proj-tag" contenteditable="true" spellcheck="false">// ARCHIVE</div>
+      <div class="proj-name" contenteditable="true" spellcheck="false">项目 · 占位</div>
+      <div class="proj-desc" contenteditable="true" spellcheck="false">Game jam 作品、练习项目或实验性 demo 都可以放这里。</div>
+      <div class="proj-meta"><span class="tag" contenteditable="true" spellcheck="false">JAM</span><span class="tag" contenteditable="true" spellcheck="false">EXPERIMENT</span></div>
       <div class="proj-link-row"><input class="proj-link-input" type="url" placeholder="项目链接 https://..."></div>
     </div>
     <button class="add-card-btn" onclick="addProject(this)">＋ 添加项目</button>
@@ -473,14 +473,14 @@ body.modal-open{cursor:auto !important;}
   </div>
   <div class="sec-header">
     <span class="sec-num">02</span>
-    <h2 class="sec-title">技术博客</h2>
+    <h2 class="sec-title" contenteditable="true" spellcheck="false">技术博客</h2>
     <div class="sec-line"></div>
   </div>
   <div class="posts-list">
-    <div class="post-item"><span class="post-drag-handle">⠿</span><span class="post-date">2025.04.01</span><span class="post-cat">游戏设计</span><span class="post-title">杀戮尖塔核心玩法拆解：有限资源下的决策美学</span><input class="post-url-input" type="url" placeholder="文章链接..."><a class="post-arrow" href="#">→</a><button class="post-delete" onclick="this.closest('.post-item').remove()">✕</button></div>
-    <div class="post-item"><span class="post-drag-handle">⠿</span><span class="post-date">2025.03.18</span><span class="post-cat">开发日志</span><span class="post-title">从零开始做卡牌游戏 #01：战斗系统的第一次迭代</span><input class="post-url-input" type="url" placeholder="文章链接..."><a class="post-arrow" href="#">→</a><button class="post-delete" onclick="this.closest('.post-item').remove()">✕</button></div>
-    <div class="post-item"><span class="post-drag-handle">⠿</span><span class="post-date">2025.03.05</span><span class="post-cat">数据分析</span><span class="post-title">用数据视角看二次元游戏留存：以明日方舟为例</span><input class="post-url-input" type="url" placeholder="文章链接..."><a class="post-arrow" href="#">→</a><button class="post-delete" onclick="this.closest('.post-item').remove()">✕</button></div>
-    <div class="post-item"><span class="post-drag-handle">⠿</span><span class="post-date">2025.02.20</span><span class="post-cat">技术</span><span class="post-title">Python 数据科学栈在游戏数值设计中的应用实践</span><input class="post-url-input" type="url" placeholder="文章链接..."><a class="post-arrow" href="#">→</a><button class="post-delete" onclick="this.closest('.post-item').remove()">✕</button></div>
+    <div class="post-item"><span class="post-drag-handle">⠿</span><span class="post-date" contenteditable="true" spellcheck="false">2025.04.01</span><span class="post-cat" contenteditable="true" spellcheck="false">游戏设计</span><span class="post-title" contenteditable="true" spellcheck="false">杀戮尖塔核心玩法拆解：有限资源下的决策美学</span><input class="post-url-input" type="url" placeholder="文章链接..."><a class="post-arrow" href="#">→</a><button class="post-delete" onclick="this.closest('.post-item').remove()">✕</button></div>
+    <div class="post-item"><span class="post-drag-handle">⠿</span><span class="post-date" contenteditable="true" spellcheck="false">2025.03.18</span><span class="post-cat" contenteditable="true" spellcheck="false">开发日志</span><span class="post-title" contenteditable="true" spellcheck="false">从零开始做卡牌游戏 #01：战斗系统的第一次迭代</span><input class="post-url-input" type="url" placeholder="文章链接..."><a class="post-arrow" href="#">→</a><button class="post-delete" onclick="this.closest('.post-item').remove()">✕</button></div>
+    <div class="post-item"><span class="post-drag-handle">⠿</span><span class="post-date" contenteditable="true" spellcheck="false">2025.03.05</span><span class="post-cat" contenteditable="true" spellcheck="false">数据分析</span><span class="post-title" contenteditable="true" spellcheck="false">用数据视角看二次元游戏留存：以明日方舟为例</span><input class="post-url-input" type="url" placeholder="文章链接..."><a class="post-arrow" href="#">→</a><button class="post-delete" onclick="this.closest('.post-item').remove()">✕</button></div>
+    <div class="post-item"><span class="post-drag-handle">⠿</span><span class="post-date" contenteditable="true" spellcheck="false">2025.02.20</span><span class="post-cat" contenteditable="true" spellcheck="false">技术</span><span class="post-title" contenteditable="true" spellcheck="false">Python 数据科学栈在游戏数值设计中的应用实践</span><input class="post-url-input" type="url" placeholder="文章链接..."><a class="post-arrow" href="#">→</a><button class="post-delete" onclick="this.closest('.post-item').remove()">✕</button></div>
   </div>
   <button class="add-post-btn" onclick="addPost(this)">＋ 添加文章</button>
 </section>
@@ -492,14 +492,14 @@ body.modal-open{cursor:auto !important;}
   </div>
   <div class="sec-header">
     <span class="sec-num">03</span>
-    <h2 class="sec-title">同人创作</h2>
+    <h2 class="sec-title" contenteditable="true" spellcheck="false">同人创作</h2>
     <div class="sec-line"></div>
   </div>
   <div class="creations-grid">
-    <div class="creation-card"><div class="creation-bg c1"></div><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-type">// ILLUST</div><div class="creation-name">插画作品</div></div>
-    <div class="creation-card"><div class="creation-bg c2"></div><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-type">// MERCH</div><div class="creation-name">漫展周边</div></div>
-    <div class="creation-card"><div class="creation-bg c3"></div><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-type">// FANWORK</div><div class="creation-name">同人创作</div></div>
-    <div class="creation-card"><div class="creation-bg c4"></div><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-type">// OTHER</div><div class="creation-name">更多作品</div></div>
+    <div class="creation-card"><div class="creation-bg c1"></div><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-type" contenteditable="true" spellcheck="false">// ILLUST</div><div class="creation-name" contenteditable="true" spellcheck="false">插画作品</div></div>
+    <div class="creation-card"><div class="creation-bg c2"></div><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-type" contenteditable="true" spellcheck="false">// MERCH</div><div class="creation-name" contenteditable="true" spellcheck="false">漫展周边</div></div>
+    <div class="creation-card"><div class="creation-bg c3"></div><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-type" contenteditable="true" spellcheck="false">// FANWORK</div><div class="creation-name" contenteditable="true" spellcheck="false">同人创作</div></div>
+    <div class="creation-card"><div class="creation-bg c4"></div><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-type" contenteditable="true" spellcheck="false">// OTHER</div><div class="creation-name" contenteditable="true" spellcheck="false">更多作品</div></div>
     <button class="add-creation-btn" onclick="addCreation(this)">＋</button>
   </div>
 </section>
@@ -507,7 +507,7 @@ body.modal-open{cursor:auto !important;}
 </div><!-- /sections-container -->
 
 <footer>
-  <div class="footer-text">© 2025 · BUILT WITH ♥ &amp; CODE</div>
+  <div class="footer-text" contenteditable="true" spellcheck="false">© 2025 · BUILT WITH ♥ &amp; CODE</div>
   <div class="footer-links">
     <div class="social-edit-wrap"><a class="social-label" id="sl-github" href="#">GITHUB</a><input class="social-input" placeholder="GitHub URL" oninput="document.getElementById('sl-github').href=this.value||'#'"></div>
     <div class="social-edit-wrap"><a class="social-label" id="sl-bili" href="#">BILIBILI</a><input class="social-input" placeholder="Bilibili URL" oninput="document.getElementById('sl-bili').href=this.value||'#'"></div>
