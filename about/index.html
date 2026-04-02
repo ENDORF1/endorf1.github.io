@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>关于我 · _DEV.LOG</title>
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Noto+Sans+SC:wght@300;400;700&family=Fira+Code:wght@400;500&display=swap');
+:root{--bg:#030810;--dim:#0a1628;--text:#c8e0f0;--muted:#3a5a7a;--cyan:#00f5ff;--magenta:#ff006e;--yellow:#ffe600;--glow-c:0 0 8px #00f5ff88,0 0 24px #00f5ff44;--glow-m:0 0 8px #ff006e88,0 0 24px #ff006e44;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans SC',sans-serif;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,245,255,.015) 2px,rgba(0,245,255,.015) 4px);pointer-events:none;z-index:100;}
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,245,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,255,.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;animation:gridShift 20s linear infinite;}
+@keyframes gridShift{to{transform:translateY(60px);}}
+nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px 48px;background:linear-gradient(180deg,rgba(3,8,16,.95),transparent);border-bottom:1px solid rgba(0,245,255,.1);}
+.nav-logo{font-family:'Share Tech Mono',monospace;font-size:18px;color:var(--cyan);letter-spacing:4px;text-shadow:var(--glow-c);text-decoration:none;}
+.nav-logo span{color:var(--magenta);}
+.nav-links{display:flex;gap:28px;}
+.nav-links a{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted);text-decoration:none;letter-spacing:2px;text-transform:uppercase;transition:color .2s;position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--cyan);transition:width .3s;}
+.nav-links a:hover{color:var(--cyan);}
+.nav-links a:hover::after{width:100%;}
+.page-wrap{position:relative;z-index:1;padding:120px 10vw 80px;}
+
+.about-body{max-width:720px;}
+.about-body h1{font-size:42px;font-weight:700;color:#fff;margin-bottom:32px;padding-left:20px;border-left:4px solid var(--cyan);}
+.about-body p{margin:0 0 16px;line-height:1.9;color:var(--text);}
+.about-body strong{color:#fff;font-weight:700;}
+.about-body em{color:var(--cyan);}
+.about-body ul{margin:8px 0 16px 28px;}
+.about-body li{margin-bottom:8px;}
+</style></head><body>
+<nav>
+  <div class="nav-logo">_<span>DEV</span>.LOG</div>
+  <div class="nav-links">
+    <a href="/">首页</a>
+    <a href="/blog/">博客</a>
+    <a href="/works/">项目</a>
+    <a href="/gallery/">创作</a>
+    <a href="/about/">关于</a>
+  </div>
+</nav>
+<div class="page-wrap">
+  <div class="about-body"><h1>关于我</h1><p><font color="#eeeeee" face="Lantinghei SC, Open Sans, Arial, Hiragino Sans GB, Microsoft YaHei, 微软雅黑, STHeiti, WenQuanYi Micro Hei, SimSun, sans-serif"><span style="font-size: 16px;">杀戮。致残。肢解。我们卷土重来！</span></font></p><p><font color="#eeeeee" face="Lantinghei SC, Open Sans, Arial, Hiragino Sans GB, Microsoft YaHei, 微软雅黑, STHeiti, WenQuanYi Micro Hei, SimSun, sans-serif"><span style="font-size: 16px;">Kill. Maim. Dismember. WE ARE UNSHACKLED!<br><br></span></font></p><p><font color="#eeeeee" face="Lantinghei SC, Open Sans, Arial, Hiragino Sans GB, Microsoft YaHei, 微软雅黑, STHeiti, WenQuanYi Micro Hei, SimSun, sans-serif"><span style="font-size: 16px;">我是龙鳞，一位兴趣使然的游戏开发者/同人画师。网站创立于2026年4月2日，以此作为我踏上这条道路的纪念。</span></font></p><div><br></div><div><span style="color: rgb(238, 238, 238); font-family: &quot;Lantinghei SC&quot;, &quot;Open Sans&quot;, Arial, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, 微软雅黑, STHeiti, &quot;WenQuanYi Micro Hei&quot;, SimSun, sans-serif; font-size: 16px; background-color: rgb(22, 40, 34);"><br></span></div></div>
+</div>
+</body></html>
