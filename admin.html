@@ -38,6 +38,27 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 #cpw-modal.show{display:flex;}
 #cpw-box{background:var(--dim);border:1px solid var(--border);padding:40px 48px;width:400px;max-width:92vw;position:relative;}
 #cpw-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--magenta));}
+/* ── UPLOAD STATUS ── */
+#upload-status{
+  position:fixed;top:60px;left:50%;transform:translateX(-50%);
+  z-index:99998;
+  background:rgba(4,10,20,.97);
+  border:1px solid var(--border);
+  padding:12px 24px;
+  display:none;align-items:center;gap:12px;
+  font-family:var(--font-mono);font-size:11px;letter-spacing:2px;
+  min-width:260px;
+}
+#upload-status.show{display:flex;}
+#upload-status.state-loading{border-color:rgba(255,230,0,.3);}
+#upload-status.state-ok{border-color:rgba(0,255,157,.3);}
+#upload-status.state-err{border-color:rgba(255,0,110,.3);}
+.us-spinner{width:14px;height:14px;border:2px solid rgba(255,230,0,.2);border-top-color:var(--yellow);border-radius:50%;animation:spin 0.7s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.us-msg{flex:1;}
+#upload-status.state-loading .us-msg{color:var(--yellow);}
+#upload-status.state-ok .us-msg{color:var(--green);}
+#upload-status.state-err .us-msg{color:var(--magenta);}
 /* ── TOAST ── */
 #toast{position:fixed;top:72px;left:50%;transform:translateX(-50%) translateY(-20px);z-index:99999;font-family:var(--font-mono);font-size:12px;letter-spacing:2px;padding:12px 28px;border:1px solid;opacity:0;pointer-events:none;transition:all .3s;white-space:nowrap;}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
@@ -264,6 +285,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 </div>
 
 <div id="toast"></div>
+<div id="upload-status">
+  <div class="us-spinner" id="us-spinner"></div>
+  <span class="us-msg" id="us-msg"></span>
+</div>
 
 <!-- ── APP ── -->
 <div id="app">
@@ -668,7 +693,7 @@ async function handleInlineImage(input){
     showToast('err','请先配置 GitHub 才能上传图片');
     input.value=''; return;
   }
-  showToast('info','上传图片中...');
+  showUploadStatus('loading','⟳ 上传中，请稍候...');
   try{
     const url=await uploadImageToGH(file);
     const img=`<img src="${url}" alt="图片" style="max-width:100%"><p><br></p>`;
@@ -676,7 +701,7 @@ async function handleInlineImage(input){
     document.execCommand('insertHTML',false,img);
     showToast('ok','图片已插入 ✓');
   }catch(e){
-    showToast('err','图片上传失败：'+e.message);
+    showUploadStatus('err','✕ 上传失败：'+e.message);
   }
   input.value='';
 }
@@ -687,15 +712,15 @@ async function handleCoverUpload(input){
     showToast('err','请先配置 GitHub 才能上传图片');
     input.value=''; return;
   }
-  showToast('info','上传封面中...');
+  showUploadStatus('loading','⟳ 上传封面中，请稍候...');
   try{
     const url=await uploadImageToGH(file);
     coverData=url;
     const prev=document.getElementById('cover-preview');
     prev.src=url; prev.style.display='block';
-    showToast('ok','封面上传成功 ✓');
+    showUploadStatus('ok','✓ 封面上传成功');
   }catch(e){
-    showToast('err','封面上传失败：'+e.message);
+    showUploadStatus('err','✕ 封面上传失败：'+e.message);
   }
   input.value='';
 }
@@ -934,7 +959,7 @@ async function handleCardImg(input){
     showToast('err','请先配置 GitHub 才能上传图片');
     input.value=''; return;
   }
-  showToast('info','上传图片中...');
+  showUploadStatus('loading','⟳ 上传中，请稍候...');
   try{
     const url=await uploadImageToGH(file);
     const mode=document.getElementById('card-modal').dataset.mode;
@@ -947,9 +972,9 @@ async function handleCardImg(input){
     pickerImg.src=url; picker.classList.add('show');
     const dot=document.getElementById('focus-dot');
     dot.style.left='50%'; dot.style.top='50%';
-    showToast('ok','图片上传成功 ✓ 点击图片选择展示焦点');
+    showUploadStatus('ok','✓ 上传成功 · 点击图片选择焦点');
   }catch(e){
-    showToast('err','图片上传失败：'+e.message);
+    showUploadStatus('err','✕ 上传失败：'+e.message);
   }
   input.value='';
 }
@@ -1684,6 +1709,27 @@ ${NAV_HTML()}
   <div class="about-body">${aboutHTML}</div>
 </div>
 </body></html>`;
+}
+
+
+/* ══════════════════════════════════════
+   UPLOAD STATUS
+══════════════════════════════════════ */
+let _uploadStatusTimer = null;
+function showUploadStatus(state, msg){
+  const el = document.getElementById('upload-status');
+  const spinner = document.getElementById('us-spinner');
+  const msgEl = document.getElementById('us-msg');
+  el.className = 'show state-' + state;
+  msgEl.textContent = msg;
+  spinner.style.display = state === 'loading' ? 'block' : 'none';
+  if(_uploadStatusTimer) clearTimeout(_uploadStatusTimer);
+  if(state !== 'loading'){
+    _uploadStatusTimer = setTimeout(()=>{ el.classList.remove('show'); }, 3000);
+  }
+}
+function hideUploadStatus(){
+  document.getElementById('upload-status').classList.remove('show');
 }
 
 /* ══════════════════════════════════════
