@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CONTEXT.WINDOW 后台管理</title>
+<title>_DEV.LOG · 后台管理</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Noto+Sans+SC:wght@300;400;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -401,7 +401,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
     <div class="card-field"><label class="card-label">标题</label><input class="card-input" id="card-title-input" placeholder="如：卡牌 DEMO / 明日方舟同人志"></div>
     <div class="card-field"><label class="card-label">描述</label><textarea class="card-textarea" id="card-desc-input" placeholder="如：受《杀戮尖塔》启发的独立卡牌 Roguelike，探索卡组构建的边界。"></textarea></div>
     <div class="card-field"><label class="card-label">标签<span style="color:var(--muted);font-size:10px;font-weight:normal;margin-left:8px;">第一个 = 卡片左上角红色小标（如 IN PROGRESS），其余 = 青色标签（如 ROGUELIKE）</span></label><input class="card-input" id="card-tags-input" placeholder="如：IN PROGRESS, ROGUELIKE, CARD GAME"></div>
-    <div class="card-field"><label class="card-label">链接<span style="color:var(--muted);font-size:10px;font-weight:normal;margin-left:8px;">填了就跳这个链接，不填就跳 /works/ 总页</span></label><input class="card-input" id="card-link-input" placeholder="如：https://github.com/你的用户名/项目名"></div>
+    <div class="card-field" id="card-link-field"><label class="card-label" id="card-link-label">链接<span style="color:var(--muted);font-size:10px;font-weight:normal;margin-left:8px;">填了就跳这个链接，不填就跳 /works/ 总页</span></label><input class="card-input" id="card-link-input" placeholder="如：https://github.com/你的用户名/项目名"></div>
     <div class="card-field" id="card-content-field"><label class="card-label">详情正文（同人作品用，支持换行）</label><textarea class="card-textarea" id="card-content-input" placeholder="作品介绍、创作背景等..." style="height:100px;"></textarea></div>
     <div class="card-field">
       <label class="card-label">封面图</label>
@@ -411,6 +411,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         <div class="focus-dot" id="focus-dot" style="left:50%;top:50%;"></div>
       </div>
       <div class="focus-hint">👆 点击图片选择展示焦点位置</div>
+      <div id="card-upload-status" style="display:none;font-family:var(--font-mono);font-size:10px;letter-spacing:2px;padding:8px 0;display:none;align-items:center;gap:8px;">
+        <div id="card-us-spinner" style="width:12px;height:12px;border:2px solid rgba(255,230,0,.2);border-top-color:var(--yellow);border-radius:50%;animation:spin 0.7s linear infinite;flex-shrink:0;"></div>
+        <span id="card-us-msg" style="color:var(--yellow);">上传中...</span>
+      </div>
       <div class="card-img-upload" onclick="document.getElementById('pp-img-input').click()">📷 上传封面图</div>
       <input type="file" id="pp-img-input" accept="image/*" onchange="handleCardImg(this)">
     </div>
@@ -886,6 +890,7 @@ function openCatItemModal(ci,ii){
   document.getElementById('card-link-input').value=item.link||'';
   document.getElementById('card-content-input').value=item.content||'';
   document.getElementById('card-content-field').style.display='block';
+  document.getElementById('card-link-field').style.display='none';
   catItemImgData=item.img||null;
   catItemImgPos=item.imgPos||'50% 50%';
   const prev=document.getElementById('card-img-preview');
@@ -917,6 +922,8 @@ function openCardModal(type,idx){
   document.getElementById('card-content-input').value=item.content||'';
   // show content field only for gallery
   document.getElementById('card-content-field').style.display=type==='gallery'?'block':'none';
+  // hide link field for gallery (gallery items link to their detail page automatically)
+  document.getElementById('card-link-field').style.display=type==='gallery'?'none':'block';
   cardImgData=item.img||null;
   cardImgPos=item.imgPos||'50% 50%';
   const prev=document.getElementById('card-img-preview');
@@ -1716,6 +1723,20 @@ ${NAV_HTML()}
    UPLOAD STATUS
 ══════════════════════════════════════ */
 let _uploadStatusTimer = null;
+
+function showCardUploadStatus(state, msg){
+  const el = document.getElementById('card-upload-status');
+  const spinner = document.getElementById('card-us-spinner');
+  const msgEl = document.getElementById('card-us-msg');
+  if(state === 'hidden'){ el.style.display='none'; return; }
+  el.style.display = 'flex';
+  spinner.style.display = state === 'loading' ? 'block' : 'none';
+  msgEl.textContent = msg;
+  if(state === 'ok') msgEl.style.color = 'var(--green)';
+  else if(state === 'err') msgEl.style.color = 'var(--magenta)';
+  else msgEl.style.color = 'var(--yellow)';
+  if(state !== 'loading') setTimeout(()=>showCardUploadStatus('hidden',''), 3000);
+}
 function showUploadStatus(state, msg){
   const el = document.getElementById('upload-status');
   const spinner = document.getElementById('us-spinner');
