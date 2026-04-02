@@ -1,4 +1,4 @@
-.<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
@@ -32,6 +32,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .lk-btn:hover{color:var(--bg);}
 .lk-btn:hover::before{transform:translateX(0);}
 @keyframes lkShake{0%,100%{transform:translateX(0);}25%{transform:translateX(-8px);}75%{transform:translateX(8px);}}
+
+/* ── TOAST ── */
+#toast{position:fixed;top:72px;left:50%;transform:translateX(-50%) translateY(-20px);z-index:99999;font-family:var(--font-mono);font-size:12px;letter-spacing:2px;padding:12px 28px;border:1px solid;opacity:0;pointer-events:none;transition:all .3s;white-space:nowrap;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+#toast.ok{color:var(--green);border-color:rgba(0,255,157,.35);background:rgba(0,255,157,.08);}
+#toast.err{color:var(--magenta);border-color:rgba(255,0,110,.35);background:rgba(255,0,110,.08);}
+#toast.info{color:var(--cyan);border-color:rgba(0,245,255,.35);background:rgba(0,245,255,.08);}
 
 /* ── LAYOUT ── */
 #app{display:none;height:100vh;flex-direction:column;}
@@ -243,6 +250,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
     <button class="lk-btn" onclick="doLogin()">进入后台</button>
   </div>
 </div>
+
+<div id="toast"></div>
 
 <!-- ── APP ── -->
 <div id="app">
@@ -543,6 +552,7 @@ function newPost(){
   saveState();
   selectPost(0);
   document.getElementById('post-title-input').focus();
+  showToast('info','新文章已创建，开始写作吧');
 }
 
 function slugify(str){
@@ -603,6 +613,7 @@ function insertCodeBlock(){
   document.getElementById('editor-content').focus();
   document.execCommand('insertHTML',false,html);
   closeCodeModal();
+  showToast('ok','代码块已插入 ✓');
 }
 
 function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
@@ -712,8 +723,11 @@ function handleCardImg(input){
 }
 
 function saveCard(){
+  const title=document.getElementById('card-title-input').value.trim();
+  if(!title){showToast('err','请填写标题');return;}
+  if(!editingCardType){showToast('err','发生错误，请重新打开卡片');return;}
   const item={
-    title:document.getElementById('card-title-input').value,
+    title:title,
     desc:document.getElementById('card-desc-input').value,
     tags:document.getElementById('card-tags-input').value.split(',').map(t=>t.trim()).filter(Boolean),
     link:document.getElementById('card-link-input').value,
@@ -725,15 +739,17 @@ function saveCard(){
   saveState();
   closeCardModal();
   renderPagePanel(editingCardType);
+  showToast('ok','卡片已保存 ✓');
 }
 
 function deleteCard(type,idx,e){
   e.stopPropagation();
-  if(!confirm('确认删除？'))return;
+  if(!confirm('确认删除这张卡片？'))return;
   const data=type==='works'?works:gallery;
   data.splice(idx,1);
   saveState();
   renderPagePanel(type);
+  showToast('ok','已删除 ✓');
 }
 
 /* ══════════════════════════════════════
@@ -754,15 +770,16 @@ function openGhConfig(){
 }
 function closeGhConfig(){document.getElementById('gh-modal').classList.remove('show');}
 function saveGhConfig(){
-  GH.user  = document.getElementById('gh-user').value.trim();
-  GH.repo  = document.getElementById('gh-repo').value.trim();
-  GH.token = document.getElementById('gh-token').value.trim();
+  const user=document.getElementById('gh-user').value.trim();
+  const repo=document.getElementById('gh-repo').value.trim();
+  const token=document.getElementById('gh-token').value.trim();
+  if(!user||!repo||!token){showToast('err','请填写所有 GitHub 配置项');return;}
+  GH.user=user; GH.repo=repo; GH.token=token;
   localStorage.setItem('gh_user',GH.user);
   localStorage.setItem('gh_repo',GH.repo);
   localStorage.setItem('gh_token',GH.token);
   closeGhConfig();
-  setStatus('ok','// 配置已保存');
-  setTimeout(()=>setStatus('idle','// 就绪'),2000);
+  showToast('ok','GitHub 配置已保存 ✓');
 }
 
 function setStatus(type,msg){
@@ -837,10 +854,13 @@ async function publishPost(){
 
     setStatus('ok','// 发布成功');
     pushLog('全部完成 · Netlify 将在约1分钟内自动部署','info');
+    showToast('ok','发布成功 · Netlify 约1分钟后更新 ✓');
     setTimeout(()=>setStatus('idle','// 就绪'),4000);
   }catch(e){
     setStatus('err','// 发布失败');
-    pushLog(e.message.includes('fetch')?'网络连接失败，请检查梯子':e.message,'err');
+    const msg=e.message.includes('fetch')?'网络连接失败，请检查梯子':e.message;
+    pushLog(msg,'err');
+    showToast('err','发布失败：'+msg);
   }
 }
 
@@ -865,10 +885,13 @@ async function pushPageData(){
     }
     setStatus('ok','// 推送成功');
     pushLog('Netlify 将在约1分钟内自动部署','info');
+    showToast('ok','推送成功 · Netlify 约1分钟后更新 ✓');
     setTimeout(()=>setStatus('idle','// 就绪'),4000);
   }catch(e){
     setStatus('err','// 推送失败');
-    pushLog(e.message.includes('fetch')?'网络连接失败，请检查梯子':e.message,'err');
+    const msg=e.message.includes('fetch')?'网络连接失败，请检查梯子':e.message;
+    pushLog(msg,'err');
+    showToast('err','推送失败：'+msg);
   }
 }
 
@@ -1107,6 +1130,18 @@ ${NAV_HTML()}
   <div class="about-body">${aboutHTML}</div>
 </div>
 </body></html>`;
+}
+
+/* ══════════════════════════════════════
+   TOAST
+══════════════════════════════════════ */
+let _toastTimer=null;
+function showToast(type,msg){
+  const el=document.getElementById('toast');
+  el.className='show '+type;
+  el.textContent=msg;
+  if(_toastTimer)clearTimeout(_toastTimer);
+  _toastTimer=setTimeout(()=>{el.className='';},3000);
 }
 </script>
 </body>
