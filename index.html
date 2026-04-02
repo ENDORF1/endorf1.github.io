@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh">
-<head>
+<html lang="zh"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>_DEV.LOG — 个人主页</title>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&family=Noto+Sans+SC:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&amp;family=Rajdhani:wght@300;400;600;700&amp;family=Noto+Sans+SC:wght@300;400;700&amp;display=swap" rel="stylesheet">
 <style>
 :root{--bg:#030810;--bg2:#060f1a;--dim:#0a1628;--text:#c8e0f0;--muted:#3a5a7a;--cyan:#00f5ff;--magenta:#ff006e;--yellow:#ffe600;--glow-c:0 0 8px #00f5ff88,0 0 24px #00f5ff44;--glow-m:0 0 8px #ff006e88,0 0 24px #ff006e44;}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -325,16 +324,16 @@ body.modal-open nav{z-index:1 !important;}
 body.modal-open body::before{z-index:1 !important;}
 </style>
 </head>
-<body>
+<body class="edit-mode modal-open">
 
 <!-- ── CURSORS ── -->
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
+<div class="cursor" id="cursor" style="left: 1012px; top: 678px; transform: translate(-50%, -50%) scale(1); background: var(--cyan);"></div>
+<div class="cursor-ring" id="cursorRing" style="left: 1012px; top: 678px; width: 36px; height: 36px;"></div>
 
 <!-- ══════════════════════════════
      PASSWORD MODAL (login)
 ══════════════════════════════ -->
-<div id="pw-overlay">
+<div id="pw-overlay" class="">
   <div id="pw-box">
     <span class="pw-tag">// ACCESS CONTROL</span>
     <div class="pw-title">编辑模式 · 验证</div>
@@ -371,17 +370,17 @@ body.modal-open body::before{z-index:1 !important;}
       <span class="pw-eye" onclick="toggleEye('cpw-confirm',this)">👁</span>
     </div>
     <span class="pw-err" id="cpw-err"></span>
-    <span class="pw-ok"  id="cpw-ok"></span>
+    <span class="pw-ok" id="cpw-ok"></span>
     <button id="cpw-submit" onclick="submitChangePw()">确认修改</button>
-    <button id="cpw-cancel" onclick="document.getElementById('cpw-overlay').style.display='none'; if(!document.querySelector('.show[id$="overlay"]')) document.body.classList.remove('modal-open')">取消</button>
+    <button id="cpw-cancel" onclick="document.getElementById('cpw-overlay').style.display='none'; if(!document.querySelector('.show[id$=" overlay"]'))="" document.body.classlist.remove('modal-open')"="">取消</button>
   </div>
 </div>
 
 <!-- ── EDIT TOGGLE ── -->
-<button id="edit-toggle" onclick="openPwModal()">🔒 编辑内容</button>
+<button id="edit-toggle" onclick="openPwModal()">✏ 编辑中</button>
 
 <!-- ── EDIT TOOLBAR ── -->
-<div id="edit-toolbar">
+<div id="edit-toolbar" style="display: flex;">
   <span class="tb-label">// 编辑模式</span>
   <div class="tb-sep"></div>
   <span class="tb-hint">⠿ 拖动排序 · 点击文字修改</span>
@@ -395,7 +394,7 @@ body.modal-open body::before{z-index:1 !important;}
 <div id="save-toast">// 已保存为 index.html</div>
 
 <!-- ── GITHUB PUSH MODAL ── -->
-<div id="gh-overlay">
+<div id="gh-overlay" class="show">
   <div id="gh-box">
     <span class="gh-tag">// GITHUB DEPLOY</span>
     <div class="gh-title">推送到 GitHub</div>
@@ -416,32 +415,32 @@ body.modal-open body::before{z-index:1 !important;}
       <label>PERSONAL ACCESS TOKEN</label>
       <input id="gh-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxx" autocomplete="off">
     </div>
-    <button id="gh-push-btn" onclick="pushToGithub()">⬆ 立即推送</button>
+    <button id="gh-push-btn" onclick="pushToGithub()" disabled="">⬆ 立即推送</button>
     <button id="gh-cancel-btn" onclick="closeGhModal()">取消</button>
-    <div id="gh-log"></div>
+    <div id="gh-log" class="show"><div class="log-spin">⟳ 正在生成网页内容...</div></div>
   </div>
 </div>
 
 <!-- ── NAV ── -->
 <nav>
-  <a class="nav-logo" href="/">_<span>DEV</span>.LOG</a>
+  <a class="nav-logo" href="/" contenteditable="true" spellcheck="false">_<span contenteditable="true" spellcheck="false">DEV</span>.LOG</a>
   <div class="nav-links">
-    <a href="/blog/">博客</a>
-    <a href="/works/">项目</a>
-    <a href="/gallery/">创作</a>
-    <a href="/about/">关于</a>
-    <a href="#sec-projects" style="color:rgba(58,90,122,.5);font-size:10px;">↓ 本页</a>
+    <a href="/blog/" contenteditable="true" spellcheck="false">博客</a>
+    <a href="/works/" contenteditable="true" spellcheck="false">项目</a>
+    <a href="/gallery/" contenteditable="true" spellcheck="false">创作</a>
+    <a href="/about/" contenteditable="true" spellcheck="false">关于</a>
+    <a href="#sec-projects" style="color:rgba(58,90,122,.5);font-size:10px;" contenteditable="true" spellcheck="false">↓ 本页</a>
   </div>
 </nav>
 
 <!-- ── HERO ── -->
 <section id="hero">
-  <div class="hero-tag">// INDEPENDENT DEVELOPER · GAME MAKER · CREATOR</div>
+  <div class="hero-tag" contenteditable="true" spellcheck="false">// INDEPENDENT DEVELOPER · GAME MAKER · CREATOR</div>
   <h1 class="hero-name">
     <span class="glitch-wrap" data-text="HELLO,">HELLO,</span>
-    <span class="line2">WORLD.</span>
+    <span class="line2" contenteditable="true" spellcheck="false">WORLD.</span>
   </h1>
-  <p id="hero-sub" class="hero-sub">独立开发者 · 卡牌游戏制作中<br><span class="hl">明日方舟</span> 开服老玩家 · 同人创作者<br>代码 / 像素 / 故事</p>
+  <p id="hero-sub" class="hero-sub" contenteditable="true" spellcheck="false">独立开发者 · 卡牌游戏制作中<br><span class="hl" contenteditable="true" spellcheck="false">明日方舟</span> 开服老玩家 · 同人创作者<br>代码 / 像素 / 故事</p>
   <div class="hero-btns">
     <a href="#sec-projects" class="btn-primary">查看项目</a>
     <a href="#sec-blog" class="btn-sec">最新文章</a>
@@ -460,12 +459,12 @@ body.modal-open body::before{z-index:1 !important;}
   </div>
   <div class="sec-header">
     <span class="sec-num">01</span>
-    <h2 class="sec-title">游戏开发</h2>
+    <h2 class="sec-title" contenteditable="true" spellcheck="false">游戏开发</h2>
     <div class="sec-line"></div>
   </div>
   <div class="projects-grid" id="dynamic-works-grid">
     <!-- 动态加载自后台项目数据 -->
-    <button class="add-card-btn" onclick="addProject(this)">＋ 添加项目</button>
+    <div style="font-family: var(--font-mono); font-size: 12px; color: var(--muted); letter-spacing: 2px; padding: 28px; grid-column: 1 / -1;">// 暂无项目 · 请在后台添加项目后推送</div><button class="add-card-btn" onclick="addProject(this)">＋ 添加项目</button>
   </div>
 </section>
 
@@ -476,30 +475,28 @@ body.modal-open body::before{z-index:1 !important;}
   </div>
   <div class="sec-header">
     <span class="sec-num">02</span>
-    <h2 class="sec-title">技术博客</h2>
+    <h2 class="sec-title" contenteditable="true" spellcheck="false">技术博客</h2>
     <div class="sec-line"></div>
   </div>
-  <div class="posts-list" id="dynamic-posts-list">
-    <!-- 动态加载自后台文章数据 -->
-  </div>
+  <div class="posts-list" id="dynamic-posts-list"><div class="no-posts-placeholder" style="font-family:var(--font-mono);font-size:12px;color:var(--muted);letter-spacing:2px;padding:20px 24px;">// 暂无已发布文章 · 请在后台发布文章后推送</div></div>
   <button class="add-post-btn" onclick="addPost(this)">＋ 添加文章</button>
 </section>
 
-<section class="page-section" id="sec-creations">
+<section class="page-section" id="sec-creations" draggable="false">
   <div class="sec-controls">
     <div class="sec-drag-handle">⠿ 拖动模块</div>
     <button class="sec-delete-btn" onclick="deleteSection(this)">✕ 删除模块</button>
   </div>
   <div class="sec-header">
     <span class="sec-num">03</span>
-    <h2 class="sec-title">同人创作</h2>
+    <h2 class="sec-title" contenteditable="true" spellcheck="false">同人创作</h2>
     <div class="sec-line"></div>
   </div>
   <div class="creations-grid">
-    <a class="creation-card" href="/gallery/illust/" data-cover-mode="gradient" data-cover-img="" data-cover-pos="50% 50%"><div class="creation-bg c1"></div><img class="creation-cover" src="" style="display:none;object-position:50% 50%"><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'custom',event)">指定图片</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><label class="cc-upload-btn">📷 上传封面图<input type="file" accept="image/*" style="display:none" onchange="uploadCreationCover(this)"></label><div class="cc-focus-hint">上传后可在图片上点击选焦点</div></div><div class="creation-type">// ILLUST</div><div class="creation-name">插画作品</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/illust/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
-    <a class="creation-card" href="/gallery/merch/" data-cover-mode="gradient" data-cover-img="" data-cover-pos="50% 50%"><div class="creation-bg c2"></div><img class="creation-cover" src="" style="display:none;object-position:50% 50%"><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'custom',event)">指定图片</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><label class="cc-upload-btn">📷 上传封面图<input type="file" accept="image/*" style="display:none" onchange="uploadCreationCover(this)"></label><div class="cc-focus-hint">上传后可在图片上点击选焦点</div></div><div class="creation-type">// MERCH</div><div class="creation-name">漫展周边</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/merch/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
-    <a class="creation-card" href="/gallery/fanwork/" data-cover-mode="gradient" data-cover-img="" data-cover-pos="50% 50%"><div class="creation-bg c3"></div><img class="creation-cover" src="" style="display:none;object-position:50% 50%"><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'custom',event)">指定图片</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><label class="cc-upload-btn">📷 上传封面图<input type="file" accept="image/*" style="display:none" onchange="uploadCreationCover(this)"></label><div class="cc-focus-hint">上传后可在图片上点击选焦点</div></div><div class="creation-type">// FANWORK</div><div class="creation-name">同人创作</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/fanwork/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
-    <a class="creation-card" href="/gallery/other/" data-cover-mode="gradient" data-cover-img="" data-cover-pos="50% 50%"><div class="creation-bg c4"></div><img class="creation-cover" src="" style="display:none;object-position:50% 50%"><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'custom',event)">指定图片</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><label class="cc-upload-btn">📷 上传封面图<input type="file" accept="image/*" style="display:none" onchange="uploadCreationCover(this)"></label><div class="cc-focus-hint">上传后可在图片上点击选焦点</div></div><div class="creation-type">// OTHER</div><div class="creation-name">更多作品</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/other/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
+    <a class="creation-card" href="/gallery/原创插画作品" data-cover-mode="gradient" data-cover-img="" data-cover-pos="50% 50%" draggable="false"><div class="creation-bg c1"></div><img class="creation-cover" src="" style="display:none;object-position:50% 50%"><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'custom',event)">指定图片</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><label class="cc-upload-btn">📷 上传封面图<input type="file" accept="image/*" style="display:none" onchange="uploadCreationCover(this)"></label><div class="cc-focus-hint">上传后可在图片上点击选焦点</div></div><div class="creation-type" contenteditable="true" spellcheck="false">// ILLUST</div><div class="creation-name" contenteditable="true" spellcheck="false">插画作品</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/illust/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
+    <a class="creation-card" href="/gallery/merch/" data-cover-mode="gradient" data-cover-img="" data-cover-pos="50% 50%"><div class="creation-bg c2"></div><img class="creation-cover" src="" style="display:none;object-position:50% 50%"><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'custom',event)">指定图片</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><label class="cc-upload-btn">📷 上传封面图<input type="file" accept="image/*" style="display:none" onchange="uploadCreationCover(this)"></label><div class="cc-focus-hint">上传后可在图片上点击选焦点</div></div><div class="creation-type" contenteditable="true" spellcheck="false">// MERCH</div><div class="creation-name" contenteditable="true" spellcheck="false">漫展周边</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/merch/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
+    <a class="creation-card" href="/gallery/fanwork/" data-cover-mode="gradient" data-cover-img="" data-cover-pos="50% 50%"><div class="creation-bg c3"></div><img class="creation-cover" src="" style="display:none;object-position:50% 50%"><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'custom',event)">指定图片</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><label class="cc-upload-btn">📷 上传封面图<input type="file" accept="image/*" style="display:none" onchange="uploadCreationCover(this)"></label><div class="cc-focus-hint">上传后可在图片上点击选焦点</div></div><div class="creation-type" contenteditable="true" spellcheck="false">// FANWORK</div><div class="creation-name" contenteditable="true" spellcheck="false">同人创作</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/fanwork/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
+    <a class="creation-card" href="/gallery/other/" data-cover-mode="gradient" data-cover-img="" data-cover-pos="50% 50%"><div class="creation-bg c4"></div><img class="creation-cover" src="" style="display:none;object-position:50% 50%"><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'custom',event)">指定图片</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><label class="cc-upload-btn">📷 上传封面图<input type="file" accept="image/*" style="display:none" onchange="uploadCreationCover(this)"></label><div class="cc-focus-hint">上传后可在图片上点击选焦点</div></div><div class="creation-type" contenteditable="true" spellcheck="false">// OTHER</div><div class="creation-name" contenteditable="true" spellcheck="false">更多作品</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/other/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
     <button class="add-creation-btn" onclick="addCreation(this)">＋</button>
   </div>
 </section>
@@ -507,11 +504,11 @@ body.modal-open body::before{z-index:1 !important;}
 </div><!-- /sections-container -->
 
 <footer>
-  <div class="footer-text">© 2025 · BUILT WITH ♥ & CODE</div>
+  <div class="footer-text" contenteditable="true" spellcheck="false">© 2025 · BUILT WITH ♥ &amp; CODE</div>
   <div class="footer-links">
-    <div class="social-edit-wrap"><a class="social-label" id="sl-github" href="#">GITHUB</a><input class="social-input" placeholder="GitHub URL" oninput="document.getElementById('sl-github').href=this.value||'#'"></div>
-    <div class="social-edit-wrap"><a class="social-label" id="sl-bili" href="#">BILIBILI</a><input class="social-input" placeholder="Bilibili URL" oninput="document.getElementById('sl-bili').href=this.value||'#'"></div>
-    <div class="social-edit-wrap"><a class="social-label" id="sl-twitter" href="#">TWITTER</a><input class="social-input" placeholder="Twitter URL" oninput="document.getElementById('sl-twitter').href=this.value||'#'"></div>
+    <div class="social-edit-wrap"><a class="social-label" id="sl-github" href="#" contenteditable="true" spellcheck="false">GITHUB</a><input class="social-input" placeholder="GitHub URL" oninput="document.getElementById('sl-github').href=this.value||'#'"></div>
+    <div class="social-edit-wrap"><a class="social-label" id="sl-bili" href="#" contenteditable="true" spellcheck="false">BILIBILI</a><input class="social-input" placeholder="Bilibili URL" oninput="document.getElementById('sl-bili').href=this.value||'#'"></div>
+    <div class="social-edit-wrap"><a class="social-label" id="sl-twitter" href="#" contenteditable="true" spellcheck="false">TWITTER</a><input class="social-input" placeholder="Twitter URL" oninput="document.getElementById('sl-twitter').href=this.value||'#'"></div>
   </div>
 </footer>
 
@@ -1118,5 +1115,16 @@ document.addEventListener('DOMContentLoaded', ()=>{
   });
 })();
 </script>
-</body>
-</html>
+
+
+<div id="aix-action-loading-host"></div><script src="chrome-extension://pljfekbkmmbkdfhddpebdlmfngigcohc/content/windowDataMessage.js"></script><div id="aix-drop-panel" style="opacity: 0; top: -1e+07px; left: 7px; transform: scale(1);">
+    <a id="aix-drop-panel-close-btn">×</a>
+        <div id="aix-drop-panel-inner">
+            <div class="aix-content">
+                <svg class="aix-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5892"><path d="M494.933333 782.933333c2.133333 2.133333 4.266667 4.266667 8.533334 6.4h8.533333c6.4 0 10.666667-2.133333 14.933333-6.4l2.133334-2.133333 275.2-275.2c8.533333-8.533333 8.533333-21.333333 0-29.866667-8.533333-8.533333-21.333333-8.533333-29.866667 0L533.333333 716.8V128c0-12.8-8.533333-21.333333-21.333333-21.333333s-21.333333 8.533333-21.333333 21.333333v588.8L249.6 475.733333c-8.533333-8.533333-21.333333-8.533333-29.866667 0-8.533333 8.533333-8.533333 21.333333 0 29.866667l275.2 277.333333zM853.333333 874.666667H172.8c-12.8 0-21.333333 8.533333-21.333333 21.333333s8.533333 21.333333 21.333333 21.333333H853.333333c12.8 0 21.333333-8.533333 21.333334-21.333333s-10.666667-21.333333-21.333334-21.333333z" p-id="5893"></path></svg>
+                <div class="aix-title">拖拽到此处完成下载</div>
+                <div class="aix-desc">图片将完成下载</div>
+            </div>
+            <div id="aix-supported-by">AIX智能下载器</div>
+        </div>
+    </div></body><div style="position: fixed; width: 400px; height: 200px; background-color: rgb(255, 255, 255); display: none; padding: 10px 14px; font-size: 14px; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 15px; z-index: 2147483647; white-space: pre-wrap; overflow-y: auto; border-radius: 4px;"></div><div id="sc-translator-shadow" style="all: initial;"></div></html>
