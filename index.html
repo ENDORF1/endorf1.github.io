@@ -153,6 +153,24 @@ body.edit-mode .add-post-btn{display:block;}
 .creation-bg.c4{background:radial-gradient(circle at 20% 20%,#ff006e,#00f5ff,transparent 70%);}
 .creation-type{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--magenta);letter-spacing:2px;margin-bottom:6px;text-transform:uppercase;}
 .creation-name{font-size:16px;font-weight:600;color:#fff;font-family:'Noto Sans SC',sans-serif;}
+.creation-link-input{display:none;position:absolute;bottom:0;left:0;right:0;background:rgba(3,8,16,.85);border:none;border-top:1px solid rgba(0,245,255,.2);color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;padding:6px 12px;outline:none;}
+body.edit-mode .creation-link-input{display:block;}
+.creation-link-input::placeholder{color:var(--muted);}
+.creation-cover{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;}
+.creation-card .creation-type,.creation-card .creation-name{position:relative;z-index:1;}
+.creation-card-edit-overlay{display:none;position:absolute;inset:0;z-index:10;background:rgba(3,8,16,.75);backdrop-filter:blur(4px);flex-direction:column;align-items:center;justify-content:center;gap:8px;}
+body.edit-mode .creation-card:hover .creation-card-edit-overlay{display:flex;}
+.cc-mode-btn{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;padding:6px 14px;border:1px solid;background:transparent;cursor:pointer;transition:all .2s;text-transform:uppercase;width:160px;text-align:center;}
+.cc-mode-btn.active{background:var(--cyan);color:var(--bg);border-color:var(--cyan);}
+.cc-mode-btn:not(.active){color:var(--muted);border-color:rgba(255,255,255,.15);}
+.cc-mode-btn:not(.active):hover{color:var(--cyan);border-color:var(--cyan);}
+.cc-upload-btn{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;padding:6px 14px;border:1px dashed rgba(0,245,255,.3);color:var(--muted);background:transparent;cursor:pointer;transition:all .2s;width:160px;text-align:center;}
+.cc-upload-btn:hover{border-color:var(--cyan);color:var(--cyan);}
+.cc-focus-hint{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;}
+.proj-link-input{display:none;background:transparent;border:none;border-bottom:1px solid rgba(0,245,255,.2);color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;width:100%;padding:4px 0;outline:none;margin-top:10px;}
+body.edit-mode .proj-link-row{display:block;}
+.proj-link-input:focus{border-bottom-color:var(--cyan);color:var(--cyan);}
+.proj-link-input::placeholder{color:var(--muted);}
 .creation-controls{display:none;position:absolute;top:8px;right:8px;gap:6px;}
 body.edit-mode .creation-controls{display:flex;}
 .creation-drag-handle{font-family:'Share Tech Mono',monospace;font-size:12px;color:rgba(255,255,255,.25);cursor:grab;padding:3px 6px;user-select:none;transition:color .2s;}
@@ -441,31 +459,8 @@ body.modal-open body::before{z-index:1 !important;}
     <h2 class="sec-title">游戏开发</h2>
     <div class="sec-line"></div>
   </div>
-  <div class="projects-grid">
-    <a class="proj-card" href="/works/">
-      <div class="card-controls"><div class="card-drag-handle">⠿⠿</div><button class="card-delete" onclick="this.closest('.proj-card').remove()">✕</button></div>
-      <div class="proj-tag">// IN PROGRESS</div>
-      <div class="proj-name">卡牌 DEMO</div>
-      <div class="proj-desc">受《杀戮尖塔》启发的独立卡牌 Roguelike。探索卡组构建与随机性的平衡边界。</div>
-      <div class="proj-meta"><span class="tag">ROGUELIKE</span><span class="tag">CARD GAME</span><span class="tag">INDIE</span></div>
-      <div class="proj-link-row"><input class="proj-link-input" type="url" placeholder="项目链接 https://..."></div>
-    </a>
-    <a class="proj-card" href="/works/">
-      <div class="card-controls"><div class="card-drag-handle">⠿⠿</div><button class="card-delete" onclick="this.closest('.proj-card').remove()">✕</button></div>
-      <div class="proj-tag">// PROTOTYPE</div>
-      <div class="proj-name">项目 · 占位</div>
-      <div class="proj-desc">在这里添加你的下一个游戏项目，或者过去的作品展示。</div>
-      <div class="proj-meta"><span class="tag">GAME</span><span class="tag">UNITY</span></div>
-      <div class="proj-link-row"><input class="proj-link-input" type="url" placeholder="项目链接 https://..."></div>
-    </a>
-    <a class="proj-card" href="/works/">
-      <div class="card-controls"><div class="card-drag-handle">⠿⠿</div><button class="card-delete" onclick="this.closest('.proj-card').remove()">✕</button></div>
-      <div class="proj-tag">// ARCHIVE</div>
-      <div class="proj-name">项目 · 占位</div>
-      <div class="proj-desc">Game jam 作品、练习项目或实验性 demo 都可以放这里。</div>
-      <div class="proj-meta"><span class="tag">JAM</span><span class="tag">EXPERIMENT</span></div>
-      <div class="proj-link-row"><input class="proj-link-input" type="url" placeholder="项目链接 https://..."></div>
-    </a>
+  <div class="projects-grid" id="dynamic-works-grid">
+    <!-- 动态加载自后台项目数据 -->
     <button class="add-card-btn" onclick="addProject(this)">＋ 添加项目</button>
   </div>
 </section>
@@ -480,11 +475,8 @@ body.modal-open body::before{z-index:1 !important;}
     <h2 class="sec-title">技术博客</h2>
     <div class="sec-line"></div>
   </div>
-  <div class="posts-list">
-    <div class="post-item"><span class="post-drag-handle">⠿</span><span class="post-date">2025.04.01</span><span class="post-cat">游戏设计</span><span class="post-title">杀戮尖塔核心玩法拆解：有限资源下的决策美学</span><input class="post-url-input" type="url" placeholder="文章链接..."><a class="post-arrow" href="#">→</a><button class="post-delete" onclick="this.closest('.post-item').remove()">✕</button></div>
-    <div class="post-item"><span class="post-drag-handle">⠿</span><span class="post-date">2025.03.18</span><span class="post-cat">开发日志</span><span class="post-title">从零开始做卡牌游戏 #01：战斗系统的第一次迭代</span><input class="post-url-input" type="url" placeholder="文章链接..."><a class="post-arrow" href="#">→</a><button class="post-delete" onclick="this.closest('.post-item').remove()">✕</button></div>
-    <div class="post-item"><span class="post-drag-handle">⠿</span><span class="post-date">2025.03.05</span><span class="post-cat">数据分析</span><span class="post-title">用数据视角看二次元游戏留存：以明日方舟为例</span><input class="post-url-input" type="url" placeholder="文章链接..."><a class="post-arrow" href="#">→</a><button class="post-delete" onclick="this.closest('.post-item').remove()">✕</button></div>
-    <div class="post-item"><span class="post-drag-handle">⠿</span><span class="post-date">2025.02.20</span><span class="post-cat">技术</span><span class="post-title">Python 数据科学栈在游戏数值设计中的应用实践</span><input class="post-url-input" type="url" placeholder="文章链接..."><a class="post-arrow" href="#">→</a><button class="post-delete" onclick="this.closest('.post-item').remove()">✕</button></div>
+  <div class="posts-list" id="dynamic-posts-list">
+    <!-- 动态加载自后台文章数据 -->
   </div>
   <button class="add-post-btn" onclick="addPost(this)">＋ 添加文章</button>
 </section>
@@ -500,10 +492,10 @@ body.modal-open body::before{z-index:1 !important;}
     <div class="sec-line"></div>
   </div>
   <div class="creations-grid">
-    <a class="creation-card" href="/gallery/"><div class="creation-bg c1"></div><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-type">// ILLUST</div><div class="creation-name">插画作品</div></a>
-    <a class="creation-card" href="/gallery/"><div class="creation-bg c2"></div><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-type">// MERCH</div><div class="creation-name">漫展周边</div></a>
-    <a class="creation-card" href="/gallery/"><div class="creation-bg c3"></div><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-type">// FANWORK</div><div class="creation-name">同人创作</div></a>
-    <a class="creation-card" href="/gallery/"><div class="creation-bg c4"></div><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-type">// OTHER</div><div class="creation-name">更多作品</div></a>
+    <a class="creation-card" href="/gallery/illust/" data-cover-mode="gradient" data-cover-img="" data-cover-pos="50% 50%"><div class="creation-bg c1"></div><img class="creation-cover" src="" style="display:none;object-position:50% 50%"><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'custom',event)">指定图片</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><label class="cc-upload-btn">📷 上传封面图<input type="file" accept="image/*" style="display:none" onchange="uploadCreationCover(this)"></label><div class="cc-focus-hint">上传后可在图片上点击选焦点</div></div><div class="creation-type">// ILLUST</div><div class="creation-name">插画作品</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/illust/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
+    <a class="creation-card" href="/gallery/merch/" data-cover-mode="gradient" data-cover-img="" data-cover-pos="50% 50%"><div class="creation-bg c2"></div><img class="creation-cover" src="" style="display:none;object-position:50% 50%"><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'custom',event)">指定图片</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><label class="cc-upload-btn">📷 上传封面图<input type="file" accept="image/*" style="display:none" onchange="uploadCreationCover(this)"></label><div class="cc-focus-hint">上传后可在图片上点击选焦点</div></div><div class="creation-type">// MERCH</div><div class="creation-name">漫展周边</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/merch/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
+    <a class="creation-card" href="/gallery/fanwork/" data-cover-mode="gradient" data-cover-img="" data-cover-pos="50% 50%"><div class="creation-bg c3"></div><img class="creation-cover" src="" style="display:none;object-position:50% 50%"><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'custom',event)">指定图片</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><label class="cc-upload-btn">📷 上传封面图<input type="file" accept="image/*" style="display:none" onchange="uploadCreationCover(this)"></label><div class="cc-focus-hint">上传后可在图片上点击选焦点</div></div><div class="creation-type">// FANWORK</div><div class="creation-name">同人创作</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/fanwork/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
+    <a class="creation-card" href="/gallery/other/" data-cover-mode="gradient" data-cover-img="" data-cover-pos="50% 50%"><div class="creation-bg c4"></div><img class="creation-cover" src="" style="display:none;object-position:50% 50%"><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'custom',event)">指定图片</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><label class="cc-upload-btn">📷 上传封面图<input type="file" accept="image/*" style="display:none" onchange="uploadCreationCover(this)"></label><div class="cc-focus-hint">上传后可在图片上点击选焦点</div></div><div class="creation-type">// OTHER</div><div class="creation-name">更多作品</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/other/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
     <button class="add-creation-btn" onclick="addCreation(this)">＋</button>
   </div>
 </section>
@@ -651,7 +643,7 @@ document.querySelectorAll('a,.proj-card,.creation-card').forEach(cursorHover);
 /* ══════════════════════════════════════
    EDIT MODE
 ══════════════════════════════════════ */
-const EDIT_SELS=['.hero-tag','.hero-name .line2','.proj-tag','.proj-name','.proj-desc','.tag','.post-date','.post-cat','.post-title','.creation-type','.creation-name','.sec-title','.footer-text','.nav-logo','.nav-logo span'];
+const EDIT_SELS=['.hero-tag','.hero-name .line2','.proj-tag','.proj-name','.proj-desc','.tag','.post-date','.post-cat','.post-title','.creation-type','.creation-name','.sec-title','.footer-text','.nav-logo','.nav-logo span','.social-label','.nav-links a'];
 function setEditable(on){
   EDIT_SELS.forEach(s=>document.querySelectorAll(s).forEach(el=>{el.contentEditable=on?'true':'false';el.spellcheck=false;}));
   // hero-sub: set whole block editable so all text including between <br> is clickable
@@ -698,7 +690,7 @@ let secN=4;
 
 function addProject(btn){
   const c=document.createElement('div');c.className='proj-card';
-  c.innerHTML=`<div class="card-controls"><div class="card-drag-handle">⠿⠿</div><button class="card-delete" onclick="this.closest('.proj-card').remove()">✕</button></div><div class="proj-tag">// NEW</div><div class="proj-name">新项目</div><div class="proj-desc">点击修改项目描述。</div><div class="proj-meta"><span class="tag">TAG</span></div><div class="proj-link-row"><input class="proj-link-input" type="url" placeholder="项目链接 https://..."></div>`;
+  c.innerHTML=`<div class="card-controls"><div class="card-drag-handle">⠿⠿</div><button class="card-delete" onclick="this.closest('.proj-card').remove()">✕</button></div><div class="proj-tag">// NEW</div><div class="proj-name">新项目</div><div class="proj-desc">点击修改项目描述。</div><div class="proj-meta"><span class="tag">TAG</span></div><div class="proj-link-row"><input class="proj-link-input" type="url" placeholder="项目链接 https://..." oninput="const a=this.closest('.proj-card');if(a.tagName==='A')a.href=this.value||'/works/'"></div>`;
   btn.parentNode.insertBefore(c,btn);
   c.querySelectorAll('.proj-tag,.proj-name,.proj-desc,.tag').forEach(e=>{e.contentEditable='true';e.spellcheck=false;});
   makeProjDrag(c);cursorHover(c);c.querySelector('.proj-name').focus();
@@ -714,7 +706,7 @@ function addPost(btn){
 
 function addCreation(btn){
   const c=document.createElement('div');c.className='creation-card';
-  c.innerHTML=`<div class="creation-bg ${BG[Math.floor(Math.random()*4)]}"></div><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-type">// TYPE</div><div class="creation-name">作品名称</div>`;
+  c.innerHTML=`<div class="creation-bg ${BG[Math.floor(Math.random()*4)]}"></div><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-type">// TYPE</div><div class="creation-name">作品名称</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" oninput="this.closest('.creation-card').href=this.value">`;
   btn.parentNode.insertBefore(c,btn);
   c.querySelectorAll('.creation-type,.creation-name').forEach(e=>{e.contentEditable='true';e.spellcheck=false;});
   makeCreationDrag(c);cursorHover(c);c.querySelector('.creation-name').focus();
@@ -911,6 +903,216 @@ async function pushToGithub() {
   }
   btn.disabled = false;
 }
+
+/* ══════════════════════════════════════
+   CREATION CARD COVER MODE
+══════════════════════════════════════ */
+function setCoverMode(card, mode, e){
+  if(e){e.preventDefault();e.stopPropagation();}
+  card.dataset.coverMode=mode;
+  const bg=card.querySelector('.creation-bg');
+  const img=card.querySelector('.creation-cover');
+  const btns=card.querySelectorAll('.cc-mode-btn');
+  btns.forEach(b=>b.classList.remove('active'));
+  // activate clicked button
+  const btnIdx={'gradient':0,'custom':1,'latest':2};
+  if(btns[btnIdx[mode]]) btns[btnIdx[mode]].classList.add('active');
+
+  if(mode==='gradient'){
+    bg.style.opacity='';
+    img.style.display='none';
+  } else if(mode==='custom'){
+    const src=card.dataset.coverImg;
+    if(src){
+      img.src=src; img.style.display='block';
+      img.style.objectPosition=card.dataset.coverPos||'50% 50%';
+      bg.style.opacity='0';
+    } else {
+      showToast('info','请上传封面图');
+    }
+  } else if(mode==='latest'){
+    // Use latest gallery image from localStorage
+    const cats=JSON.parse(localStorage.getItem('galleryCategories')||'[]');
+    let latestImg=null, latestPos='50% 50%';
+    for(const cat of cats){
+      for(const item of (cat.items||[])){
+        if(item.img){latestImg=item.img; latestPos=item.imgPos||'50% 50%';}
+      }
+    }
+    if(latestImg){
+      img.src=latestImg; img.style.display='block';
+      img.style.objectPosition=latestPos;
+      bg.style.opacity='0';
+    } else {
+      showToast('info','画廊中还没有作品图，先在后台添加作品');
+      setCoverMode(card,'gradient',null);
+    }
+  }
+}
+
+async function uploadCreationCover(input){
+  const file=input.files[0]; if(!file)return;
+  const card=input.closest('.creation-card');
+  if(!GH_USER||!GH_REPO||!GH_TOKEN){
+    showToast('err','请先配置 GitHub 才能上传图片'); input.value=''; return;
+  }
+  showToast('info','上传封面中...');
+  try{
+    const url=await uploadImageToGH(file);
+    card.dataset.coverImg=url;
+    // show focus picker for this card
+    openCreationFocusPicker(card, url);
+    showToast('ok','封面已上传 ✓ 点击图片选择焦点');
+  }catch(e){
+    showToast('err','上传失败：'+e.message);
+  }
+  input.value='';
+}
+
+function openCreationFocusPicker(card, imgSrc){
+  // Reuse the existing focus picker modal
+  const picker=document.getElementById('focus-picker-wrap');
+  const pickerImg=document.getElementById('focus-picker-img');
+  pickerImg.src=imgSrc;
+  picker.classList.add('show');
+  const dot=document.getElementById('focus-dot');
+  dot.style.left='50%'; dot.style.top='50%';
+  // Override setFocusPoint temporarily to update this card
+  window._focusPickerTarget=card;
+  // show a little modal wrapper
+  document.getElementById('card-modal').dataset.mode='creation-cover';
+  document.getElementById('card-modal').classList.add('show');
+  // hide other fields, only show picker
+  document.getElementById('meta-bar') && null;
+  document.getElementById('post-title-input') && (document.getElementById('post-title-input').style.display='none');
+  document.getElementById('card-title-input').closest('.card-field').style.display='none';
+  document.getElementById('card-desc-input').closest('.card-field').style.display='none';
+  document.getElementById('card-tags-input').closest('.card-field').style.display='none';
+  document.getElementById('card-link-input').closest('.card-field').style.display='none';
+  document.getElementById('card-content-field').style.display='none';
+  document.getElementById('card-img-preview').style.display='none';
+  document.querySelector('.card-img-upload').style.display='none';
+  document.querySelector('.card-save').style.display='none';
+  document.querySelector('.card-cancel').textContent='关闭';
+}
+
+// Override closeCardModal to restore fields
+const _origCloseCardModal=window.closeCardModal;
+window.closeCardModal=function(){
+  const mode=document.getElementById('card-modal').dataset.mode;
+  if(mode==='creation-cover'){
+    // apply focus to card
+    const card=window._focusPickerTarget;
+    if(card){
+      const pos=cardImgPos||'50% 50%';
+      card.dataset.coverPos=pos;
+      const img=card.querySelector('.creation-cover');
+      if(img){img.style.objectPosition=pos;}
+      setCoverMode(card,'custom',null);
+      window._focusPickerTarget=null;
+    }
+    // restore fields
+    document.getElementById('card-title-input').closest('.card-field').style.display='';
+    document.getElementById('card-desc-input').closest('.card-field').style.display='';
+    document.getElementById('card-tags-input').closest('.card-field').style.display='';
+    document.getElementById('card-link-input').closest('.card-field').style.display='';
+    document.querySelector('.card-img-upload').style.display='';
+    document.querySelector('.card-save').style.display='';
+    document.querySelector('.card-cancel').textContent='取消';
+    document.getElementById('focus-picker-wrap').classList.remove('show');
+  }
+  document.getElementById('card-modal').classList.remove('show');
+};
+
+/* ══════════════════════════════════════
+   DYNAMIC BLOG POSTS FROM ADMIN DATA
+══════════════════════════════════════ */
+
+function loadDynamicWorks(){
+  const grid = document.getElementById('dynamic-works-grid');
+  if(!grid) return;
+
+  const works = JSON.parse(localStorage.getItem('works') || '[]')
+    .filter(w => w.title)
+    .slice(0, 6);
+
+  const addBtn = grid.querySelector('.add-card-btn');
+  [...grid.children].forEach(el => {
+    if(!el.classList.contains('add-card-btn')) el.remove();
+  });
+
+  if(works.length === 0){
+    const ph = document.createElement('div');
+    ph.style.cssText = 'font-family:var(--font-mono);font-size:12px;color:var(--muted);letter-spacing:2px;padding:28px;grid-column:1/-1;';
+    ph.textContent = '// 暂无项目 · 请在后台添加项目后推送';
+    grid.insertBefore(ph, addBtn);
+    return;
+  }
+
+  works.forEach(w => {
+    const href = w.link || '/works/';
+    const card = document.createElement('a');
+    card.className = 'proj-card';
+    card.href = href;
+    card.innerHTML = `
+      <div class="card-controls">
+        <div class="card-drag-handle">⠿⠿</div>
+        <button class="card-delete" onclick="this.closest('.proj-card').remove()">✕</button>
+      </div>
+      <div class="proj-tag">// ${(w.tags||[])[0] ? w.tags[0].toUpperCase() : 'PROJECT'}</div>
+      <div class="proj-name">${w.title}</div>
+      <div class="proj-desc">${w.desc||''}</div>
+      <div class="proj-meta">${(w.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      <div class="proj-link-row"><input class="proj-link-input" type="url" placeholder="项目链接 https://..." value="${w.link||''}" oninput="const a=this.closest('.proj-card');if(a.tagName==='A')a.href=this.value||'/works/'"></div>
+    `;
+    grid.insertBefore(card, addBtn);
+  });
+}
+
+function loadDynamicPosts(){
+  const list = document.getElementById('dynamic-posts-list');
+  if(!list) return;
+
+  const posts = JSON.parse(localStorage.getItem('posts') || '[]')
+    .filter(p => !p.draft && p.title)
+    .slice(0, 6);
+
+  if(posts.length === 0){
+    list.innerHTML = '<div class="no-posts-placeholder" style="font-family:var(--font-mono);font-size:12px;color:var(--muted);letter-spacing:2px;padding:20px 24px;">// 暂无已发布文章 · 请在后台发布文章后推送</div>';
+    return;
+  }
+
+  list.innerHTML = posts.map(p => `
+    <a class="post-item" href="/blog/${p.slug}.html">
+      <span class="post-drag-handle" style="display:none">⠿</span>
+      <span class="post-date">${p.date || ''}</span>
+      <span class="post-cat">${p.cat || '未分类'}</span>
+      <span class="post-title">${p.title}</span>
+      <span class="post-arrow">→</span>
+    </a>
+  `).join('');
+}
+
+// Run on page load
+document.addEventListener('DOMContentLoaded', ()=>{
+  loadDynamicPosts();
+  loadDynamicWorks();
+});
+
+/* ══════════════════════════════════════
+   肃正协议 · 暗号触发
+   键盘依次输入 suzhengxieyi 跳转隐藏页面
+══════════════════════════════════════ */
+(function(){
+  const CODE = 'suzhengxieyi';
+  let buf = '';
+  document.addEventListener('keydown', e => {
+    if(e.key.length !== 1) return;
+    buf += e.key.toLowerCase();
+    if(buf.length > CODE.length) buf = buf.slice(-CODE.length);
+    if(buf === CODE) window.location.href = '/suzhengjieyi/';
+  });
+})();
 </script>
 </body>
 </html>
