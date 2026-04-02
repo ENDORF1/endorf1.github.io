@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>肃正协议 · 访问记录</title>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Noto+Sans+SC:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#030810;--dim:#0a1628;--cyan:#00f5ff;--magenta:#ff006e;--yellow:#ffe600;--text:#c8e0f0;--muted:#3a5a7a;--glow-c:0 0 8px #00f5ff88,0 0 24px #00f5ff44;--glow-m:0 0 8px #ff006e88,0 0 24px #ff006e44;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Share Tech Mono',monospace;overflow:hidden;}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,245,255,.015) 2px,rgba(0,245,255,.015) 4px);pointer-events:none;z-index:10;}
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,245,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,255,.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;animation:gridShift 20s linear infinite;}
+@keyframes gridShift{to{transform:translateY(60px);}}
+
+.wrap{position:relative;z-index:1;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:40px;}
+
+.title-tag{font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:16px;text-shadow:var(--glow-m);}
+.title{font-size:32px;font-weight:700;color:#fff;letter-spacing:6px;margin-bottom:8px;font-family:'Share Tech Mono',monospace;}
+.subtitle{font-size:11px;color:var(--muted);letter-spacing:3px;margin-bottom:60px;}
+
+.stats{display:flex;gap:48px;margin-bottom:60px;}
+.stat-card{background:var(--dim);border:1px solid rgba(0,245,255,.15);padding:32px 48px;text-align:center;position:relative;}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.stat-card:first-child::before{background:linear-gradient(90deg,var(--cyan),transparent);}
+.stat-card:last-child::before{background:linear-gradient(90deg,var(--magenta),transparent);}
+.stat-label{font-size:10px;color:var(--muted);letter-spacing:3px;margin-bottom:16px;display:block;}
+.stat-num{font-size:48px;font-weight:700;letter-spacing:4px;line-height:1;}
+.stat-card:first-child .stat-num{color:var(--cyan);text-shadow:var(--glow-c);}
+.stat-card:last-child .stat-num{color:var(--magenta);text-shadow:var(--glow-m);}
+.stat-desc{font-size:10px;color:var(--muted);letter-spacing:2px;margin-top:12px;display:block;}
+
+.note{font-size:10px;color:var(--muted);letter-spacing:2px;line-height:2;}
+.note span{color:var(--cyan);}
+
+.deco{position:absolute;right:8vw;top:50%;transform:translateY(-50%);width:200px;height:200px;border:1px solid rgba(0,245,255,.08);border-radius:50%;animation:spin 20s linear infinite;pointer-events:none;}
+.deco::before{content:'';position:absolute;inset:20px;border:1px solid rgba(255,0,110,.08);border-radius:50%;animation:spin 12s linear infinite reverse;}
+@keyframes spin{to{transform:translateY(-50%) rotate(360deg);}}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.wrap>*{animation:fadeIn .6s ease both;}
+.wrap>*:nth-child(1){animation-delay:.1s;}
+.wrap>*:nth-child(2){animation-delay:.2s;}
+.wrap>*:nth-child(3){animation-delay:.3s;}
+.wrap>*:nth-child(4){animation-delay:.5s;}
+.wrap>*:nth-child(5){animation-delay:.7s;}
+</style>
+</head>
+<body>
+<div class="deco"></div>
+<div class="wrap">
+  <div class="title-tag">// CLASSIFIED · ACCESS GRANTED</div>
+  <div class="title">肃正协议</div>
+  <div class="subtitle">NETWORK ACCESS RECORD · ENDORF1.GITHUB.IO</div>
+
+  <div class="stats">
+    <div class="stat-card">
+      <span class="stat-label">// UNIQUE VISITORS</span>
+      <div class="stat-num" id="busuanzi_value_site_uv">--</div>
+      <span class="stat-desc">独立访客数</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">// PAGE VIEWS</span>
+      <div class="stat-num" id="busuanzi_value_site_pv">--</div>
+      <span class="stat-desc">总浏览次数</span>
+    </div>
+  </div>
+
+  <div class="note">
+    数据来源：全站累计 · 由 <span>busuanzi</span> 提供<br>
+    本页面不对外公开 · 仅限协议执行者访问
+  </div>
+</div>
+</body>
+</html>
