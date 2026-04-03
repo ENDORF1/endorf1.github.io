@@ -26,7 +26,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:cent
 .back-btn:hover{color:var(--cyan);}
 .gd-cat{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;display:block;}
 .gd-title{font-size:clamp(28px,5vw,48px);font-weight:700;color:#fff;margin-bottom:24px;}
-.gd-canvas{max-width:100%;max-height:80vh;display:block;margin:0 auto 40px;border:1px solid rgba(255,0,110,.2);-webkit-user-drag:none;user-select:none;}
+.gd-canvas{max-width:100%;max-height:80vh;display:block;margin:0 auto 40px;border:1px solid rgba(255,0,110,.2);user-select:none;-webkit-user-drag:none;}
 .gd-body{max-width:720px;}
 .gd-body p{margin:0 0 16px;line-height:1.9;color:var(--text);}
 </style></head><body>
@@ -49,71 +49,40 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:cent
 </div>
 <script>
 (function(){
-  var SRC="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775168429357-q4ws6.png";
-  var cv=document.getElementById('gd-c');
-  if(!cv)return;
-  var cx=cv.getContext('2d');
-  var im=new Image();
-  im.crossOrigin='anonymous';
-
-  // 禁用右键
-  document.addEventListener('contextmenu',function(e){e.preventDefault();});
-  // 禁用拖拽
-  cv.addEventListener('dragstart',function(e){e.preventDefault();});
-  // 禁用长按选择（移动端）
-  cv.addEventListener('touchstart',function(e){e.preventDefault();},{passive:false});
-  // 禁用键盘截图快捷键（尽力拦截，无法完全阻止系统截图）
-  document.addEventListener('keydown',function(e){
-    if((e.ctrlKey||e.metaKey)&&(e.key==='s'||e.key==='S'||e.key==='p'||e.key==='P'))e.preventDefault();
-    if(e.key==='PrintScreen')e.preventDefault();
-  });
-
+  var S="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775168429357-q4ws6.png",W="Xcale";
+  var cv=document.getElementById("gd-c");if(!cv)return;
+  var cx=cv.getContext("2d"),im=new Image();
+  im.crossOrigin="anonymous";
+  function clean(){cx.clearRect(0,0,cv.width,cv.height);cx.drawImage(im,0,0,cv.width,cv.height);}
+  function drawWM(ctx,w,h){
+    ctx.save();
+    var fs=Math.max(18,Math.min(w,h)*0.045);
+    ctx.font="bold "+fs+"px Share Tech Mono,monospace";
+    ctx.fillStyle="rgba(255,0,110,0.75)";ctx.strokeStyle="rgba(0,0,0,0.4)";ctx.lineWidth=1;
+    ctx.rotate(-Math.PI/6);
+    var sx=w*0.26,sy=Math.max(fs*2.2,h*0.12);
+    for(var y=-h*1.5;y<w+h*1.5;y+=sy)
+      for(var x=-w*1.5;x<w+h*1.5;x+=sx){ctx.strokeText(W,x,y);ctx.fillText(W,x,y);}
+    ctx.restore();
+  }
   im.onload=function(){
-    // 按实际比例缩放 canvas
-    var mw=Math.min(im.naturalWidth,window.innerWidth-80);
-    var sc=mw/im.naturalWidth;
-    cv.width=im.naturalWidth*sc;
-    cv.height=im.naturalHeight*sc;
-
-    // 渲染干净版（正常预览）
-    cx.drawImage(im,0,0,cv.width,cv.height);
-
-    // 在离屏 canvas 上预烘焙水印版，备用
-    var wc=document.createElement('canvas');
-    wc.width=cv.width; wc.height=cv.height;
-    var wx=wc.getContext('2d');
-    wx.drawImage(im,0,0,wc.width,wc.height);
-    // 平铺水印：Xcale，品红色，斜向-30°
-    wx.save();
-    var fs=Math.max(18,Math.min(wc.width,wc.height)*0.045);
-    wx.font='bold '+fs+'px "Share Tech Mono",monospace';
-    wx.fillStyle='rgba(255,0,110,0.75)';
-    wx.strokeStyle='rgba(0,0,0,0.4)';
-    wx.lineWidth=1;
-    wx.rotate(-Math.PI/6);
-    var sx=wc.width*0.26, sy=Math.max(fs*2.2, wc.height*0.12);
-    for(var y=-wc.height*1.5;y<wc.width+wc.height*1.5;y+=sy)
-      for(var x=-wc.width*1.5;x<wc.width+wc.height*1.5;x+=sx){
-        wx.strokeText('Xcale',x,y);
-        wx.fillText('Xcale',x,y);
-      }
-    wx.restore();
-
-    // toDataURL 触发时返回水印版
-    var _orig=cv.toDataURL.bind(cv);
+    var mw=Math.min(im.naturalWidth,window.innerWidth-80),sc=mw/im.naturalWidth;
+    cv.width=im.naturalWidth*sc;cv.height=im.naturalHeight*sc;
+    clean();
+    var wc=document.createElement("canvas");wc.width=cv.width;wc.height=cv.height;
+    var wx=wc.getContext("2d");wx.drawImage(im,0,0,wc.width,wc.height);drawWM(wx,wc.width,wc.height);
     cv.toDataURL=function(){return wc.toDataURL.apply(wc,arguments);};
-    cv.toBlob=function(cb,type,q){return wc.toBlob(cb,type,q);};
+    cv.toBlob=function(cb,t,q){return wc.toBlob(cb,t,q);};
+    document.addEventListener("contextmenu",function(e){e.preventDefault();});
+    cv.addEventListener("dragstart",function(e){e.preventDefault();});
+    cv.addEventListener("touchstart",function(e){e.preventDefault();},{passive:false});
+    document.addEventListener("keydown",function(e){
+      if((e.ctrlKey||e.metaKey)&&(e.key==="s"||e.key==="S"||e.key==="p"||e.key==="P"))e.preventDefault();
+      if(e.key==="PrintScreen")e.preventDefault();
+    });
   };
-
-  im.onerror=function(){
-    // 加载失败降级为普通图片（无法跨域时的兜底）
-    var fb=document.createElement('img');
-    fb.src=SRC;
-    fb.style.cssText='max-width:100%;max-height:80vh;display:block;margin:0 auto 40px;border:1px solid rgba(255,0,110,.2);';
-    cv.replaceWith(fb);
-  };
-
-  im.src=SRC;
+  im.onerror=function(){var fb=document.createElement("img");fb.src=S;fb.className="gd-img";cv.replaceWith(fb);};
+  im.src=S;
 })();
 </script>
 </body></html>
