@@ -5,6 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
+<meta name="version" content="1775242604243">
 <meta name="version" content="1775217578279">
 <title>_DEV.LOG — 个人主页</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&amp;family=Rajdhani:wght@300;400;600;700&amp;family=Noto+Sans+SC:wght@300;400;700&amp;display=swap" rel="stylesheet">
@@ -338,11 +339,11 @@ body.modal-open nav{z-index:1 !important;}
 body.modal-open body::before{z-index:1 !important;}
 </style>
 </head>
-<body class="">
+<body class="modal-open">
 
 <!-- ── CURSORS ── -->
-<div class="cursor" id="cursor" style="left: 1238px; top: 929px; transform: translate(-50%, -50%) scale(1); background: var(--cyan);"></div>
-<div class="cursor-ring" id="cursorRing" style="left: 1238.01px; top: 928.978px; width: 36px; height: 36px;"></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
 
 <!-- ══════════════════════════════
      PASSWORD MODAL (login)
@@ -408,7 +409,7 @@ body.modal-open body::before{z-index:1 !important;}
 <div id="save-toast">// 已保存为 index.html</div>
 
 <!-- ── GITHUB PUSH MODAL ── -->
-<div id="gh-overlay" class="">
+<div id="gh-overlay" class="show">
   <div id="gh-box">
     <span class="gh-tag">// GITHUB DEPLOY</span>
     <div class="gh-title">推送到 GitHub</div>
@@ -429,9 +430,9 @@ body.modal-open body::before{z-index:1 !important;}
       <label>PERSONAL ACCESS TOKEN</label>
       <input id="gh-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxx" autocomplete="off">
     </div>
-    <button id="gh-push-btn" onclick="pushToGithub()">⬆ 立即推送</button>
+    <button id="gh-push-btn" onclick="pushToGithub()" disabled="">⬆ 立即推送</button>
     <button id="gh-cancel-btn" onclick="closeGhModal()">取消</button>
-    <div id="gh-log"></div>
+    <div id="gh-log" class=""><div class="log-spin">⟳ 正在生成网页内容...</div></div>
   </div>
 </div>
 
@@ -1413,6 +1414,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 ══════════════════════════════════════ */
 // Link navigation handled by clearing hrefs in enterEditMode
 </script>
+
 
 
 
