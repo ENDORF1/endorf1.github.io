@@ -411,7 +411,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         <div class="focus-dot" id="focus-dot" style="left:50%;top:50%;"></div>
       </div>
       <div class="focus-hint">👆 点击图片选择展示焦点位置</div>
-      <div id="card-upload-status" style="display:none;font-family:var(--font-mono);font-size:10px;letter-spacing:2px;padding:8px 0;display:none;align-items:center;gap:8px;">
+      <div id="card-upload-status" style="font-family:var(--font-mono);font-size:10px;letter-spacing:2px;padding:8px 0;display:none;align-items:center;gap:8px;">
         <div id="card-us-spinner" style="width:12px;height:12px;border:2px solid rgba(255,230,0,.2);border-top-color:var(--yellow);border-radius:50%;animation:spin 0.7s linear infinite;flex-shrink:0;"></div>
         <span id="card-us-msg" style="color:var(--yellow);">上传中...</span>
       </div>
@@ -970,7 +970,7 @@ async function handleCardImg(input){
     showToast('err','请先配置 GitHub 才能上传图片');
     input.value=''; return;
   }
-  showUploadStatus('loading','⟳ 上传中，请稍候...');
+  showCardUploadStatus('loading','⟳ 上传中，请稍候...');
   try{
     const url=await uploadImageToGH(file);
     const mode=document.getElementById('card-modal').dataset.mode;
@@ -983,9 +983,9 @@ async function handleCardImg(input){
     pickerImg.src=url; picker.classList.add('show');
     const dot=document.getElementById('focus-dot');
     dot.style.left='50%'; dot.style.top='50%';
-    showUploadStatus('ok','✓ 上传成功 · 点击图片选择焦点');
+    showCardUploadStatus('ok','✓ 上传成功 · 点击图片选择焦点');
   }catch(e){
-    showUploadStatus('err','✕ 上传失败：'+e.message);
+    showCardUploadStatus('err','✕ 上传失败：'+e.message);
   }
   input.value='';
 }
