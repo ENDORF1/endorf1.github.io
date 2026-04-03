@@ -676,11 +676,6 @@ function enterEditMode(){
   document.getElementById('edit-toggle').textContent='✏ 编辑中';
   setEditable(true);
   initAllDrag();
-  // Temporarily disable all link navigation
-  document.querySelectorAll('a[href]').forEach(a=>{
-    a.dataset.savedHref = a.getAttribute('href');
-    a.removeAttribute('href');
-  });
   // Keep cursor hover working on cards
   document.querySelectorAll('.creation-card,.proj-card').forEach(cursorHover);
 }
@@ -690,12 +685,7 @@ function exitEditMode(){
   document.getElementById('edit-toggle').textContent='🔒 编辑内容';
   setEditable(false);
   renumber();
-  // Restore all link hrefs
-  document.querySelectorAll('a[data-saved-href]').forEach(a=>{
-    a.setAttribute('href', a.dataset.savedHref);
-    delete a.dataset.savedHref;
-  });
-  // Also sync any link inputs back to their <a> href
+  // Sync creation link inputs back to href on exit
   document.querySelectorAll('.creation-link-input').forEach(inp=>{
     const a = inp.closest('a');
     if(a && inp.value) a.setAttribute('href', inp.value);
@@ -768,8 +758,24 @@ function addSection(){
 function makeDraggable({el,handleSel,containerFn,siblingsSel,dragClass,overClassA,overClassB,insertFn}){
   const handle=el.querySelector(handleSel);
   if(!handle)return;
-  handle.addEventListener('mousedown',()=>{el.draggable=true;});
-  el.addEventListener('dragstart',e=>{e.dataTransfer.effectAllowed='move';el.classList.add(dragClass);window.__drag=el;});
+  // Set draggable directly on handle, use dragstart on parent
+  handle.setAttribute('draggable','true');
+  handle.addEventListener('dragstart',e=>{
+    e.stopPropagation();
+    e.dataTransfer.effectAllowed='move';
+    e.dataTransfer.setData('text/plain','drag');
+    el.classList.add(dragClass);
+    window.__drag=el;
+  });
+  handle.addEventListener('dragend',()=>{
+    el.classList.remove(dragClass);
+    document.querySelectorAll(siblingsSel).forEach(s=>s.classList.remove(overClassA,overClassB));
+    window.__drag=null;
+  });
+  // Keep dragover/drop on the element itself for drop targeting
+  el.addEventListener('dragstart',e=>{
+    if(window.__drag===el) return;
+  });
   el.addEventListener('dragend',()=>{
     el.draggable=false;el.classList.remove(dragClass);
     document.querySelectorAll(siblingsSel).forEach(s=>s.classList.remove(overClassA,overClassB));
