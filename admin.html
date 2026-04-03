@@ -254,6 +254,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 #works-editor-content .video-embed{position:relative;width:100%;padding-bottom:56.25%;margin:24px 0;background:#000;}
 #works-editor-content .video-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
 
+.img-mgr-btn{font-family:var(--font-mono);font-size:10px;padding:4px 12px;border:1px solid rgba(0,245,255,.25);color:var(--muted);background:transparent;cursor:pointer;letter-spacing:1px;transition:all .2s;}
+.img-mgr-btn:hover{color:var(--cyan);border-color:var(--cyan);}
+.img-del-btn{border-color:rgba(255,0,110,.3)!important;color:var(--magenta)!important;display:none;}
+.img-del-btn:hover{background:rgba(255,0,110,.15)!important;color:var(--magenta)!important;border-color:rgba(255,0,110,.5)!important;}
 /* works / gallery / about panels */
 #page-panel{flex:1;display:none;flex-direction:column;overflow:hidden;}
 #page-panel.show{display:flex;}
@@ -352,6 +356,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
       <button class="tb-nav-btn" onclick="switchTab('works',this)">游戏项目</button>
       <button class="tb-nav-btn" onclick="switchTab('gallery',this)">同人画廊</button>
       <button class="tb-nav-btn" onclick="switchTab('about',this)">关于我</button>
+      <button class="tb-nav-btn" onclick="switchTab('images',this)">🖼 图片管理</button>
     </div>
     <div class="tb-spacer"></div>
     <div class="tb-status idle" id="tb-status">// 就绪</div>
@@ -664,15 +669,22 @@ function switchTab(tab, btn){
     blogLeft.classList.remove('hidden');
     blogRight.classList.remove('hidden');
     pubBtn.textContent='⬆ 发布';
+    pubBtn.style.display='';
   } else if(tab==='works'){
     worksLeft.classList.remove('hidden');
     worksRight.classList.remove('hidden');
     pubBtn.textContent='⬆ 推送更新';
+    pubBtn.style.display='';
     renderWorksList();
     if(works.length > 0 && currentWork === null) selectWork(0);
+  } else if(tab==='images'){
+    pagePanel.classList.add('show');
+    pubBtn.style.display='none';
+    renderImagesPanel();
   } else {
     pagePanel.classList.add('show');
     pubBtn.textContent='⬆ 推送更新';
+    pubBtn.style.display='';
     renderPagePanel(tab);
   }
 }
@@ -1770,6 +1782,168 @@ async function patchHomeHTML(){
 
   await ghPut('index.html', html, 'update: homepage dynamic content');
 }
+/* ══════════════════════════════════════
+   IMAGE MANAGER
+══════════════════════════════════════ */
+let _imgList = [];      // {name, path, sha, size, url, used}
+let _imgSelected = new Set();
+
+async function renderImagesPanel(){
+  const body = document.getElementById('pp-body');
+  const title = document.getElementById('pp-title');
+  title.textContent = '// 图片管理';
+  body.innerHTML = '<div style="font-family:var(--font-mono);font-size:11px;color:var(--yellow);letter-spacing:2px;padding:20px 0;">⟳ 正在加载图片列表...</div>';
+
+  if(!GH.token) GH.token = await decryptToken() || '';
+  if(!GH.user||!GH.repo||!GH.token){
+    body.innerHTML = '<div style="font-family:var(--font-mono);font-size:11px;color:var(--magenta);letter-spacing:2px;padding:20px 0;">// 请先配置 GitHub</div>';
+    openGhConfig(); return;
+  }
+
+  // 收集所有正在使用的图片 URL
+  const usedUrls = new Set();
+  posts.forEach(p=>{ if(p.cover) usedUrls.add(p.cover); });
+  works.forEach(w=>{ if(w.img) usedUrls.add(w.img); if(w.imgFull) usedUrls.add(w.imgFull); });
+  galleryCategories.forEach(cat=>cat.items.forEach(item=>{
+    if(item.img) usedUrls.add(item.img); if(item.imgFull) usedUrls.add(item.imgFull);
+  }));
+
+  // 从 GitHub 获取 images/ 和 images/full/ 目录
+  const headers = {'Authorization':`token ${GH.token}`,'Accept':'application/vnd.github.v3+json'};
+  _imgList = [];
+  try{
+    for(const dir of ['images','images/full']){
+      const res = await fetch(`https://api.github.com/repos/${GH.user}/${GH.repo}/contents/${dir}`, {headers});
+      if(!res.ok) continue;
+      const files = await res.json();
+      files.filter(f=>f.type==='file').forEach(f=>{
+        const url = `https://cdn.jsdelivr.net/gh/${GH.user}/${GH.repo}@main/${f.path}`;
+        _imgList.push({
+          name: f.name,
+          path: f.path,
+          sha:  f.sha,
+          size: f.size,
+          url,
+          used: usedUrls.has(url)
+        });
+      });
+    }
+  }catch(e){
+    body.innerHTML = '<div style="font-family:var(--font-mono);font-size:11px;color:var(--magenta);letter-spacing:2px;">// 加载失败：'+e.message+'</div>';
+    return;
+  }
+
+  _imgSelected.clear();
+  _renderImageList(body);
+}
+
+function _renderImageList(body){
+  const unused = _imgList.filter(f=>!f.used);
+  const used   = _imgList.filter(f=>f.used);
+
+  let html = '<div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap;">'
+    +'<span style="font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:1px;">'
+    +_imgList.length+' 张图片 · '+unused.length+' 张未使用</span>'
+    +'<button onclick="_selectAllImages()" class="img-mgr-btn">全选</button>'
+    +'<button onclick="_selectAll()" class="img-mgr-btn">全选未使用</button>'
+    +'<button onclick="_selectNone()" class="img-mgr-btn">取消全选</button>'
+    '<button id="img-delete-btn" onclick="_deleteSelected()" class="img-mgr-btn img-del-btn">🗑 删除所选</button>'
+    +'</div>';
+
+  // 未使用
+  if(unused.length){
+    html += '<div style="font-family:var(--font-mono);font-size:10px;color:var(--magenta);letter-spacing:3px;margin-bottom:12px;">// 未使用 · '+unused.length+' 张</div>';
+    html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:32px;">';
+    unused.forEach(f=>{ html += _imgCard(f, false); });
+    html += '</div>';
+  }
+
+  // 使用中
+  if(used.length){
+    html += '<div style="font-family:var(--font-mono);font-size:10px;color:var(--cyan);letter-spacing:3px;margin-bottom:12px;">// 使用中 · '+used.length+' 张</div>';
+    html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;">';
+    used.forEach(f=>{ html += _imgCard(f, true); });
+    html += '</div>';
+  }
+
+  if(!_imgList.length) html = '<div style="font-family:var(--font-mono);font-size:12px;color:var(--muted);letter-spacing:2px;padding:20px 0;">// images/ 目录下暂无图片</div>';
+
+  body.innerHTML = html;
+}
+
+function _imgCard(f, isUsed){
+  const sel = _imgSelected.has(f.path);
+  const kb  = (f.size/1024).toFixed(1)+'KB';
+  const border = sel ? '2px solid var(--cyan)' : (isUsed ? '1px solid rgba(0,245,255,.15)' : '1px solid rgba(255,0,110,.2)');
+  const epath = f.path.replace(/"/g,'&quot;');
+  return '<div data-imgpath="'+epath+'" onclick="_toggleSelectEl(this)" style="background:var(--dim);border:'+border+';cursor:pointer;position:relative;transition:border .15s;">'
+    +(sel?'<div style="position:absolute;top:6px;right:6px;width:18px;height:18px;background:var(--cyan);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--bg);z-index:1;">✓</div>':'')
+    +(isUsed?'<div style="position:absolute;top:6px;left:6px;font-family:var(--font-mono);font-size:8px;color:var(--cyan);background:rgba(3,8,16,.85);padding:2px 5px;letter-spacing:1px;z-index:1;">使用中</div>':'')
+    +'<img src="'+f.url+'" style="width:100%;height:120px;object-fit:cover;display:block;">'
+    +'<div style="padding:8px 10px;">'
+    +'<div style="font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+f.name+'</div>'
+    +'<div style="font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:1px;margin-top:2px;">'+kb+'</div>'
+    +'</div></div>';
+}
+
+function _toggleSelectEl(el){
+  const path = el.dataset.imgpath;
+  if(!path) return;
+  _toggleSelect(path);
+}
+function _toggleSelect(path){
+  if(_imgSelected.has(path)) _imgSelected.delete(path);
+  else _imgSelected.add(path);
+  const deleteBtn = document.getElementById('img-delete-btn');
+  if(deleteBtn) deleteBtn.style.display = _imgSelected.size>0 ? '' : 'none';
+  _renderImageList(document.getElementById('pp-body'));
+}
+
+function _selectAllImages(){
+  _imgList.forEach(f=>_imgSelected.add(f.path));
+  const deleteBtn = document.getElementById('img-delete-btn');
+  if(deleteBtn) deleteBtn.style.display = _imgSelected.size>0 ? '' : 'none';
+  _renderImageList(document.getElementById('pp-body'));
+}
+function _selectAll(){
+  _imgList.filter(f=>!f.used).forEach(f=>_imgSelected.add(f.path));
+  const deleteBtn = document.getElementById('img-delete-btn');
+  if(deleteBtn) deleteBtn.style.display = _imgSelected.size>0 ? '' : 'none';
+  _renderImageList(document.getElementById('pp-body'));
+}
+
+function _selectNone(){
+  _imgSelected.clear();
+  const deleteBtn = document.getElementById('img-delete-btn');
+  if(deleteBtn) deleteBtn.style.display = 'none';
+  _renderImageList(document.getElementById('pp-body'));
+}
+
+async function _deleteSelected(){
+  if(_imgSelected.size===0) return;
+  if(!confirm('确认删除选中的 '+_imgSelected.size+' 张图片？此操作不可撤销。')) return;
+
+  const headers = {'Authorization':`token ${GH.token}`,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'};
+  const toDelete = _imgList.filter(f=>_imgSelected.has(f.path));
+  const body = document.getElementById('pp-body');
+  body.innerHTML = '<div style="font-family:var(--font-mono);font-size:11px;color:var(--yellow);letter-spacing:2px;padding:20px 0;">⟳ 正在删除...</div>';
+
+  let ok=0, fail=0;
+  for(const f of toDelete){
+    try{
+      const res = await fetch(`https://api.github.com/repos/${GH.user}/${GH.repo}/contents/${f.path}`,{
+        method:'DELETE', headers,
+        body: JSON.stringify({message:'delete image: '+f.name, sha: f.sha})
+      });
+      if(res.ok){ ok++; delete _shaCache[f.path]; }
+      else { fail++; console.warn('delete failed', f.path, res.status); }
+    }catch(e){ fail++; }
+  }
+
+  showToast(fail===0?'ok':'info', '已删除 '+ok+' 张'+(fail>0?' · '+fail+' 张失败':''));
+  await renderImagesPanel();
+}
+
 async function updateMainIndex(){
   // homepage is maintained manually - do not overwrite
 }
