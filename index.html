@@ -5,6 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
+<meta name="version" content="1775252254065">
 <meta name="version" content="1775250098936">
 <meta name="version" content="1775247125385">
 <meta name="version" content="1775244317578">
@@ -399,7 +400,7 @@ body.modal-open body::before{z-index:1 !important;}
 </div>
 
 <!-- ── COVER PICKER OVERLAY ── -->
-<div id="cover-picker-overlay" style="position:fixed;inset:0;z-index:999998;background:rgba(3,8,16,.92);backdrop-filter:blur(16px);display:none;align-items:center;justify-content:center;">
+<div id="cover-picker-overlay" style="position: fixed; inset: 0px; z-index: 999998; background: rgba(3, 8, 16, 0.92); backdrop-filter: blur(16px); display: none; align-items: center; justify-content: center;">
   <div style="background:var(--dim);border:1px solid rgba(0,245,255,.22);padding:36px 40px;width:460px;max-width:92vw;position:relative;box-shadow:0 0 60px rgba(0,245,255,.08);">
     <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--magenta));"></div>
     <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:20px;">// 上传封面图</div>
@@ -409,14 +410,14 @@ body.modal-open body::before{z-index:1 !important;}
       <div id="cp-dot" style="position:absolute;width:14px;height:14px;border-radius:50%;background:var(--cyan);border:2px solid #fff;transform:translate(-50%,-50%);pointer-events:none;box-shadow:0 0 8px rgba(0,245,255,.8);left:50%;top:50%;"></div>
     </div>
     <div id="cp-hint" style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:14px;display:none;">👆 点击图片选择展示焦点位置</div>
-    <div id="cp-status" style="font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:2px;min-height:20px;margin-bottom:12px;color:var(--cyan);"></div>
-    <label style="display:block;width:100%;padding:10px;background:transparent;border:1px dashed rgba(0,245,255,.3);color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:2px;cursor:pointer;text-align:center;transition:all .2s;margin-bottom:10px;" onmouseover="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'" onmouseout="this.style.borderColor='rgba(0,245,255,.3)';this.style.color='var(--muted)'">
+    <div id="cp-status" style="font-family: &quot;Share Tech Mono&quot;, monospace; font-size: 11px; letter-spacing: 2px; min-height: 20px; margin-bottom: 12px; color: var(--magenta);">✕ 上传失败：请先在推送弹窗里填写 GitHub 配置</div>
+    <label style="display: block; width: 100%; padding: 10px; background: transparent; border: 1px dashed rgba(0, 245, 255, 0.3); color: var(--muted); font-family: &quot;Share Tech Mono&quot;, monospace; font-size: 11px; letter-spacing: 2px; cursor: pointer; text-align: center; transition: 0.2s; margin-bottom: 10px;" onmouseover="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'" onmouseout="this.style.borderColor='rgba(0,245,255,.3)';this.style.color='var(--muted)'">
       📷 选择图片上传
-      <input type="file" accept="image/*" style="display:none" onchange="cpHandleUpload(this)">
+      <input type="file" accept="image/*" style="display:none" onchange="cpHandleUpload(this)" value="">
     </label>
     <div style="display:flex;gap:10px;">
-      <button onclick="cpConfirm()" style="flex:1;padding:10px;background:transparent;border:1px solid var(--cyan);color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:2px;cursor:pointer;transition:all .2s;" onmouseover="this.style.background='var(--cyan)';this.style.color='var(--bg)'" onmouseout="this.style.background='transparent';this.style.color='var(--cyan)'">确认</button>
-      <button onclick="cpCancel()" style="flex:1;padding:10px;background:transparent;border:1px solid var(--muted);color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:2px;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='var(--magenta)';this.style.color='var(--magenta)'" onmouseout="this.style.borderColor='var(--muted)';this.style.color='var(--muted)'">取消</button>
+      <button onclick="cpConfirm()" style="flex: 1 1 0%; padding: 10px; background: transparent; border: 1px solid var(--cyan); color: var(--cyan); font-family: &quot;Share Tech Mono&quot;, monospace; font-size: 11px; letter-spacing: 2px; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='var(--cyan)';this.style.color='var(--bg)'" onmouseout="this.style.background='transparent';this.style.color='var(--cyan)'">确认</button>
+      <button onclick="cpCancel()" style="flex: 1 1 0%; padding: 10px; background: transparent; border-color: var(--muted); border-top-style: ; border-top-width: ; border-right-style: ; border-right-width: ; border-bottom-style: ; border-bottom-width: ; border-left-style: ; border-left-width: ; border-image-source: ; border-image-slice: ; border-image-width: ; border-image-outset: ; border-image-repeat: ; color: var(--muted); font-family: &quot;Share Tech Mono&quot;, monospace; font-size: 11px; letter-spacing: 2px; cursor: pointer; transition: 0.2s;" onmouseover="this.style.borderColor='var(--magenta)';this.style.color='var(--magenta)'" onmouseout="this.style.borderColor='var(--muted)';this.style.color='var(--muted)'">取消</button>
     </div>
   </div>
 </div>
@@ -508,7 +509,7 @@ body.modal-open body::before{z-index:1 !important;}
     <div class="sec-line"></div>
   </div>
   <div class="projects-grid" id="dynamic-works-grid">
-    <button class="add-card-btn" onclick="addProject(this)">＋ 添加项目</button>
+    <div style="font-family: var(--font-mono); font-size: 12px; color: var(--muted); letter-spacing: 2px; padding: 28px; grid-column: 1 / -1;">// 暂无项目 · 请在后台添加项目后推送</div><button class="add-card-btn" onclick="addProject(this)">＋ 添加项目</button>
   </div>
 </section>
 
@@ -522,8 +523,8 @@ body.modal-open body::before{z-index:1 !important;}
     <h2 class="sec-title" contenteditable="false" spellcheck="false">技术博客</h2>
     <div class="sec-line"></div>
   </div>
-  <div class="posts-list" id="dynamic-posts-list"><a class="post-item" href="/blog/杀戮尖塔-slay-the-spire-核心玩法循环拆解.html"><span class="post-drag-handle" style="display:none">⠿</span><span class="post-date">2026-04-03</span><span class="post-cat">玩法拆解</span><span class="post-title">杀戮尖塔（Slay the Spire）核心玩法循环拆解</span><span class="post-arrow">→</span></a><button class="add-post-btn" onclick="addPost(this)">＋ 添加文章</button>
-</section>
+  <div class="posts-list" id="dynamic-posts-list"><a class="post-item" data-draggable="1" href="/blog/杀戮尖塔-slay-the-spire-核心玩法循环拆解.html"><span class="post-drag-handle" style="display:none" data-drag-handle="1">⠿</span><span class="post-date" contenteditable="false" spellcheck="false">2026-04-03</span><span class="post-cat" contenteditable="false" spellcheck="false">玩法拆解</span><span class="post-title" contenteditable="false" spellcheck="false">杀戮尖塔（Slay the Spire）核心玩法循环拆解</span><span class="post-arrow">→</span></a><button class="add-post-btn" onclick="addPost(this)">＋ 添加文章</button>
+</div></section>
 
 <section class="page-section" id="sec-creations" data-draggable="1">
   <div class="sec-controls">
@@ -1555,6 +1556,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 ══════════════════════════════════════ */
 // Link navigation handled by clearing hrefs in enterEditMode
 </script>
+
 
 
 
