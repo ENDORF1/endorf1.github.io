@@ -509,7 +509,7 @@ body.modal-open body::before{z-index:1 !important;}
     <div class="sec-line"></div>
   </div>
   <div class="projects-grid" id="dynamic-works-grid">
-    <div style="font-family: var(--font-mono); font-size: 12px; color: var(--muted); letter-spacing: 2px; padding: 28px; grid-column: 1 / -1;">// 暂无项目 · 请在后台添加项目后推送</div><button class="add-card-btn" onclick="addProject(this)">＋ 添加项目</button>
+    <a class="proj-card" href="/works/希望-熄忘.html"><div class="card-controls"><div class="card-drag-handle">⠿⠿</div><button class="card-delete" onclick="this.closest('.proj-card').remove()">✕</button></div><div class="proj-tag">// IN PROGRESS</div><div class="proj-name">希望 熄忘</div><div class="proj-desc"></div><div class="proj-meta"><span class="tag">IN PROGRESS</span><span class="tag">ROGUELIKE</span><span class="tag">CARDGAME</span><span class="tag">UNITY</span></div></a><button class="add-card-btn" onclick="addProject(this)">＋ 添加项目</button>
   </div>
 </section>
 
@@ -523,7 +523,7 @@ body.modal-open body::before{z-index:1 !important;}
     <h2 class="sec-title" contenteditable="false" spellcheck="false">技术博客</h2>
     <div class="sec-line"></div>
   </div>
-  <div class="posts-list" id="dynamic-posts-list"><a class="post-item" data-draggable="1" href="/blog/杀戮尖塔-slay-the-spire-核心玩法循环拆解.html"><span class="post-drag-handle" style="display:none" data-drag-handle="1">⠿</span><span class="post-date" contenteditable="false" spellcheck="false">2026-04-03</span><span class="post-cat" contenteditable="false" spellcheck="false">玩法拆解</span><span class="post-title" contenteditable="false" spellcheck="false">杀戮尖塔（Slay the Spire）核心玩法循环拆解</span><span class="post-arrow">→</span></a><button class="add-post-btn" onclick="addPost(this)">＋ 添加文章</button>
+  <div class="posts-list" id="dynamic-posts-list"><div class="no-posts-placeholder" style="font-family:var(--font-mono);font-size:12px;color:var(--muted);letter-spacing:2px;padding:20px 24px;">// 暂无已发布文章 · 请在后台发布文章后推送</div><button class="add-post-btn" onclick="addPost(this)">＋ 添加文章</button>
 </div></section>
 
 <section class="page-section" id="sec-creations" data-draggable="1">
