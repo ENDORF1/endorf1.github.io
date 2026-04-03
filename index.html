@@ -343,7 +343,7 @@ body.modal-open nav{z-index:1 !important;}
 body.modal-open body::before{z-index:1 !important;}
 </style>
 </head>
-<body class="modal-open">
+<body class="">
 
 <!-- ── CURSORS ── -->
 <div class="cursor" id="cursor"></div>
@@ -764,6 +764,8 @@ function saveChanges(){
   });
   // 哈希已保存在 localStorage，无需嵌入 HTML
   localStorage.setItem('_pw_hash', PW_HASH);
+  // 确保 body 不以 modal-open 状态保存
+  document.body.classList.remove('modal-open');
   // 确保推送按钮不以 disabled 状态保存，gh-overlay 不以 show 状态保存
   const _ghPushBtn=document.getElementById('gh-push-btn');if(_ghPushBtn)_ghPushBtn.disabled=false;
   const _ghOvl=document.getElementById('gh-overlay');const _ghOvlCls=_ghOvl?_ghOvl.className:'';
@@ -1114,6 +1116,8 @@ async function pushToGithub() {
     document.querySelectorAll('.creation-link-input').forEach(inp=>{
       const a=inp.closest('a');if(a&&inp.value)a.setAttribute('href',inp.value);
     });
+    // 确保 body 不以 modal-open 状态保存
+    document.body.classList.remove('modal-open');
     // 确保推送按钮不以 disabled 状态保存，gh-overlay 不以 show 状态保存
     const _ghPushBtn2=document.getElementById('gh-push-btn');if(_ghPushBtn2)_ghPushBtn2.disabled=false;
     const _ghOvl2=document.getElementById('gh-overlay');const _ghOvlCls2=_ghOvl2?_ghOvl2.className:'';
