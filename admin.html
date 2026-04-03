@@ -245,6 +245,15 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 #img-file-input,#cover-file-input,#pp-img-input{display:none;}
 
 /* card edit modal */
+.ed-btn{font-family:var(--font-mono);font-size:10px;padding:4px 8px;background:transparent;border:1px solid rgba(0,245,255,.2);color:var(--muted);cursor:pointer;transition:all .2s;letter-spacing:1px;}
+.ed-btn:hover{border-color:var(--cyan);color:var(--cyan);}
+#works-editor-content h2{font-size:20px;font-weight:700;color:#fff;margin:24px 0 10px;padding-left:12px;border-left:3px solid var(--magenta);}
+#works-editor-content h3{font-size:16px;font-weight:700;color:#fff;margin:18px 0 8px;padding-left:10px;border-left:2px solid var(--cyan);}
+#works-editor-content p{margin:0 0 12px;}
+#works-editor-content pre{background:#060d18;border:1px solid rgba(0,245,255,.15);padding:14px 16px;font-family:var(--font-code);font-size:13px;color:#a8c8e8;overflow-x:auto;margin:12px 0;white-space:pre-wrap;}
+#works-editor-content img{max-width:100%;border:1px solid rgba(0,245,255,.15);margin:8px 0;display:block;}
+#works-editor-content .video-embed{position:relative;width:100%;padding-bottom:56.25%;margin:16px 0;background:#000;}
+#works-editor-content .video-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
 #card-modal{position:fixed;inset:0;z-index:99999;background:rgba(3,8,16,.92);backdrop-filter:blur(16px);display:none;align-items:center;justify-content:center;}
 #card-modal.show{display:flex;}
 #card-box{background:var(--dim);border:1px solid var(--border);width:520px;max-width:92vw;position:relative;padding:40px 44px;}
@@ -403,6 +412,23 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
     <div class="card-field"><label class="card-label">标签<span style="color:var(--muted);font-size:10px;font-weight:normal;margin-left:8px;">第一个 = 卡片左上角红色小标（如 IN PROGRESS），其余 = 青色标签（如 ROGUELIKE）</span></label><input class="card-input" id="card-tags-input" placeholder="如：IN PROGRESS, ROGUELIKE, CARD GAME"></div>
     <div class="card-field" id="card-link-field"><label class="card-label" id="card-link-label">链接<span style="color:var(--muted);font-size:10px;font-weight:normal;margin-left:8px;">填了就跳这个链接，不填就跳 /works/ 总页</span></label><input class="card-input" id="card-link-input" placeholder="如：https://github.com/你的用户名/项目名"></div>
     <div class="card-field" id="card-content-field"><label class="card-label">详情正文（同人作品用，支持换行）</label><textarea class="card-textarea" id="card-content-input" placeholder="作品介绍、创作背景等..." style="height:100px;"></textarea></div>
+    <!-- works 富文本编辑器 -->
+    <div class="card-field" id="works-editor-field" style="display:none;">
+      <label class="card-label">项目详情页正文</label>
+      <div id="works-editor-toolbar" style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px;">
+        <button class="ed-btn" onclick="weCmd('bold')"><b>B</b></button>
+        <button class="ed-btn" onclick="weCmd('italic')"><i>I</i></button>
+        <button class="ed-btn" onclick="weHeading(2)">H2</button>
+        <button class="ed-btn" onclick="weHeading(3)">H3</button>
+        <button class="ed-btn" onclick="weCmd('insertUnorderedList')">&bull; 列表</button>
+        <button class="ed-btn" onclick="weInsertCode()">代码块</button>
+        <button class="ed-btn" onclick="weInsertImg()">插图</button>
+        <button class="ed-btn" onclick="weInsertVideo()">插视频</button>
+        <button class="ed-btn" onclick="weCmd('removeFormat')">清除格式</button>
+      </div>
+      <div id="works-editor-content" contenteditable="true" style="min-height:200px;background:#0a0e1a;border:1px solid rgba(0,245,255,.15);padding:16px;color:#c8e0f0;font-size:14px;line-height:1.8;outline:none;overflow-y:auto;max-height:360px;"></div>
+      <input type="file" id="works-img-input" accept="image/*" style="display:none" onchange="weHandleImg(this)">
+    </div>
     <div class="card-field">
       <label class="card-label">封面图</label>
       <img class="card-img-preview" id="card-img-preview" src="">
@@ -923,8 +949,12 @@ function openCardModal(type,idx){
   document.getElementById('card-tags-input').value=(item.tags||[]).join(', ');
   document.getElementById('card-link-input').value=item.link||'';
   document.getElementById('card-content-input').value=item.content||'';
-  // show content field only for gallery
+  // content field: gallery uses textarea, works uses rich editor
   document.getElementById('card-content-field').style.display=type==='gallery'?'block':'none';
+  document.getElementById('works-editor-field').style.display=type==='works'?'block':'none';
+  if(type==='works'){
+    document.getElementById('works-editor-content').innerHTML=item.content||'';
+  }
   // hide link field for gallery (gallery items link to their detail page automatically)
   document.getElementById('card-link-field').style.display=type==='gallery'?'none':'block';
   cardImgData=item.img||null;
@@ -962,6 +992,59 @@ function setFocusPoint(e, imgEl){
   showToast('info','焦点已设置：'+x+' '+y);
 }
 function closeCardModal(){document.getElementById('card-modal').classList.remove('show');}
+
+/* ── WORKS RICH EDITOR ── */
+function weCmd(cmd){document.getElementById('works-editor-content').focus();document.execCommand(cmd,false,null);}
+function weHeading(n){
+  document.getElementById('works-editor-content').focus();
+  document.execCommand('formatBlock',false,'h'+n);
+}
+function weInsertCode(){
+  const ed=document.getElementById('works-editor-content');
+  ed.focus();
+  const pre='<pre><code contenteditable="true">// 在此输入代码</code></pre><p><br></p>';
+  document.execCommand('insertHTML',false,pre);
+}
+async function weInsertImg(){
+  document.getElementById('works-img-input').click();
+}
+async function weHandleImg(input){
+  const file=input.files[0];if(!file)return;
+  if(!GH.token)GH.token=await decryptToken()||'';
+  if(!GH.user||!GH.repo||!GH.token){showToast('err','请先配置 GitHub 才能上传图片');input.value='';return;}
+  showCardUploadStatus('loading','⟳ 上传图片中...');
+  try{
+    const url=await uploadImageToGH(file);
+    const ed=document.getElementById('works-editor-content');
+    ed.focus();
+    document.execCommand('insertHTML',false,'<img src="'+url+'" alt=""><p><br></p>');
+    showCardUploadStatus('ok','✓ 图片已插入');
+  }catch(e){showCardUploadStatus('err','✕ 上传失败：'+e.message);}
+  input.value='';
+}
+function weInsertVideo(){
+  const url=prompt('请粘贴 B站 或 YouTube 视频链接：');
+  if(!url)return;
+  let embedUrl='';
+  // B站 BV/av
+  const bvMatch=url.match(/BV[\w]+/);
+  const avMatch=url.match(/av(\d+)/i);
+  const aidMatch=url.match(/[?&]aid=(\d+)/);
+  if(bvMatch){
+    embedUrl='https://player.bilibili.com/player.html?bvid='+bvMatch[0]+'&page=1&high_quality=1&autoplay=0';
+  } else if(avMatch||aidMatch){
+    const aid=(avMatch?avMatch[1]:(aidMatch?aidMatch[1]:''));
+    embedUrl='https://player.bilibili.com/player.html?aid='+aid+'&page=1&high_quality=1&autoplay=0';
+  }
+  // YouTube
+  const ytMatch=url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([-\w]+)/);
+  if(ytMatch) embedUrl='https://www.youtube.com/embed/'+ytMatch[1];
+  if(!embedUrl){showToast('err','无法识别链接，请粘贴 B站或 YouTube 链接');return;}
+  const html='<div class="video-embed"><iframe src="'+embedUrl+'" allowfullscreen allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe></div><p><br></p>';
+  const ed=document.getElementById('works-editor-content');
+  ed.focus();
+  document.execCommand('insertHTML',false,html);
+}
 
 async function handleCardImg(input){
   const file=input.files[0];if(!file)return;
@@ -1016,13 +1099,17 @@ function saveCard(){
   }
 
   if(!editingCardType){showToast('err','发生错误，请重新打开卡片');return;}
+  const worksContent = editingCardType==='works'
+    ? document.getElementById('works-editor-content').innerHTML
+    : document.getElementById('card-content-input').value;
   const item={
     title:title,
     desc:document.getElementById('card-desc-input').value,
     tags:document.getElementById('card-tags-input').value.split(',').map(t=>t.trim()).filter(Boolean),
     link:document.getElementById('card-link-input').value,
-    content:document.getElementById('card-content-input').value,
+    content:worksContent,
     img:cardImgData,
+    imgFull:cardImgFullData||cardImgData,
     imgPos:cardImgPos,
     slug:slugify(title)
   };
@@ -1206,6 +1293,12 @@ async function pushPageData(){
       pushLog('推送游戏项目页...','spin');
       await ghPut('works/index.html',buildWorksHTML(),'update: works page');
       pushLog('游戏项目页已推送','ok');
+      for(const w of works){
+        const slug=w.slug||slugify(w.title);
+        pushLog('推送项目详情：'+w.title,'spin');
+        await ghPut('works/'+slug+'.html',buildWorkDetailHTML(w),'work: '+w.title);
+        pushLog('详情页已推送 → works/'+slug+'.html','ok');
+      }
     } else if(currentTab==='gallery'){
       if(galleryCategories.every(cat=>cat.items.length===0)){
         pushLog('警告：所有分类均为空，跳过推送以避免覆盖已有内容','err');
@@ -1385,19 +1478,57 @@ ${('<scr'+'ipt>\n(function(){\n  document.addEventListener(\'contextmenu\',funct
 </body></html>`;
 }
 
+function buildWorkDetailHTML(w){
+  const slug=w.slug||slugify(w.title);
+  return '<!DOCTYPE html>\n'
+    +'<html lang="zh"><head>\n'
+    +'<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">\n'
+    +'<title>'+w.title+' · 游戏开发 · _DEV.LOG</title>\n'
+    +'<style>\n'+BASE_CSS+'\n'
+    +'.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:\'Share Tech Mono\',monospace;font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:2px;margin-bottom:40px;transition:color .2s;}\n'
+    +'.back-btn:hover{color:var(--cyan);}\n'
+    +'.wd-tag{font-family:\'Share Tech Mono\',monospace;font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;display:block;}\n'
+    +'.wd-title{font-size:clamp(28px,5vw,48px);font-weight:700;color:#fff;margin-bottom:16px;}\n'
+    +'.wd-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px;}\n'
+    +'.wd-tag-item{font-family:\'Share Tech Mono\',monospace;font-size:10px;color:var(--cyan);border:1px solid rgba(0,245,255,.3);padding:3px 8px;letter-spacing:1px;}\n'
+    +'.wd-cover{max-width:100%;max-height:500px;object-fit:cover;border:1px solid rgba(0,245,255,.15);display:block;margin:0 auto 40px;width:100%;}\n'
+    +'.wd-body{max-width:800px;}\n'
+    +'.wd-body h2{font-size:22px;font-weight:700;color:#fff;margin:32px 0 12px;padding-left:12px;border-left:3px solid var(--magenta);}\n'
+    +'.wd-body h3{font-size:18px;font-weight:700;color:#fff;margin:24px 0 10px;padding-left:10px;border-left:2px solid var(--cyan);}\n'
+    +'.wd-body p{margin:0 0 16px;line-height:1.9;color:var(--text);}\n'
+    +'.wd-body ul{margin:8px 0 16px 24px;}\n'
+    +'.wd-body li{margin-bottom:8px;line-height:1.8;color:var(--text);}\n'
+    +'.wd-body img{max-width:100%;border:1px solid rgba(0,245,255,.15);margin:8px 0;display:block;}\n'
+    +'.wd-body pre{background:#060d18;border:1px solid rgba(0,245,255,.15);padding:16px 20px;font-family:\'Fira Code\',monospace;font-size:13px;color:#a8c8e8;overflow-x:auto;margin:16px 0;white-space:pre-wrap;}\n'
+    +'.wd-body pre code{display:block;}\n'
+    +'.video-embed{position:relative;width:100%;padding-bottom:56.25%;margin:24px 0;background:#000;}\n'
+    +'.video-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}\n'
+    +'</style></head><body>\n'
+    +NAV_HTML()+'\n'
+    +'<div class="page-wrap">\n'
+    +'  <a class="back-btn" href="/works/">\u2190 \u8fd4\u56de\u9879\u76ee</a>\n'
+    +'  <span class="wd-tag">// WORKS</span>\n'
+    +'  <h1 class="wd-title">'+(w.title||'')+'</h1>\n'
+    +'  <div class="wd-tags">'+(w.tags||[]).map(t=>'<span class="wd-tag-item">'+t+'</span>').join('')+'</div>\n'
+    +(w.img?'  <img class="wd-cover" src="'+(w.imgFull||w.img)+'" style="object-position:'+(w.imgPos||'50% 50%')+'" alt="">\n':'')
+    +'  <div class="wd-body">'+(w.content||('<p>'+( w.desc||'')+'</p>'))+'</div>\n'
+    +(w.link?'  <div style="margin-top:40px;"><a href="'+w.link+'" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border:1px solid var(--cyan);color:var(--cyan);font-family:\'Share Tech Mono\',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;text-decoration:none;transition:all .3s;">\u67e5\u770b\u9879\u76ee \u2192</a></div>\n':'')
+    +'</div>\n'
+    +"${'<scr'+'ipt>\\n(function(){\\n  document.addEventListener(\\'contextmenu\\',function(e){e.preventDefault();});\\n  document.addEventListener(\\'dragstart\\',function(e){if(e.target.tagName===\\'IMG\\')e.preventDefault();});\\n  document.addEventListener(\\'keydown\\',function(e){\\n    if((e.ctrlKey||e.metaKey)&&(e.key===\\'s\\'||e.key===\\'S\\'||e.key===\\'p\\'||e.key===\\'P\\'))e.preventDefault();\\n    if(e.key===\\'PrintScreen\\')e.preventDefault();\\n  });\\n})();\\n</'+'script>'}"
+    +'\n</body></html>';
+}
+
 function buildWorksHTML(){
   const cards=works.map(w=>{
+    const slug=w.slug||slugify(w.title);
     const inner=`
       ${w.img?`<img class="wc-img" src="${w.img}" style="object-position:${w.imgPos||'50% 50%'}" alt="">`:`<div class="wc-img-ph"></div>`}
       <div class="wc-body">
         <div class="wc-title">${w.title||''}</div>
         <div class="wc-desc">${w.desc||''}</div>
         <div class="wc-tags">${(w.tags||[]).map(t=>`<span class="wc-tag">${t}</span>`).join('')}</div>
-        ${w.link?`<span class="wc-link">查看项目 →</span>`:''}
       </div>`;
-    return w.link
-      ? `<a class="work-card" href="${w.link}" target="_blank" rel="noopener">${inner}</a>`
-      : `<div class="work-card">${inner}</div>`;
+    return `<a class="work-card" href="/works/${slug}.html">${inner}</a>`;
   }).join('');
   return`<!DOCTYPE html>
 <html lang="zh"><head>
