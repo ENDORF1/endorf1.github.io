@@ -154,6 +154,7 @@ body.edit-mode .add-post-btn{display:block;}
 body.edit-mode a.creation-card{pointer-events:none;}
 body.edit-mode a.creation-card *{pointer-events:auto;}
 .creation-card:hover{border-color:rgba(255,0,110,.5);transform:translateY(-4px);}
+body.edit-mode .creation-card{cursor:default;}
 .creation-card.is-dragging{opacity:.35;}
 .creation-card.drag-over-left{border-left:2px solid var(--cyan);}
 .creation-card.drag-over-right{border-right:2px solid var(--cyan);}
@@ -680,6 +681,8 @@ function enterEditMode(){
     a.dataset.savedHref = a.getAttribute('href');
     a.removeAttribute('href');
   });
+  // Keep cursor hover working on cards
+  document.querySelectorAll('.creation-card,.proj-card').forEach(cursorHover);
 }
 function exitEditMode(){
   document.body.classList.remove('edit-mode');
