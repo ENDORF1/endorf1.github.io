@@ -467,7 +467,7 @@ body.modal-open body::before{z-index:1 !important;}
 
 <section class="page-section" id="sec-projects">
   <div class="sec-controls">
-    <div class="sec-drag-handle" draggable="true">⠿ 拖动模块</div>
+    <div class="sec-drag-handle">⠿ 拖动模块</div>
     <button class="sec-delete-btn" onclick="deleteSection(this)">✕ 删除模块</button>
   </div>
   <div class="sec-header">
@@ -483,7 +483,7 @@ body.modal-open body::before{z-index:1 !important;}
 
 <section class="page-section" id="sec-blog">
   <div class="sec-controls">
-    <div class="sec-drag-handle" draggable="true">⠿ 拖动模块</div>
+    <div class="sec-drag-handle">⠿ 拖动模块</div>
     <button class="sec-delete-btn" onclick="deleteSection(this)">✕ 删除模块</button>
   </div>
   <div class="sec-header">
@@ -497,7 +497,7 @@ body.modal-open body::before{z-index:1 !important;}
 
 <section class="page-section" id="sec-creations" draggable="false">
   <div class="sec-controls">
-    <div class="sec-drag-handle" draggable="true">⠿ 拖动模块</div>
+    <div class="sec-drag-handle">⠿ 拖动模块</div>
     <button class="sec-delete-btn" onclick="deleteSection(this)">✕ 删除模块</button>
   </div>
   <div class="sec-header">
@@ -506,10 +506,10 @@ body.modal-open body::before{z-index:1 !important;}
     <div class="sec-line"></div>
   </div>
   <div class="creations-grid">
-    <a class="creation-card" href="/gallery/original/" data-cover-mode="latest" data-cat-slug="illust" data-cover-img="" data-cover-pos="50% 50%"><div class="creation-bg c1" style="opacity: 0;"></div><img class="creation-cover" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775168429357-q4ws6.png" style="display: block; object-position: 47.9% 18.9%;"><div class="creation-controls"><div class="creation-drag-handle" draggable="true">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'custom',event)">指定图片</button><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><label class="cc-upload-btn">📷 上传封面图<input type="file" accept="image/*" style="display:none" onchange="uploadCreationCover(this)" value=""></label><div class="cc-focus-hint">上传后可在图片上点击选焦点</div></div><div class="creation-type" contenteditable="false" spellcheck="false">// ILLUST</div><div class="creation-name" contenteditable="false" spellcheck="false">插画作品</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/original/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
-    <a class="creation-card" href="/gallery/fanwork/" data-cover-mode="latest" data-cat-slug="merch" data-cover-img="" data-cover-pos="50% 50%"><div class="creation-bg c2"></div><img class="creation-cover" src="" style="display:none;object-position:50% 50%"><div class="creation-controls"><div class="creation-drag-handle" draggable="true">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'custom',event)">指定图片</button><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><label class="cc-upload-btn">📷 上传封面图<input type="file" accept="image/*" style="display:none" onchange="uploadCreationCover(this)" value=""></label><div class="cc-focus-hint">上传后可在图片上点击选焦点</div></div><div class="creation-type" contenteditable="false" spellcheck="false">// MERCH</div><div class="creation-name" contenteditable="false" spellcheck="false">漫展周边</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/fanwork/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
-    <a class="creation-card" href="/gallery/fanwork/" data-cover-mode="latest" data-cat-slug="fanwork" data-cover-img="" data-cover-pos="50% 50%" draggable="false"><div class="creation-bg c3"></div><img class="creation-cover" src="" style="display:none;object-position:50% 50%"><div class="creation-controls"><div class="creation-drag-handle" draggable="true">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'custom',event)">指定图片</button><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><label class="cc-upload-btn">📷 上传封面图<input type="file" accept="image/*" style="display:none" onchange="uploadCreationCover(this)" value=""></label><div class="cc-focus-hint">上传后可在图片上点击选焦点</div></div><div class="creation-type" contenteditable="false" spellcheck="false">// FANWORK</div><div class="creation-name" contenteditable="false" spellcheck="false">同人创作</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/fanwork/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
-    <a class="creation-card" href="/https://www.pixiv.net/users/107152559" data-cover-mode="gradient" data-cat-slug="other" data-cover-img="" data-cover-pos="50% 50%" draggable="false"><div class="creation-bg c4"></div><img class="creation-cover" src="" style="display:none;object-position:50% 50%"><div class="creation-controls"><div class="creation-drag-handle" draggable="true">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'custom',event)">指定图片</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><label class="cc-upload-btn">📷 上传封面图<input type="file" accept="image/*" style="display:none" onchange="uploadCreationCover(this)" value=""></label><div class="cc-focus-hint">上传后可在图片上点击选焦点</div></div><div class="creation-type" contenteditable="false" spellcheck="false">// OTHER</div><div class="creation-name" contenteditable="false" spellcheck="false">更多作品</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/https://www.pixiv.net/users/107152559" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
+    <a class="creation-card" href="/gallery/original/" data-cover-mode="latest" data-cat-slug="illust" data-cover-img="" data-cover-pos="50% 50%"><div class="creation-bg c1" style="opacity: 0;"></div><img class="creation-cover" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775168429357-q4ws6.png" style="display: block; object-position: 47.9% 18.9%;"><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'custom',event)">指定图片</button><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><label class="cc-upload-btn">📷 上传封面图<input type="file" accept="image/*" style="display:none" onchange="uploadCreationCover(this)" value=""></label><div class="cc-focus-hint">上传后可在图片上点击选焦点</div></div><div class="creation-type" contenteditable="false" spellcheck="false">// ILLUST</div><div class="creation-name" contenteditable="false" spellcheck="false">插画作品</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/original/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
+    <a class="creation-card" href="/gallery/fanwork/" data-cover-mode="latest" data-cat-slug="merch" data-cover-img="" data-cover-pos="50% 50%"><div class="creation-bg c2"></div><img class="creation-cover" src="" style="display:none;object-position:50% 50%"><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'custom',event)">指定图片</button><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><label class="cc-upload-btn">📷 上传封面图<input type="file" accept="image/*" style="display:none" onchange="uploadCreationCover(this)" value=""></label><div class="cc-focus-hint">上传后可在图片上点击选焦点</div></div><div class="creation-type" contenteditable="false" spellcheck="false">// MERCH</div><div class="creation-name" contenteditable="false" spellcheck="false">漫展周边</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/fanwork/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
+    <a class="creation-card" href="/gallery/fanwork/" data-cover-mode="latest" data-cat-slug="fanwork" data-cover-img="" data-cover-pos="50% 50%"><div class="creation-bg c3"></div><img class="creation-cover" src="" style="display:none;object-position:50% 50%"><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'custom',event)">指定图片</button><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><label class="cc-upload-btn">📷 上传封面图<input type="file" accept="image/*" style="display:none" onchange="uploadCreationCover(this)" value=""></label><div class="cc-focus-hint">上传后可在图片上点击选焦点</div></div><div class="creation-type" contenteditable="false" spellcheck="false">// FANWORK</div><div class="creation-name" contenteditable="false" spellcheck="false">同人创作</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/fanwork/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
+    <a class="creation-card" href="/https://www.pixiv.net/users/107152559" data-cover-mode="gradient" data-cat-slug="other" data-cover-img="" data-cover-pos="50% 50%"><div class="creation-bg c4"></div><img class="creation-cover" src="" style="display:none;object-position:50% 50%"><div class="creation-controls"><div class="creation-drag-handle">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'custom',event)">指定图片</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><label class="cc-upload-btn">📷 上传封面图<input type="file" accept="image/*" style="display:none" onchange="uploadCreationCover(this)" value=""></label><div class="cc-focus-hint">上传后可在图片上点击选焦点</div></div><div class="creation-type" contenteditable="false" spellcheck="false">// OTHER</div><div class="creation-name" contenteditable="false" spellcheck="false">更多作品</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/https://www.pixiv.net/users/107152559" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
     <button class="add-creation-btn" onclick="addCreation(this)">＋</button>
   </div>
 </section>
@@ -682,6 +682,11 @@ function enterEditMode(){
   document.getElementById('edit-toolbar').style.display='flex';
   document.getElementById('edit-toggle').textContent='✏ 编辑中';
   setEditable(true);
+  // Disable all <a> navigation while editing
+  document.querySelectorAll('a[href]').forEach(a=>{
+    a.dataset.savedHref=a.getAttribute('href');
+    a.removeAttribute('href');
+  });
   initAllDrag();
   // Keep cursor hover working on cards
   document.querySelectorAll('.creation-card,.proj-card').forEach(cursorHover);
@@ -692,10 +697,14 @@ function exitEditMode(){
   document.getElementById('edit-toggle').textContent='🔒 编辑内容';
   setEditable(false);
   renumber();
-  // Sync creation link inputs back to href on exit
+  // Sync creation link inputs back first, then restore all hrefs
   document.querySelectorAll('.creation-link-input').forEach(inp=>{
     const a = inp.closest('a');
-    if(a && inp.value) a.setAttribute('href', inp.value);
+    if(a && inp.value) a.dataset.savedHref=inp.value;
+  });
+  document.querySelectorAll('a[data-saved-href]').forEach(a=>{
+    a.setAttribute('href', a.dataset.savedHref);
+    delete a.dataset.savedHref;
   });
 }
 function renumber(){document.querySelectorAll('.page-section').forEach((s,i)=>{const n=s.querySelector('.sec-num');if(n)n.textContent=String(i+1).padStart(2,'0');});}
@@ -760,48 +769,88 @@ function addSection(){
 }
 
 /* ══════════════════════════════════════
-   DRAG SYSTEM
+   DRAG SYSTEM  (mouse-based, works on <a> cards)
 ══════════════════════════════════════ */
+(function(){
+  let dragging=null,ghost=null,cfg=null,lastOver=null;
+
+  function clearHL(c){
+    if(!c)return;
+    document.querySelectorAll(c.siblingsSel).forEach(s=>s.classList.remove(c.overClassA,c.overClassB));
+  }
+
+  function mkGhost(el){
+    const r=el.getBoundingClientRect();
+    const g=el.cloneNode(true);
+    g.style.cssText='position:fixed;left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px;opacity:.5;pointer-events:none;z-index:99999;transform:rotate(2deg);box-shadow:0 8px 32px rgba(0,0,0,.6);';
+    document.body.appendChild(g);
+    return g;
+  }
+
+  document.addEventListener('mousedown',e=>{
+    const handle=e.target.closest('[data-drag-handle]');
+    if(!handle)return;
+    const el=handle.closest('[data-draggable]');
+    if(!el)return;
+    cfg=window.__dragCfg&&window.__dragCfg.get(el);
+    if(!cfg)return;
+    e.preventDefault();e.stopPropagation();
+    dragging=el;
+    ghost=mkGhost(el);
+    el.classList.add(cfg.dragClass);
+    const offX=e.clientX-el.getBoundingClientRect().left;
+    const offY=e.clientY-el.getBoundingClientRect().top;
+
+    function onMove(e){
+      ghost.style.left=(e.clientX-offX)+'px';
+      ghost.style.top=(e.clientY-offY)+'px';
+      ghost.style.display='none';
+      const under=document.elementFromPoint(e.clientX,e.clientY);
+      ghost.style.display='';
+      clearHL(cfg);lastOver=null;
+      if(!under)return;
+      const target=under.closest(cfg.siblingsSel);
+      if(!target||target===dragging)return;
+      const container=cfg.containerFn(dragging);
+      if(!container||!container.contains(target))return;
+      lastOver={target,x:e.clientX,y:e.clientY};
+      const r=target.getBoundingClientRect();
+      const useX=cfg.overClassA.includes('left');
+      target.classList.add(useX?(e.clientX<r.left+r.width/2?cfg.overClassA:cfg.overClassB):(e.clientY<r.top+r.height/2?cfg.overClassA:cfg.overClassB));
+    }
+
+    function onUp(){
+      document.removeEventListener('mousemove',onMove);
+      document.removeEventListener('mouseup',onUp);
+      ghost.remove();ghost=null;
+      dragging.classList.remove(cfg.dragClass);
+      clearHL(cfg);
+      if(lastOver){
+        const {target,x,y}=lastOver;
+        const container=cfg.containerFn(dragging);
+        if(container&&container.contains(target)){
+          const r=target.getBoundingClientRect();
+          cfg.insertFn(container,dragging,target,{clientX:x,clientY:y},r);
+        }
+      }
+      dragging=null;cfg=null;lastOver=null;
+    }
+
+    document.addEventListener('mousemove',onMove);
+    document.addEventListener('mouseup',onUp);
+  });
+
+  window.__dragCfg=new Map();
+})();
+
 function makeDraggable({el,handleSel,containerFn,siblingsSel,dragClass,overClassA,overClassB,insertFn}){
   const handle=el.querySelector(handleSel);
   if(!handle)return;
-  // Set draggable directly on handle, use dragstart on parent
-  handle.setAttribute('draggable','true');
-  handle.addEventListener('dragstart',e=>{
-    e.stopPropagation();
-    e.dataTransfer.effectAllowed='move';
-    e.dataTransfer.setData('text/plain','drag');
-    el.classList.add(dragClass);
-    window.__drag=el;
-  });
-  handle.addEventListener('dragend',()=>{
-    el.classList.remove(dragClass);
-    document.querySelectorAll(siblingsSel).forEach(s=>s.classList.remove(overClassA,overClassB));
-    window.__drag=null;
-  });
-  // Keep dragover/drop on the element itself for drop targeting
-  el.addEventListener('dragstart',e=>{
-    if(window.__drag===el) return;
-  });
-  el.addEventListener('dragend',()=>{
-    el.draggable=false;el.classList.remove(dragClass);
-    document.querySelectorAll(siblingsSel).forEach(s=>s.classList.remove(overClassA,overClassB));
-    window.__drag=null;
-  });
-  el.addEventListener('dragover',e=>{
-    const d=window.__drag;if(!d||d===el)return;e.preventDefault();
-    document.querySelectorAll(siblingsSel).forEach(s=>s.classList.remove(overClassA,overClassB));
-    const r=el.getBoundingClientRect();
-    const useX=overClassA.includes('left')||overClassA.includes('right');
-    el.classList.add(useX?(e.clientX<r.left+r.width/2?overClassA:overClassB):(e.clientY<r.top+r.height/2?overClassA:overClassB));
-  });
-  el.addEventListener('dragleave',()=>el.classList.remove(overClassA,overClassB));
-  el.addEventListener('drop',e=>{
-    const d=window.__drag;if(!d||d===el)return;e.preventDefault();
-    const r=el.getBoundingClientRect();
-    insertFn(containerFn(el),d,el,e,r);
-    el.classList.remove(overClassA,overClassB);
-  });
+  handle.setAttribute('data-drag-handle','1');
+  el.setAttribute('data-draggable','1');
+  el.removeAttribute('draggable');
+  handle.removeAttribute('draggable');
+  window.__dragCfg.set(el,{containerFn,siblingsSel,dragClass,overClassA,overClassB,insertFn});
 }
 
 function makeSecDrag(sec){
@@ -832,27 +881,43 @@ function syncPostsOrder(){
   const drafts = posts.filter(p=>p.draft);
   if(reordered.length) localStorage.setItem('posts', JSON.stringify([...reordered, ...drafts]));
 }
+function safeInsertAfter(c,d,t){
+  // Insert d after t, but never after a non-card element (e.g. add-btn)
+  const next=t.nextSibling;
+  const cardClasses=['proj-card','post-item','creation-card'];
+  const isCard=n=>n&&n.classList&&cardClasses.some(cls=>n.classList.contains(cls));
+  if(isCard(next)){
+    c.insertBefore(d,next);
+  } else {
+    // Find first non-card child to insert before (the add button etc.), else append
+    const anchor=[...c.children].find(ch=>ch!==d&&!isCard(ch));
+    anchor?c.insertBefore(d,anchor):c.appendChild(d);
+  }
+}
 function makeProjDrag(card){
   makeDraggable({el:card,handleSel:'.card-drag-handle',
     containerFn:e=>e.closest('.projects-grid'),
     siblingsSel:'.proj-card',dragClass:'is-dragging',
     overClassA:'drag-over-left',overClassB:'drag-over-right',
-    insertFn:(c,d,t,e,r)=>{e.clientX<r.left+r.width/2?c.insertBefore(d,t):c.insertBefore(d,t.nextSibling); syncWorksOrder();}});
+    insertFn:(c,d,t,e,r)=>{if(!c||!c.contains(t))return;e.clientX<r.left+r.width/2?c.insertBefore(d,t):safeInsertAfter(c,d,t); syncWorksOrder();}});
 }
 function makePostDrag(item){
   makeDraggable({el:item,handleSel:'.post-drag-handle',
     containerFn:e=>e.closest('.posts-list'),
     siblingsSel:'.post-item',dragClass:'is-dragging',
     overClassA:'drag-over-top',overClassB:'drag-over-bottom',
-    insertFn:(c,d,t,e,r)=>{e.clientY<r.top+r.height/2?c.insertBefore(d,t):c.insertBefore(d,t.nextSibling); syncPostsOrder();}});
+    insertFn:(c,d,t,e,r)=>{if(!c||!c.contains(t))return;e.clientY<r.top+r.height/2?c.insertBefore(d,t):safeInsertAfter(c,d,t); syncPostsOrder();}});
 }
 function makeCreationDrag(card){
+  // Ensure the card itself never blocks drag events from the handle
+  card.removeAttribute('draggable');
   makeDraggable({el:card,handleSel:'.creation-drag-handle',
     containerFn:e=>e.closest('.creations-grid'),
     siblingsSel:'.creation-card',dragClass:'is-dragging',
     overClassA:'drag-over-left',overClassB:'drag-over-right',
-    insertFn:(c,d,t,e,r)=>{e.clientX<r.left+r.width/2?c.insertBefore(d,t):c.insertBefore(d,t.nextSibling);}});
+    insertFn:(c,d,t,e,r)=>{if(!c||!c.contains(t))return;e.clientX<r.left+r.width/2?c.insertBefore(d,t):safeInsertAfter(c,d,t);}});
 }
+
 function initAllDrag(){
   document.querySelectorAll('.page-section').forEach(makeSecDrag);
   document.querySelectorAll('.proj-card').forEach(makeProjDrag);
