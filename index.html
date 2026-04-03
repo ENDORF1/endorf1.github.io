@@ -714,7 +714,13 @@ function exitEditMode(){
   // Sync creation link inputs back first, then restore all hrefs
   document.querySelectorAll('.creation-link-input').forEach(inp=>{
     const a = inp.closest('a');
-    if(a && inp.value) a.dataset.savedHref=inp.value;
+    if(a) a.dataset.savedHref=inp.value; // 空值也写入，覆盖旧链接
+  });
+  // social inputs
+  ['sl-github','sl-bili','sl-twitter'].forEach(id=>{
+    const a=document.getElementById(id);
+    const inp=a&&a.parentElement.querySelector('.social-input');
+    if(a&&inp) a.dataset.savedHref=inp.value;
   });
   document.querySelectorAll('a[data-saved-href]').forEach(a=>{
     if(a.dataset.savedHref) a.setAttribute('href', a.dataset.savedHref);
