@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Nightfall · 同人创作 · _DEV.LOG</title>
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Noto+Sans+SC:wght@300;400;700&family=Fira+Code:wght@400;500&display=swap');
+:root{--bg:#030810;--dim:#0a1628;--text:#c8e0f0;--muted:#3a5a7a;--cyan:#00f5ff;--magenta:#ff006e;--yellow:#ffe600;--glow-c:0 0 8px #00f5ff88,0 0 24px #00f5ff44;--glow-m:0 0 8px #ff006e88,0 0 24px #ff006e44;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans SC',sans-serif;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,245,255,.015) 2px,rgba(0,245,255,.015) 4px);pointer-events:none;z-index:100;}
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,245,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,255,.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;animation:gridShift 20s linear infinite;}
+@keyframes gridShift{to{transform:translateY(60px);}}
+nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px 48px;background:linear-gradient(180deg,rgba(3,8,16,.95),transparent);border-bottom:1px solid rgba(0,245,255,.1);}
+.nav-logo{font-family:'Share Tech Mono',monospace;font-size:18px;color:var(--cyan);letter-spacing:4px;text-shadow:var(--glow-c);text-decoration:none;}
+.nav-logo span{color:var(--magenta);}
+.nav-links{display:flex;gap:28px;}
+.nav-links a{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted);text-decoration:none;letter-spacing:2px;text-transform:uppercase;transition:color .2s;position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--cyan);transition:width .3s;}
+.nav-links a:hover{color:var(--cyan);}
+.nav-links a:hover::after{width:100%;}
+.page-wrap{position:relative;z-index:1;padding:120px 10vw 80px;}
+
+.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:2px;margin-bottom:40px;transition:color .2s;}
+.back-btn:hover{color:var(--cyan);}
+.gd-cat{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;display:block;}
+.gd-title{font-size:clamp(28px,5vw,48px);font-weight:700;color:#fff;margin-bottom:24px;}
+.gd-canvas{max-width:100%;max-height:80vh;display:block;margin:0 auto 40px;border:1px solid rgba(255,0,110,.2);-webkit-user-drag:none;user-select:none;}
+.gd-body{max-width:720px;}
+.gd-body p{margin:0 0 16px;line-height:1.9;color:var(--text);}
+</style></head><body>
+<nav>
+  <div class="nav-logo">_<span>DEV</span>.LOG</div>
+  <div class="nav-links">
+    <a href="/">首页</a>
+    <a href="/blog/">博客</a>
+    <a href="/works/">项目</a>
+    <a href="/gallery/">创作</a>
+    <a href="/about/">关于</a>
+  </div>
+</nav>
+<div class="page-wrap">
+  <a class="back-btn" href="/gallery/fanwork/">← 返回同人创作</a>
+  <span class="gd-cat">// 同人创作</span>
+  <h1 class="gd-title">Nightfall</h1>
+  <canvas id="gd-c" class="gd-canvas"></canvas>
+  <div class="gd-body"><p>来自装甲核心6的真 渡鸦。</p></div>
+</div>
+<script>
+(function(){
+  var SRC="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775240915309-fzolz.jpg";
+  var cv=document.getElementById('gd-c');
+  if(!cv)return;
+  var cx=cv.getContext('2d');
+  var im=new Image();
+  im.crossOrigin='anonymous';
+
+  // 禁用右键
+  document.addEventListener('contextmenu',function(e){e.preventDefault();});
+  // 禁用拖拽
+  cv.addEventListener('dragstart',function(e){e.preventDefault();});
+  // 禁用长按选择（移动端）
+  cv.addEventListener('touchstart',function(e){e.preventDefault();},{passive:false});
+  // 禁用键盘截图快捷键（尽力拦截，无法完全阻止系统截图）
+  document.addEventListener('keydown',function(e){
+    if((e.ctrlKey||e.metaKey)&&(e.key==='s'||e.key==='S'||e.key==='p'||e.key==='P'))e.preventDefault();
+    if(e.key==='PrintScreen')e.preventDefault();
+  });
+
+  im.onload=function(){
+    // 按实际比例缩放 canvas
+    var mw=Math.min(im.naturalWidth,window.innerWidth-80);
+    var sc=mw/im.naturalWidth;
+    cv.width=im.naturalWidth*sc;
+    cv.height=im.naturalHeight*sc;
+
+    // 渲染干净版（正常预览）
+    cx.drawImage(im,0,0,cv.width,cv.height);
+
+    // 在离屏 canvas 上预烘焙水印版，备用
+    var wc=document.createElement('canvas');
+    wc.width=cv.width; wc.height=cv.height;
+    var wx=wc.getContext('2d');
+    wx.drawImage(im,0,0,wc.width,wc.height);
+    // 平铺水印：Xcale，品红色，斜向-30°
+    wx.save();
+    var fs=Math.max(18,Math.min(wc.width,wc.height)*0.045);
+    wx.font='bold '+fs+'px "Share Tech Mono",monospace';
+    wx.fillStyle='rgba(255,0,110,0.75)';
+    wx.strokeStyle='rgba(0,0,0,0.4)';
+    wx.lineWidth=1;
+    wx.rotate(-Math.PI/6);
+    var sx=wc.width*0.26, sy=Math.max(fs*2.2, wc.height*0.12);
+    for(var y=-wc.height*1.5;y<wc.width+wc.height*1.5;y+=sy)
+      for(var x=-wc.width*1.5;x<wc.width+wc.height*1.5;x+=sx){
+        wx.strokeText('Xcale',x,y);
+        wx.fillText('Xcale',x,y);
+      }
+    wx.restore();
+
+    // toDataURL 触发时返回水印版
+    var _orig=cv.toDataURL.bind(cv);
+    cv.toDataURL=function(){return wc.toDataURL.apply(wc,arguments);};
+    cv.toBlob=function(cb,type,q){return wc.toBlob(cb,type,q);};
+  };
+
+  im.onerror=function(){
+    // 加载失败降级为普通图片（无法跨域时的兜底）
+    var fb=document.createElement('img');
+    fb.src=SRC;
+    fb.style.cssText='max-width:100%;max-height:80vh;display:block;margin:0 auto 40px;border:1px solid rgba(255,0,110,.2);';
+    cv.replaceWith(fb);
+  };
+
+  im.src=SRC;
+})();
+</script>
+</body></html>
