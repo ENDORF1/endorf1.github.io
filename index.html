@@ -5,6 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
+<meta name="version" content="1775217473827">
 <title>_DEV.LOG — 个人主页</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&amp;family=Rajdhani:wght@300;400;600;700&amp;family=Noto+Sans+SC:wght@300;400;700&amp;display=swap" rel="stylesheet">
 <style>
@@ -337,11 +338,11 @@ body.modal-open nav{z-index:1 !important;}
 body.modal-open body::before{z-index:1 !important;}
 </style>
 </head>
-<body class="">
+<body class="modal-open">
 
 <!-- ── CURSORS ── -->
-<div class="cursor" id="cursor" style="left: 1277px; top: 931px; transform: translate(-50%, -50%) scale(1); background: var(--cyan);"></div>
-<div class="cursor-ring" id="cursorRing" style="left: 1277px; top: 931px; width: 36px; height: 36px;"></div>
+<div class="cursor" id="cursor" style="left: 985px; top: 569px; transform: translate(-50%, -50%) scale(1); background: var(--cyan);"></div>
+<div class="cursor-ring" id="cursorRing" style="left: 984.72px; top: 568.934px; width: 36px; height: 36px;"></div>
 
 <!-- ══════════════════════════════
      PASSWORD MODAL (login)
@@ -352,13 +353,13 @@ body.modal-open body::before{z-index:1 !important;}
     <div class="pw-title">编辑模式 · 验证</div>
     <div class="pw-sub">该操作需要身份验证。<br>请输入编辑密码以继续。</div>
     <div class="pw-field">
-      <input id="pw-input" type="password" placeholder="••••••••" autocomplete="off" onkeydown="if(event.key==='Enter')submitPw()" value="admin888">
+      <input id="pw-input" type="password" placeholder="••••••••" autocomplete="off" onkeydown="if(event.key==='Enter')submitPw()" class="">
       <span class="pw-eye" id="pw-eye" onclick="toggleEye('pw-input','pw-eye')">👁</span>
     </div>
-    <span class="pw-err" id="pw-err"></span>
+    <span class="pw-err" id="pw-err">// 密码错误</span>
     <button id="pw-submit" onclick="submitPw()">解锁编辑</button>
     <button id="pw-cancel" onclick="closePwModal()">取消</button>
-    <div class="pw-attempts" id="pw-attempts"></div>
+    <div class="pw-attempts" id="pw-attempts">已失败 <b>3</b>/5 次</div>
   </div>
 </div>
 
@@ -371,15 +372,15 @@ body.modal-open body::before{z-index:1 !important;}
     <div class="pw-title">修改密码</div>
     <div class="pw-sub">更改编辑模式的访问密码。</div>
     <div class="pw-field">
-      <input id="cpw-old" type="password" placeholder="当前密码" autocomplete="off" value="admin888">
+      <input id="cpw-old" type="password" placeholder="当前密码" autocomplete="off">
       <span class="pw-eye" onclick="toggleEye('cpw-old',this)">👁</span>
     </div>
     <div class="pw-field">
-      <input id="cpw-new" type="password" placeholder="新密码（至少6位）" autocomplete="off" value="123123ufo">
+      <input id="cpw-new" type="password" placeholder="新密码（至少6位）" autocomplete="off">
       <span class="pw-eye" onclick="toggleEye('cpw-new',this)">👁</span>
     </div>
     <div class="pw-field">
-      <input id="cpw-confirm" type="password" placeholder="确认新密码" autocomplete="off" value="123123ufo">
+      <input id="cpw-confirm" type="password" placeholder="确认新密码" autocomplete="off">
       <span class="pw-eye" onclick="toggleEye('cpw-confirm',this)">👁</span>
     </div>
     <span class="pw-err" id="cpw-err"></span>
@@ -407,7 +408,7 @@ body.modal-open body::before{z-index:1 !important;}
 <div id="save-toast">// 已保存为 index.html</div>
 
 <!-- ── GITHUB PUSH MODAL ── -->
-<div id="gh-overlay" class="">
+<div id="gh-overlay" class="show">
   <div id="gh-box">
     <span class="gh-tag">// GITHUB DEPLOY</span>
     <div class="gh-title">推送到 GitHub</div>
@@ -418,23 +419,19 @@ body.modal-open body::before{z-index:1 !important;}
     </div>
     <div class="gh-field">
       <label>GITHUB 用户名</label>
-      <input id="gh-user" type="text" placeholder="octocat" autocomplete="off" value="">
+      <input id="gh-user" type="text" placeholder="octocat" autocomplete="off">
     </div>
     <div class="gh-field">
       <label>仓库名</label>
-      <input id="gh-repo" type="text" placeholder="my-site" autocomplete="off" value="">
+      <input id="gh-repo" type="text" placeholder="my-site" autocomplete="off">
     </div>
     <div class="gh-field">
       <label>PERSONAL ACCESS TOKEN</label>
-      <input id="gh-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxx" autocomplete="off" value="">
+      <input id="gh-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxx" autocomplete="off">
     </div>
-    <button id="gh-push-btn" onclick="pushToGithub()">⬆ 立即推送</button>
+    <button id="gh-push-btn" onclick="pushToGithub()" disabled="">⬆ 立即推送</button>
     <button id="gh-cancel-btn" onclick="closeGhModal()">取消</button>
-    <div id="gh-log" class="show"><div class="log-spin">⟳ 正在生成网页内容...</div><div class="log-spin">⟳ 连接 GitHub（ENDORF1/endorf1.github.io）...</div><div class="log-info">// 找到现有文件，准备更新...</div><div class="log-spin">⟳ 正在推送...</div><div class="log-err">✕ 推送失败：Repository rule violations found
-
-Secret detected in content
-
-</div></div>
+    <div id="gh-log" class="show"><div class="log-spin">⟳ 正在生成网页内容...</div></div>
   </div>
 </div>
 
@@ -1397,6 +1394,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 ══════════════════════════════════════ */
 // Link navigation handled by clearing hrefs in enterEditMode
 </script>
+
 
 
 
