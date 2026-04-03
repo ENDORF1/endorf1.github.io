@@ -14,6 +14,11 @@
 html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:'Rajdhani','Noto Sans SC',sans-serif;overflow-x:hidden;cursor:none;}
 body.edit-mode{cursor:default;}
+body.edit-mode a{pointer-events:none;}
+body.edit-mode a *{pointer-events:auto;}
+body.edit-mode [contenteditable="true"]{pointer-events:auto;}
+body.edit-mode button{pointer-events:auto;}
+body.edit-mode input{pointer-events:auto;}
 body.edit-mode .cursor,body.edit-mode .cursor-ring{display:none;}
 #pw-overlay.show~.cursor,#pw-overlay.show~.cursor-ring,
 #gh-overlay.show~.cursor,#gh-overlay.show~.cursor-ring,
