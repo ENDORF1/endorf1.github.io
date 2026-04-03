@@ -107,7 +107,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 #post-list::-webkit-scrollbar{width:4px;}
 #post-list::-webkit-scrollbar-track{background:transparent;}
 #post-list::-webkit-scrollbar-thumb{background:var(--muted);border-radius:2px;}
-.post-item{padding:12px 16px;cursor:pointer;border-left:2px solid transparent;transition:all .2s;position:relative;}
+.post-item{padding:12px 16px;cursor:pointer;border-left:2px solid transparent;transition:all .2s;position:relative;display:flex;align-items:center;}
 .post-item:hover{background:rgba(0,245,255,.04);border-left-color:rgba(0,245,255,.3);}
 .post-item.active{background:rgba(0,245,255,.06);border-left-color:var(--cyan);}
 .pi-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -215,17 +215,19 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 
 /* works editor panel */
 #works-list-panel{width:280px;flex-shrink:0;background:var(--dim);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+#works-list-panel.hidden{display:none;}
 #works-list{flex:1;overflow-y:auto;padding:8px 0;}
 #works-list::-webkit-scrollbar{width:4px;}
 #works-list::-webkit-scrollbar-track{background:transparent;}
 #works-list::-webkit-scrollbar-thumb{background:var(--muted);border-radius:2px;}
-.wi-item{padding:12px 16px;cursor:pointer;border-left:2px solid transparent;position:relative;transition:background .15s;}
+.wi-item{padding:12px 16px;cursor:pointer;border-left:2px solid transparent;position:relative;transition:background .15s;display:flex;align-items:center;}
 .wi-item:hover{background:rgba(0,245,255,.04);}
 .wi-item.active{background:rgba(0,245,255,.06);border-left-color:var(--cyan);}
 .wi-title{font-size:13px;color:var(--white);margin-bottom:4px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .wi-meta{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:1px;}
 .wi-draft{position:absolute;right:12px;top:12px;font-family:var(--font-mono);font-size:9px;color:var(--yellow);letter-spacing:1px;border:1px solid rgba(255,230,0,.3);padding:1px 5px;}
 #works-editor-panel{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+#works-editor-panel.hidden{display:none;}
 #works-meta-bar{padding:16px 24px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:10px;flex-shrink:0;}
 #works-title-input{background:transparent;border:none;border-bottom:1px solid rgba(0,245,255,.15);color:var(--white);font-size:22px;font-weight:700;letter-spacing:1px;padding:6px 0;outline:none;width:100%;font-family:var(--font-body);transition:border-color .2s;}
 #works-title-input:focus{border-bottom-color:var(--cyan);}
@@ -678,6 +680,104 @@ function switchTab(tab, btn){
 /* ══════════════════════════════════════
    POST LIST
 ══════════════════════════════════════ */
+/* ══════════════════════════════════════
+   DRAG-TO-REORDER (mouse-based, vertical list & grid)
+══════════════════════════════════════ */
+function makeDragList(container, itemSel, onReorder){
+  let dragging=null, ghost=null, offY=0, offX=0;
+
+  function siblings(){ return [...container.querySelectorAll(itemSel)]; }
+
+  function mkGhost(el){
+    const r=el.getBoundingClientRect();
+    const g=el.cloneNode(true);
+    g.style.cssText='position:fixed;left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;'
+      +'height:'+r.height+'px;opacity:.55;pointer-events:none;z-index:99999;'
+      +'box-shadow:0 4px 20px rgba(0,0,0,.5);outline:1px solid var(--cyan);';
+    document.body.appendChild(g);
+    return g;
+  }
+
+  container.addEventListener('mousedown', e=>{
+    const handle = e.target.closest('[data-drag-handle]') || e.target.closest(itemSel);
+    if(!handle) return;
+    const el = e.target.closest(itemSel);
+    if(!el || el.closest('.pp-add')) return;
+    // don't drag if clicking a button / input inside
+    if(e.target.tagName==='BUTTON'||e.target.tagName==='INPUT') return;
+    e.preventDefault();
+    dragging = el;
+    const r = el.getBoundingClientRect();
+    offX = e.clientX - r.left;
+    offY = e.clientY - r.top;
+    ghost = mkGhost(el);
+    el.style.opacity = '0.3';
+
+    function onMove(e){
+      ghost.style.left = (e.clientX-offX)+'px';
+      ghost.style.top  = (e.clientY-offY)+'px';
+      // find target sibling
+      ghost.style.display='none';
+      const under = document.elementFromPoint(e.clientX, e.clientY);
+      ghost.style.display='';
+      const target = under && under.closest(itemSel);
+      siblings().forEach(s=>s.classList.remove('drag-over-top','drag-over-bottom','drag-over-left','drag-over-right'));
+      if(target && target!==dragging && container.contains(target)){
+        const r2=target.getBoundingClientRect();
+        // detect grid vs list by comparing widths
+        const isGrid = (r2.width < container.getBoundingClientRect().width * 0.7);
+        if(isGrid){
+          target.classList.add(e.clientX < r2.left+r2.width/2 ? 'drag-over-left' : 'drag-over-right');
+        } else {
+          target.classList.add(e.clientY < r2.top+r2.height/2 ? 'drag-over-top' : 'drag-over-bottom');
+        }
+      }
+    }
+
+    function onUp(e){
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+      ghost.remove(); ghost=null;
+      dragging.style.opacity='';
+      siblings().forEach(s=>s.classList.remove('drag-over-top','drag-over-bottom','drag-over-left','drag-over-right'));
+
+      ghost_pos: {
+        const under_final = document.elementFromPoint(e.clientX, e.clientY);
+        const target = under_final && under_final.closest(itemSel);
+        if(!target || target===dragging || !container.contains(target)) break ghost_pos;
+        const r2=target.getBoundingClientRect();
+        const isGrid = (r2.width < container.getBoundingClientRect().width * 0.7);
+        const before = isGrid
+          ? e.clientX < r2.left+r2.width/2
+          : e.clientY < r2.top+r2.height/2;
+        if(before) container.insertBefore(dragging, target);
+        else container.insertBefore(dragging, target.nextSibling);
+      }
+
+      // rebuild array from DOM order
+      const newOrder = siblings().map(el=>parseInt(el.dataset.idx));
+      onReorder(newOrder);
+      dragging=null;
+    }
+
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  });
+}
+
+function addDragStyles(){
+  if(document.getElementById('drag-reorder-styles')) return;
+  const s=document.createElement('style');
+  s.id='drag-reorder-styles';
+  s.textContent='.drag-over-top{border-top:2px solid var(--cyan)!important;}'
+    +'.drag-over-bottom{border-bottom:2px solid var(--cyan)!important;}'
+    +'.drag-over-left{border-left:2px solid var(--cyan)!important;}'
+    +'.drag-over-right{border-right:2px solid var(--cyan)!important;}'
+    +'[data-drag-handle]{cursor:grab;user-select:none;}'
+    +'[data-drag-handle]:active{cursor:grabbing;}';
+  document.head.appendChild(s);
+}
+
 function renderPostList(){
   const el=document.getElementById('post-list');
   el.innerHTML='';
@@ -688,16 +788,34 @@ function renderPostList(){
   posts.forEach((p,i)=>{
     const d=document.createElement('div');
     d.className='post-item'+(currentPost===i?' active':'');
+    d.dataset.idx=i;
     d.innerHTML=`
-      <div class="pi-title">${p.title||'（无标题）'}</div>
-      <div class="pi-meta">
-        <span class="pi-cat">${p.cat||'未分类'}</span>
-        <span>${p.date||''}</span>
+      <span data-drag-handle style="font-size:14px;color:var(--muted);margin-right:8px;flex-shrink:0;" title="拖拽排序">⠿</span>
+      <div style="flex:1;min-width:0;">
+        <div class="pi-title">${p.title||'（无标题）'}</div>
+        <div class="pi-meta">
+          <span class="pi-cat">${p.cat||'未分类'}</span>
+          <span>${p.date||''}</span>
+        </div>
       </div>
       ${p.draft?'<span class="pi-draft">草稿</span>':''}
     `;
     d.onclick=()=>selectPost(i);
     el.appendChild(d);
+  });
+  addDragStyles();
+  makeDragList(el, '.post-item', newOrder=>{
+    const reordered = newOrder.map(i=>posts[i]);
+    posts.splice(0, posts.length, ...reordered);
+    // fix currentPost index
+    if(currentPost!==null){
+      const cur = reordered.findIndex(p=>p===posts[currentPost]);
+      // re-index
+      const oldPost = posts[currentPost];
+      currentPost = reordered.indexOf(oldPost);
+    }
+    saveState();
+    renderPostList();
   });
 }
 
@@ -874,11 +992,24 @@ function renderWorksList(){
   works.forEach((w,i)=>{
     const d = document.createElement('div');
     d.className = 'wi-item' + (currentWork===i?' active':'');
-    d.innerHTML = '<div class="wi-title">'+(w.title||'（无标题）')+'</div>'
+    d.dataset.idx = i;
+    d.innerHTML = '<span data-drag-handle style="font-size:14px;color:var(--muted);margin-right:8px;flex-shrink:0;" title="拖拽排序">⠿</span>'
+      +'<div style="flex:1;min-width:0;">'
+      +'<div class="wi-title">'+(w.title||'（无标题）')+'</div>'
       +'<div class="wi-meta">'+(w.date||'')+(w.tags&&w.tags[0]?' · '+w.tags[0]:'')+'</div>'
+      +'</div>'
       +(w.draft!==false?'<span class="wi-draft">草稿</span>':'');
     d.onclick = ()=>{ saveCurrentWork(); selectWork(i); };
     el.appendChild(d);
+  });
+  addDragStyles();
+  makeDragList(el, '.wi-item', newOrder=>{
+    const reordered = newOrder.map(i=>works[i]);
+    const curWork = currentWork!==null ? works[currentWork] : null;
+    works.splice(0, works.length, ...reordered);
+    if(curWork) currentWork = reordered.indexOf(curWork);
+    saveState();
+    renderWorksList();
   });
 }
 
@@ -1056,16 +1187,20 @@ function renderGalleryCategories(container){
 
     const grid=document.createElement('div');
     grid.className='pp-grid';
+    grid.dataset.catIdx=ci;
     cat.items.forEach((item,ii)=>{
       const card=document.createElement('div');
       card.className='pp-card';
+      card.dataset.idx=ii;
       card.innerHTML=`
+        <span data-drag-handle style="position:absolute;top:6px;left:6px;font-size:13px;color:rgba(255,255,255,.3);cursor:grab;user-select:none;z-index:2;" title="拖拽排序">⠿⠿</span>
         ${item.img?`<img class="pp-card-img" src="${item.img}" alt="" style="object-position:${item.imgPos||'50% 50%'}">`:`<div class="pp-card-img-placeholder">📷 点击上传封面</div>`}
         <div class="pp-card-title">${item.title||'无标题'}</div>
         <div class="pp-card-desc">${item.desc||''}</div>
         <button class="pp-card-del" onclick="deleteCatItem(${ci},${ii},event)">✕ 删除</button>
       `;
-      card.onclick=(e)=>{ if(!e.target.classList.contains('pp-card-del')) openCatItemModal(ci,ii); };
+      card.style.position='relative';
+      card.onclick=(e)=>{ if(!e.target.classList.contains('pp-card-del')&&!e.target.dataset.dragHandle) openCatItemModal(ci,ii); };
       grid.appendChild(card);
     });
 
@@ -1077,6 +1212,18 @@ function renderGalleryCategories(container){
     grid.appendChild(addBtn);
     section.appendChild(grid);
     container.appendChild(section);
+
+    // 给这个分类的 grid 加拖拽
+    addDragStyles();
+    makeDragList(grid, '.pp-card', newOrder=>{
+      const catIdx = parseInt(grid.dataset.catIdx);
+      const cat = galleryCategories[catIdx];
+      const reordered = newOrder.map(i=>cat.items[i]);
+      cat.items.splice(0, cat.items.length, ...reordered);
+      saveState();
+      // 重新渲染这个分类（不全部重渲染，避免丢失其他分类的拖拽绑定）
+      renderPagePanel('gallery');
+    });
   });
 
   // Add category button
