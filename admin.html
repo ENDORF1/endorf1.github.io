@@ -476,6 +476,7 @@ async function doLogin(){
   const val=document.getElementById('lk-input').value;
   const hash=await sha256(val);
   if(hash===PW_HASH){
+    __aesKey = await deriveKey(val); // derive encryption key from password
     document.getElementById('lock').remove();
     document.getElementById('app').classList.add('show');
     init();
@@ -1044,17 +1045,52 @@ function deleteCard(type,idx,e){
 /* ══════════════════════════════════════
    GITHUB
 ══════════════════════════════════════ */
+
+/* ══════════════════════════════════════
+   TOKEN CRYPTO  (AES-256-GCM, key from PBKDF2)
+   index.html 和 admin.html 共用同一份密文
+   localStorage key: "gh_token_enc"
+══════════════════════════════════════ */
+let __aesKey = null; // 登录后在内存持有，页面关闭即消失
+
+async function deriveKey(password) {
+  const enc = new TextEncoder();
+  const km = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    { name:'PBKDF2', salt:enc.encode('gh-token-salt-v1'), iterations:200000, hash:'SHA-256' },
+    km, { name:'AES-GCM', length:256 }, false, ['encrypt','decrypt']
+  );
+}
+async function encryptToken(token) {
+  if (!__aesKey || !token) return;
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = await crypto.subtle.encrypt({name:'AES-GCM',iv}, __aesKey, new TextEncoder().encode(token));
+  const b64 = b => btoa(String.fromCharCode(...new Uint8Array(b)));
+  localStorage.setItem('gh_token_enc', b64(iv)+':'+b64(ct));
+}
+async function decryptToken() {
+  if (!__aesKey) return null;
+  const stored = localStorage.getItem('gh_token_enc');
+  if (!stored) return null;
+  try {
+    const [ivB64,ctB64] = stored.split(':');
+    const fb64 = s => Uint8Array.from(atob(s), c=>c.charCodeAt(0));
+    const pt = await crypto.subtle.decrypt({name:'AES-GCM',iv:fb64(ivB64)}, __aesKey, fb64(ctB64));
+    return new TextDecoder().decode(pt);
+  } catch { return null; }
+}
 let GH={user:'',repo:'',token:''};
 
 function loadGhConfig(){
   GH.user  = localStorage.getItem('gh_user')  || '';
   GH.repo  = localStorage.getItem('gh_repo')  || '';
-  GH.token = localStorage.getItem('gh_token') || '';
+  // Token loaded from encrypted storage into GH.token
+  decryptToken().then(t=>{ if(t) GH.token=t; });
 }
 function openGhConfig(){
   document.getElementById('gh-user').value  = GH.user;
   document.getElementById('gh-repo').value  = GH.repo;
-  document.getElementById('gh-token').value = GH.token;
+  decryptToken().then(t=>{ document.getElementById('gh-token').value = t||''; });
   document.getElementById('gh-modal').classList.add('show');
 }
 function closeGhConfig(){document.getElementById('gh-modal').classList.remove('show');}
@@ -1066,7 +1102,8 @@ function saveGhConfig(){
   GH.user=user; GH.repo=repo; GH.token=token;
   localStorage.setItem('gh_user',GH.user);
   localStorage.setItem('gh_repo',GH.repo);
-  localStorage.setItem('gh_token',GH.token);
+  encryptToken(token); // save encrypted token
+  localStorage.removeItem('gh_token'); // remove any old plaintext token
   closeGhConfig();
   showToast('ok','GitHub 配置已保存 ✓');
 }
@@ -1841,6 +1878,16 @@ async function submitCpw(){
   if(newVal!==cfmVal){errEl.textContent='// 两次输入的密码不一致';return;}
   const oldHash=await sha256(oldVal);
   if(oldHash!==PW_HASH){errEl.textContent='// 当前密码错误';return;}
+  // Re-encrypt token with new password before updating key
+  const oldKey = __aesKey;
+  const newKey = await deriveKey(newVal);
+  if (oldKey && localStorage.getItem('gh_token_enc')) {
+    const token = await decryptToken();
+    if (token) { __aesKey = newKey; await encryptToken(token); }
+    else { __aesKey = newKey; }
+  } else {
+    __aesKey = newKey;
+  }
   PW_HASH=await sha256(newVal);
   closeCpwModal();
   showToast('ok','密码已修改 · 请重新推送 admin.html 使其永久生效 ✓');
