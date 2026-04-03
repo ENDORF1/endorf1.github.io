@@ -959,9 +959,10 @@ async function handleInlineImage(input){
   showUploadStatus('loading','⟳ 上传中，请稍候...');
   try{
     const url=await uploadImageToGH(file);
-    const img=`<img src="${url}" alt="图片" style="max-width:100%"><p><br></p>`;
+    const caption = prompt('图片注释（可留空）', '');
+    const figHtml = `<figure class="post-figure"><img src="${url}" alt="图片">${caption ? `<figcaption>${caption}</figcaption>` : ''}</figure><p><br></p>`;
     document.getElementById('editor-content').focus();
-    document.execCommand('insertHTML',false,img);
+    document.execCommand('insertHTML',false,figHtml);
     showToast('ok','图片已插入 ✓');
   }catch(e){
     showUploadStatus('err','✕ 上传失败：'+e.message);
@@ -1768,12 +1769,12 @@ async function patchHomeHTML(){
   const postsId = html.indexOf('id="dynamic-posts-list"');
   if(postsId !== -1){
     const innerStart = html.indexOf('>', postsId) + 1;
-    // 找结束标记：add-post-btn 按钮结束位置，保留按钮并补上 </div>
+    // 找结束标记：add-post-btn 按钮，容错空白
     let addBtnIdx = html.indexOf('add-post-btn', innerStart);
     if(addBtnIdx !== -1){
-      // 找到按钮的完整结束 </button>，切割点定在其后
-      const btnEnd = html.indexOf('</button>', addBtnIdx) + '</button>'.length;
-      html = html.slice(0, innerStart) + postsHTML + html.slice(btnEnd).replace(/^\s*<\/div>/, '').replace('</section>', '</div>\n</section>');
+      // 往前找 < 
+      addBtnIdx = html.lastIndexOf('<', addBtnIdx);
+      html = html.slice(0, innerStart) + postsHTML + html.slice(addBtnIdx);
     } else {
       // 找 </div> 作为后备
       const divEnd = html.indexOf('</div>', innerStart);
@@ -2019,7 +2020,10 @@ ${BASE_CSS}
 .post-body a{color:var(--cyan);border-bottom:1px solid rgba(0,245,255,.3);text-decoration:none;}
 .post-body blockquote{border-left:3px solid var(--cyan);padding:12px 20px;margin:20px 0;background:rgba(0,245,255,.04);color:var(--muted);}
 .post-body hr{border:none;border-top:1px solid rgba(0,245,255,.15);margin:40px 0;}
-.post-body img{max-width:100%;border:1px solid rgba(0,245,255,.15);margin:8px 0;}
+.post-body img{display:block;max-width:100%;width:auto;border:1px solid rgba(0,245,255,.15);margin:20px auto 0;}
+.post-body figure.post-figure{margin:20px 0;text-align:center;}
+.post-body figure.post-figure img{margin:0 auto;}
+.post-body figure.post-figure figcaption{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:8px;padding:0 8px;}
 .post-body pre{background:#0a0e1a;border:1px solid rgba(0,245,255,.15);margin:20px 0;overflow:hidden;position:relative;}
 .post-body pre .code-lang{position:absolute;top:0;right:0;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;padding:6px 12px;background:rgba(0,245,255,.05);border-bottom:1px solid rgba(0,245,255,.1);border-left:1px solid rgba(0,245,255,.1);}
 .post-body pre code{display:block;padding:16px 20px;font-family:'Fira Code',monospace;font-size:13px;line-height:1.7;color:#a8c8e8;overflow-x:auto;counter-reset:line;}
