@@ -55,8 +55,18 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:cent
       <div class="bc-body">
         <span class="bc-cat"># 玩法拆解</span>
         <div class="bc-title">杀戮尖塔（Slay the Spire）核心玩法循环拆解</div>
-        <div class="bc-meta">2026-03-03 <span>Roguelike，独立游戏，DeckBuilding</span></div>
+        <div class="bc-meta">2026-04-03 <span>Roguelike，独立游戏，DeckBuilding</span></div>
       </div>
     </a></div>
 </div>
+<script>
+(function(){
+  document.addEventListener('contextmenu',function(e){e.preventDefault();});
+  document.addEventListener('dragstart',function(e){if(e.target.tagName==='IMG')e.preventDefault();});
+  document.addEventListener('keydown',function(e){
+    if((e.ctrlKey||e.metaKey)&&(e.key==='s'||e.key==='S'||e.key==='p'||e.key==='P'))e.preventDefault();
+    if(e.key==='PrintScreen')e.preventDefault();
+  });
+})();
+</script>
 </body></html>
