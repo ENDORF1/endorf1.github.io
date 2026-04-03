@@ -5,6 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
+<meta name="version" content="1775244317578">
 <meta name="version" content="1775217578279">
 <title>_DEV.LOG — 个人主页</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&amp;family=Rajdhani:wght@300;400;600;700&amp;family=Noto+Sans+SC:wght@300;400;700&amp;display=swap" rel="stylesheet">
@@ -338,7 +339,7 @@ body.modal-open nav{z-index:1 !important;}
 body.modal-open body::before{z-index:1 !important;}
 </style>
 </head>
-<body class="">
+<body class="modal-open">
 
 <!-- ── CURSORS ── -->
 <div class="cursor" id="cursor"></div>
@@ -356,10 +357,10 @@ body.modal-open body::before{z-index:1 !important;}
       <input id="pw-input" type="password" placeholder="••••••••" autocomplete="off" onkeydown="if(event.key==='Enter')submitPw()" class="">
       <span class="pw-eye" id="pw-eye" onclick="toggleEye('pw-input','pw-eye')">👁</span>
     </div>
-    <span class="pw-err" id="pw-err">// 密码错误</span>
+    <span class="pw-err" id="pw-err"></span>
     <button id="pw-submit" onclick="submitPw()">解锁编辑</button>
     <button id="pw-cancel" onclick="closePwModal()">取消</button>
-    <div class="pw-attempts" id="pw-attempts">已失败 <b>1</b>/5 次</div>
+    <div class="pw-attempts" id="pw-attempts"></div>
   </div>
 </div>
 
@@ -408,7 +409,7 @@ body.modal-open body::before{z-index:1 !important;}
 <div id="save-toast">// 已保存为 index.html</div>
 
 <!-- ── GITHUB PUSH MODAL ── -->
-<div id="gh-overlay" class="">
+<div id="gh-overlay" class="show">
   <div id="gh-box">
     <span class="gh-tag">// GITHUB DEPLOY</span>
     <div class="gh-title">推送到 GitHub</div>
@@ -431,7 +432,7 @@ body.modal-open body::before{z-index:1 !important;}
     </div>
     <button id="gh-push-btn" onclick="pushToGithub()">⬆ 立即推送</button>
     <button id="gh-cancel-btn" onclick="closeGhModal()">取消</button>
-    <div id="gh-log" class=""></div>
+    <div id="gh-log" class=""><div class="log-spin">⟳ 正在生成网页内容...</div></div>
   </div>
 </div>
 
@@ -522,7 +523,7 @@ body.modal-open body::before{z-index:1 !important;}
   <div class="footer-links">
     <div class="social-edit-wrap"><a class="social-label" id="sl-github" contenteditable="false" spellcheck="false" href="https://endorf1.github.io/#">GITHUB</a><input class="social-input" placeholder="GitHub URL" oninput="document.getElementById('sl-github').href=this.value||'#'" value="https://github.com/ENDORF1"></div>
     <div class="social-edit-wrap"><a class="social-label" id="sl-bili" contenteditable="false" spellcheck="false" href="https://endorf1.github.io/#">BILIBILI</a><input class="social-input" placeholder="Bilibili URL" oninput="document.getElementById('sl-bili').href=this.value||'#'" value=""></div>
-    <div class="social-edit-wrap"><a class="social-label" id="sl-twitter" contenteditable="false" spellcheck="false" href="https://endorf1.github.io/#">Pixiv</a><input class="social-input" placeholder="Twitter URL" oninput="document.getElementById('sl-twitter').href=this.value||'#'" value="/https://www.pixiv.net/users/107152559"></div>
+    <div class="social-edit-wrap"><a class="social-label" id="sl-twitter" contenteditable="false" spellcheck="false" href="https://endorf1.github.io/#">Pixiv</a><input class="social-input" placeholder="Twitter URL" oninput="document.getElementById('sl-twitter').href=this.value||'#'" value="https://www.pixiv.net/users/107152559"></div>
   </div>
 </footer>
 
@@ -1425,6 +1426,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 ══════════════════════════════════════ */
 // Link navigation handled by clearing hrefs in enterEditMode
 </script>
+
 
 
 
