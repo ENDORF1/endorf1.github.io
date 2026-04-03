@@ -1939,7 +1939,7 @@ function buildWorkDetailHTML(w){
     +'  <div class="wd-body">'+(w.content||('<p>'+( w.desc||'')+'</p>'))+'</div>\n'
     +(w.link?'  <div style="margin-top:40px;"><a href="'+w.link+'" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border:1px solid var(--cyan);color:var(--cyan);font-family:\'Share Tech Mono\',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;text-decoration:none;transition:all .3s;">\u67e5\u770b\u9879\u76ee \u2192</a></div>\n':'')
     +'</div>\n'
-    +"${'<scr'+'ipt>\\n(function(){\\n  document.addEventListener(\\'contextmenu\\',function(e){e.preventDefault();});\\n  document.addEventListener(\\'dragstart\\',function(e){if(e.target.tagName===\\'IMG\\')e.preventDefault();});\\n  document.addEventListener(\\'keydown\\',function(e){\\n    if((e.ctrlKey||e.metaKey)&&(e.key===\\'s\\'||e.key===\\'S\\'||e.key===\\'p\\'||e.key===\\'P\\'))e.preventDefault();\\n    if(e.key===\\'PrintScreen\\')e.preventDefault();\\n  });\\n})();\\n</'+'script>'}"
+    +'<scr'+'ipt>\n(function(){\n  document.addEventListener(\'contextmenu\',function(e){e.preventDefault();});\n  document.addEventListener(\'dragstart\',function(e){if(e.target.tagName===\'IMG\')e.preventDefault();});\n  document.addEventListener(\'keydown\',function(e){\n    if((e.ctrlKey||e.metaKey)&&(e.key===\'s\'||e.key===\'S\'||e.key===\'p\'||e.key===\'P\'))e.preventDefault();\n    if(e.key===\'PrintScreen\')e.preventDefault();\n  });\n})();\n</'+'script>'
     +'\n</body></html>';
 }
 
