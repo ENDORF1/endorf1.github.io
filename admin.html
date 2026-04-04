@@ -314,7 +314,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 
 .img-mgr-btn{font-family:var(--font-mono);font-size:10px;padding:4px 12px;border:1px solid rgba(0,245,255,.25);color:var(--muted);background:transparent;cursor:pointer;letter-spacing:1px;transition:all .2s;}
 .img-mgr-btn:hover{color:var(--cyan);border-color:var(--cyan);}
-.img-del-btn{border-color:rgba(255,0,110,.3)!important;color:var(--magenta)!important;}
+.img-del-btn{border-color:rgba(255,0,110,.3)!important;color:var(--magenta)!important;display:none;}
 .img-del-btn:hover{background:rgba(255,0,110,.15)!important;color:var(--magenta)!important;border-color:rgba(255,0,110,.5)!important;}
 /* works / gallery / about panels */
 #page-panel{flex:1;display:none;flex-direction:column;overflow:hidden;}
@@ -2491,10 +2491,13 @@ async function _deleteSelected(){
   if(_imgSelected.size===0) return;
   if(!confirm('确认删除选中的 '+_imgSelected.size+' 张图片？此操作不可撤销。')) return;
 
+  if(!GH.token) GH.token = await decryptToken() || '';
+  if(!GH.user||!GH.repo||!GH.token){ showToast('err','请先配置 GitHub'); return; }
+
   const headers = {'Authorization':`token ${GH.token}`,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'};
   const toDelete = _imgList.filter(f=>_imgSelected.has(f.path));
   const body = document.getElementById('pp-body');
-  body.innerHTML = '<div style="font-family:var(--font-mono);font-size:11px;color:var(--yellow);letter-spacing:2px;padding:20px 0;">⟳ 正在删除...</div>';
+  body.innerHTML = '<div style="font-family:var(--font-mono);font-size:11px;color:var(--yellow);letter-spacing:2px;padding:20px 0;">⟳ 正在删除 0 / '+toDelete.length+' ...</div>';
 
   let ok=0, fail=0;
   for(const f of toDelete){
@@ -2503,9 +2506,17 @@ async function _deleteSelected(){
         method:'DELETE', headers,
         body: JSON.stringify({message:'delete image: '+f.name, sha: f.sha})
       });
-      if(res.ok){ ok++; delete _shaCache[f.path]; }
-      else { fail++; console.warn('delete failed', f.path, res.status); }
-    }catch(e){ fail++; }
+      if(res.ok){
+        ok++;
+        _imgList = _imgList.filter(i=>i.path!==f.path);
+        _imgSelected.delete(f.path);
+      } else {
+        fail++;
+        const d = await res.json().catch(()=>({}));
+        console.warn('delete failed', f.path, res.status, d.message);
+      }
+    }catch(e){ fail++; console.error('delete error', f.path, e); }
+    body.innerHTML = '<div style="font-family:var(--font-mono);font-size:11px;color:var(--yellow);letter-spacing:2px;padding:20px 0;">⟳ 正在删除 '+ok+' / '+toDelete.length+' ...</div>';
   }
 
   showToast(fail===0?'ok':'info', '已删除 '+ok+' 张'+(fail>0?' · '+fail+' 张失败':''));
