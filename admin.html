@@ -499,14 +499,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
           <option value="22px">大 · 22</option>
           <option value="28px">特大 · 28</option>
         </select>
-        <select class="et-select" onchange="applyLineHeight(this.value,'works-editor-content');this.selectedIndex=0;" title="行距">
-          <option value="">行距</option>
-          <option value="1.2">紧 · 1.2</option>
-          <option value="1.5">稍紧 · 1.5</option>
-          <option value="1.9">正常 · 1.9</option>
-          <option value="2.4">宽松 · 2.4</option>
-          <option value="3.0">很宽 · 3.0</option>
-        </select>
         <div class="et-color-wrap" title="文字颜色">
           <button class="et-btn" onclick="document.getElementById('works-text-color').click()" style="font-weight:700;position:relative;padding-bottom:8px;">A<span class="et-color-swatch" id="works-text-swatch" style="background:#00f5ff;"></span></button>
           <input type="color" id="works-text-color" class="et-hidden-input" value="#00f5ff" oninput="applyTextColor(this.value,'works-editor-content','works-text-swatch')">
@@ -586,14 +578,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         <button class="et-btn" onclick="exec('justifyRight')" title="右对齐">⬤R</button>
         <div class="et-sep"></div>
         <input type="text" class="et-select" id="editor-fontsize" placeholder="字号" title="字号（如：15px）" style="width:80px;" value="15px" oninput="applyFontSize(this,'editor-content')">
-        <select class="et-select" onchange="applyLineHeight(this.value,'editor-content');this.selectedIndex=0;" title="行距">
-          <option value="">行距</option>
-          <option value="1.2">紧 · 1.2</option>
-          <option value="1.5">稍紧 · 1.5</option>
-          <option value="1.9">正常 · 1.9</option>
-          <option value="2.4">宽松 · 2.4</option>
-          <option value="3.0">很宽 · 3.0</option>
-        </select>
         <div class="et-color-wrap" title="文字颜色">
           <button class="et-btn" onclick="document.getElementById('blog-text-color').click()" style="font-weight:700;position:relative;padding-bottom:8px;">A<span class="et-color-swatch" id="blog-text-swatch" style="background:#00f5ff;"></span></button>
           <input type="color" id="blog-text-color" class="et-hidden-input" value="#00f5ff" oninput="applyTextColor(this.value,'editor-content','blog-text-swatch')">
@@ -1214,6 +1198,7 @@ function _findAlignTarget(ed){
   let divCandidate=null;
   while(block&&block!==ed){
     if(blockTags.test(block.tagName))return block;
+    // Prefer .table-wrap divs (our paste wrapper) or any div containing a table
     if(block.tagName==='DIV'){
       if(block.classList.contains('table-wrap'))return block;
       if(!divCandidate)divCandidate=block;
@@ -1246,106 +1231,15 @@ function _applyAlign(el,align){
   }
 }
 
-/* 对齐：有选中文字时只对选中段落生效，无选中时对光标所在块生效 */
-function _applyAlignToSelection(ed, align){
-  const sel = window.getSelection();
-  if(!sel||!sel.rangeCount) return;
-  const range = sel.getRangeAt(0);
-  const selectedText = sel.toString();
-
-  if(selectedText.length > 0){
-    // 找选区跨越的所有段落级块元素，对每个分别设置 text-align
-    const blockTags = /^(P|DIV|H[1-6]|LI|BLOCKQUOTE|TD|TH)$/;
-    const ancestor = range.commonAncestorContainer;
-    const container = ancestor.nodeType===3 ? ancestor.parentElement : ancestor;
-
-    // 收集选区内所有块元素
-    let blocks = [];
-    // 如果 container 本身就是块，且选区只在一个块内
-    if(blockTags.test(container.tagName) && container !== ed){
-      blocks = [container];
-    } else {
-      // 跨多个块：遍历 ed 内所有块，找与选区有交叉的
-      const walker = document.createTreeWalker(ed, NodeFilter.SHOW_ELEMENT);
-      let node;
-      while(node = walker.nextNode()){
-        if(blockTags.test(node.tagName) && range.intersectsNode(node)){
-          // 排除子块（只取最外层的段落块）
-          if(!blocks.some(b=>b.contains(node))) blocks.push(node);
-        }
-      }
-    }
-
-    if(blocks.length > 0){
-      blocks.forEach(b=>{ b.style.textAlign = align; });
-    } else {
-      // fallback：包一个 div
-      const div = document.createElement('div');
-      div.style.textAlign = align;
-      range.surroundContents(div);
-    }
-  } else {
-    // 无选中：找光标所在块，整块对齐
-    const target = _findAlignTarget(ed);
-    if(target) _applyAlign(target, align);
-    else document.execCommand('justify'+(align.charAt(0).toUpperCase()+align.slice(1)), false, null);
-  }
-}
-
-/* 行距：对选中的块元素设置 line-height；无选中则对光标所在块生效 */
-function applyLineHeight(val, edId){
-  if(!val) return;
-  const ed = document.getElementById(edId);
-  ed.focus();
-  const sel = window.getSelection();
-  if(!sel||!sel.rangeCount) return;
-  const range = sel.getRangeAt(0);
-  const selectedText = sel.toString();
-  const blockTags = /^(P|DIV|H[1-6]|LI|BLOCKQUOTE|TD|TH)$/;
-
-  if(selectedText.length > 0){
-    const ancestor = range.commonAncestorContainer;
-    const container = ancestor.nodeType===3 ? ancestor.parentElement : ancestor;
-    let blocks = [];
-    if(blockTags.test(container.tagName) && container !== ed){
-      blocks = [container];
-    } else {
-      const walker = document.createTreeWalker(ed, NodeFilter.SHOW_ELEMENT);
-      let node;
-      while(node = walker.nextNode()){
-        if(blockTags.test(node.tagName) && range.intersectsNode(node)){
-          if(!blocks.some(b=>b.contains(node))) blocks.push(node);
-        }
-      }
-    }
-    if(blocks.length > 0){
-      blocks.forEach(b=>{ b.style.lineHeight = val; });
-    } else {
-      // 选中内容在同一行内，用 span 包裹
-      const span = document.createElement('span');
-      span.style.lineHeight = val;
-      try{ range.surroundContents(span); } catch(e){ document.execCommand('insertHTML',false,'<span style="line-height:'+val+'">'+selectedText+'</span>'); }
-    }
-  } else {
-    // 无选中：对光标所在块生效
-    let node = range.commonAncestorContainer;
-    if(node.nodeType===3) node = node.parentElement;
-    let block = node;
-    while(block && block !== ed){
-      if(blockTags.test(block.tagName)){ block.style.lineHeight = val; return; }
-      block = block.parentElement;
-    }
-    // 最后 fallback：整个编辑器
-    ed.style.lineHeight = val;
-  }
-}
-
 function exec(cmd,val=null){
   const ed=document.getElementById('editor-content');
   ed.focus();
   if(cmd==='justifyCenter'||cmd==='justifyLeft'||cmd==='justifyRight'){
-    _applyAlignToSelection(ed, cmd==='justifyCenter'?'center':cmd==='justifyLeft'?'left':'right');
-    return;
+    const target=_findAlignTarget(ed);
+    if(target){
+      _applyAlign(target,cmd==='justifyCenter'?'center':cmd==='justifyLeft'?'left':'right');
+      return;
+    }
   }
   document.execCommand(cmd,false,val);
 }
@@ -1486,22 +1380,10 @@ function confirmDelete(){
 
 /* Font size */
 function applyFontSize(sel, edId){
-  const size=sel.value; if(!size){ if(sel.selectedIndex!==undefined) sel.selectedIndex=0; return; }
+  const size=sel.value; if(!size){ sel.selectedIndex=0; return; }
   const ed=document.getElementById(edId); ed.focus();
-  const selection=window.getSelection();
-  const selectedText=selection&&selection.toString();
-  if(selectedText){
-    document.execCommand('insertHTML',false,`<span style="font-size:${size}">${selectedText}</span>`);
-  } else {
-    // 无选中时对光标所在块的字号生效
-    const range=selection&&selection.rangeCount?selection.getRangeAt(0):null;
-    if(range){
-      let node=range.commonAncestorContainer;
-      if(node.nodeType===3)node=node.parentElement;
-      node.style.fontSize=size;
-    }
-  }
-  if(sel.selectedIndex!==undefined) sel.selectedIndex=0;
+  document.execCommand('insertHTML',false,`<span style="font-size:${size}">${window.getSelection().toString()||'文字'}</span>`);
+  sel.selectedIndex=0;
 }
 
 /* Text color */
@@ -1765,8 +1647,11 @@ function wexec(cmd){
   const ed=document.getElementById('works-editor-content');
   ed.focus();
   if(cmd==='justifyCenter'||cmd==='justifyLeft'||cmd==='justifyRight'){
-    _applyAlignToSelection(ed, cmd==='justifyCenter'?'center':cmd==='justifyLeft'?'left':'right');
-    return;
+    const target=_findAlignTarget(ed);
+    if(target){
+      _applyAlign(target,cmd==='justifyCenter'?'center':cmd==='justifyLeft'?'left':'right');
+      return;
+    }
   }
   document.execCommand(cmd,false,null);
 }
@@ -2606,10 +2491,13 @@ async function _deleteSelected(){
   if(_imgSelected.size===0) return;
   if(!confirm('确认删除选中的 '+_imgSelected.size+' 张图片？此操作不可撤销。')) return;
 
+  if(!GH.token) GH.token = await decryptToken() || '';
+  if(!GH.user||!GH.repo||!GH.token){ showToast('err','请先配置 GitHub'); return; }
+
   const headers = {'Authorization':`token ${GH.token}`,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'};
   const toDelete = _imgList.filter(f=>_imgSelected.has(f.path));
   const body = document.getElementById('pp-body');
-  body.innerHTML = '<div style="font-family:var(--font-mono);font-size:11px;color:var(--yellow);letter-spacing:2px;padding:20px 0;">⟳ 正在删除...</div>';
+  body.innerHTML = '<div style="font-family:var(--font-mono);font-size:11px;color:var(--yellow);letter-spacing:2px;padding:20px 0;">⟳ 正在删除 0 / '+toDelete.length+' ...</div>';
 
   let ok=0, fail=0;
   for(const f of toDelete){
@@ -2618,9 +2506,17 @@ async function _deleteSelected(){
         method:'DELETE', headers,
         body: JSON.stringify({message:'delete image: '+f.name, sha: f.sha})
       });
-      if(res.ok){ ok++; delete _shaCache[f.path]; }
-      else { fail++; console.warn('delete failed', f.path, res.status); }
-    }catch(e){ fail++; }
+      if(res.ok){
+        ok++;
+        _imgList = _imgList.filter(i=>i.path!==f.path);
+        _imgSelected.delete(f.path);
+      } else {
+        fail++;
+        const d = await res.json().catch(()=>({}));
+        console.warn('delete failed', f.path, res.status, d.message);
+      }
+    }catch(e){ fail++; console.error('delete error', f.path, e); }
+    body.innerHTML = '<div style="font-family:var(--font-mono);font-size:11px;color:var(--yellow);letter-spacing:2px;padding:20px 0;">⟳ 正在删除 '+ok+' / '+toDelete.length+' ...</div>';
   }
 
   showToast(fail===0?'ok':'info', '已删除 '+ok+' 张'+(fail>0?' · '+fail+' 张失败':''));
