@@ -2274,6 +2274,15 @@ async function patchHomeHTML(){
   const bytes = Uint8Array.from(atob(b64), c=>c.charCodeAt(0));
   let html = new TextDecoder('utf-8').decode(bytes);
 
+  // 关键修复：清理 index.html 中编辑模式的残留属性，防止乱码
+  html = html
+    .replace(/contenteditable="true"/g, '')
+    .replace(/spellcheck="false"/g, '')
+    .replace(/data-focus-listener-added="[^"]*"/g, '')
+    .replace(/\s+class="is-dragging"/g, '')
+    .replace(/\s+class="drag-over-\w+"/g, '')
+    .replace(/\s+style="[^"]*cursor[^"]*"/g, '');
+
   // HTML转义函数
   const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/`/g,'&#x60;');
 
