@@ -2630,14 +2630,17 @@ ${('<scr'+'ipt>\n(function(){\n  document.addEventListener(\'contextmenu\',funct
 }
 
 function buildBlogIndexHTML(){
+  // HTML转义函数
+  const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/`/g,'&#x60;');
+  
   const published=posts.filter(p=>!p.draft);
   const cards=published.map(p=>`
-    <a class="blog-card" href="/blog/${p.slug}.html">
-      ${p.cover?`<img class="bc-cover" src="${p.cover}" alt="">`:`<div class="bc-cover-ph"></div>`}
+    <a class="blog-card" href="/blog/${esc(p.slug)}.html">
+      ${p.cover?`<img class="bc-cover" src="${esc(p.cover)}" alt="">`:`<div class="bc-cover-ph"></div>`}
       <div class="bc-body">
-        <span class="bc-cat"># ${p.cat||'未分类'}</span>
-        <div class="bc-title">${p.title}</div>
-        <div class="bc-meta">${p.date||''} ${(p.tags||[]).map(t=>`<span>${t}</span>`).join(' ')}</div>
+        <span class="bc-cat"># ${esc(p.cat||'未分类')}</span>
+        <div class="bc-title">${esc(p.title)}</div>
+        <div class="bc-meta">${esc(p.date||'')} ${(p.tags||[]).map(t=>`<span>${esc(t)}</span>`).join(' ')}</div>
       </div>
     </a>`).join('');
   return`<!DOCTYPE html>
@@ -2668,6 +2671,7 @@ ${NAV_HTML()}
 </div>
 ${('<scr'+'ipt>\n(function(){\n  document.addEventListener(\'contextmenu\',function(e){e.preventDefault();});\n  document.addEventListener(\'dragstart\',function(e){if(e.target.tagName===\'IMG\')e.preventDefault();});\n  document.addEventListener(\'keydown\',function(e){\n    if((e.ctrlKey||e.metaKey)&&(e.key===\'s\'||e.key===\'S\'||e.key===\'p\'||e.key===\'P\'))e.preventDefault();\n    if(e.key===\'PrintScreen\')e.preventDefault();\n  });\n})();\n</'+'script>')}
 </body></html>`;
+}
 }
 
 function buildWorkDetailHTML(w){
@@ -2725,16 +2729,19 @@ function buildWorkDetailHTML(w){
 }
 
 function buildWorksHTML(){
+  // HTML转义函数
+  const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/`/g,'&#x60;');
+  
   const cards=works.map(w=>{
     const slug=w.slug||slugify(w.title);
     const inner=`
-      ${w.img?`<img class="wc-img" src="${w.img}" style="object-position:${w.imgPos||'50% 50%'}" alt="">`:`<div class="wc-img-ph"></div>`}
+      ${w.img?`<img class="wc-img" src="${esc(w.img)}" style="object-position:${esc(w.imgPos||'50% 50%')}" alt="">`:`<div class="wc-img-ph"></div>`}
       <div class="wc-body">
-        <div class="wc-title">${w.title||''}</div>
-        <div class="wc-desc">${w.desc||''}</div>
-        <div class="wc-tags">${(w.tags||[]).map(t=>`<span class="wc-tag">${t}</span>`).join('')}</div>
+        <div class="wc-title">${esc(w.title||'')}</div>
+        <div class="wc-desc">${esc(w.desc||'')}</div>
+        <div class="wc-tags">${(w.tags||[]).map(t=>`<span class="wc-tag">${esc(t)}</span>`).join('')}</div>
       </div>`;
-    return `<a class="work-card" href="/works/${slug}.html">${inner}</a>`;
+    return `<a class="work-card" href="/works/${esc(slug)}.html">${inner}</a>`;
   }).join('');
   return`<!DOCTYPE html>
 <html lang="zh"><head>
@@ -2768,15 +2775,18 @@ ${('<scr'+'ipt>\n(function(){\n  document.addEventListener(\'contextmenu\',funct
 }
 
 function buildGalleryHTML(){
+  // HTML转义函数
+  const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/`/g,'&#x60;');
+  
   // Gallery index: show category cards
   const cards=galleryCategories.map(cat=>{
     const firstImg=cat.items.find(i=>i.img);
     return `
-    <a class="gallery-card" href="/gallery/${cat.slug}/">
-      ${firstImg?`<img class="gc-img" src="${firstImg.img}" style="object-position:${firstImg.imgPos||'50% 50%'}" alt="">`:`<div class="gc-img-ph" style="background:radial-gradient(circle at 50% 50%,rgba(255,0,110,.15),transparent)"></div>`}
+    <a class="gallery-card" href="/gallery/${esc(cat.slug)}/">
+      ${firstImg?`<img class="gc-img" src="${esc(firstImg.img)}" style="object-position:${esc(firstImg.imgPos||'50% 50%')}" alt="">`:`<div class="gc-img-ph" style="background:radial-gradient(circle at 50% 50%,rgba(255,0,110,.15),transparent)"></div>`}
       <div class="gc-body">
         <div class="gc-type">// ${cat.items.length} 件作品</div>
-        <div class="gc-title">${cat.name}</div>
+        <div class="gc-title">${esc(cat.name)}</div>
       </div>
     </a>`;
   }).join('');
