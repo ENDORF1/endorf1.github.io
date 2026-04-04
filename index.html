@@ -20,7 +20,7 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani','Noto Sans SC
 body.edit-mode{cursor:default;}
 body.edit-mode a{pointer-events:none;}
 body.edit-mode a *{pointer-events:auto;}
-body.edit-mode [contenteditable="true"]{pointer-events:auto;}
+body.edit-mode []{pointer-events:auto;}
 body.edit-mode button{pointer-events:auto;}
 body.edit-mode input{pointer-events:auto;}
 body.edit-mode .cursor,body.edit-mode .cursor-ring{display:none;}
@@ -57,8 +57,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:cent
 .hero-name .line2{color:transparent;-webkit-text-stroke:1px var(--cyan);display:block;filter:drop-shadow(0 0 20px var(--cyan));}
 .hero-sub{margin-top:24px;font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--muted);letter-spacing:2px;line-height:1.8;max-width:500px;animation:fadeIn 1s .4s ease both;}
 .hero-sub .hl{color:var(--cyan);}
-#hero-sub[contenteditable="true"]{outline:1px dashed rgba(0,245,255,.35);cursor:text;}
-#hero-sub[contenteditable="true"]:focus{outline:1px solid var(--cyan);background:rgba(0,245,255,.07);box-shadow:0 0 12px rgba(0,245,255,.12);}
+#hero-sub[]{outline:1px dashed rgba(0,245,255,.35);cursor:text;}
+#hero-sub[]:focus{outline:1px solid var(--cyan);background:rgba(0,245,255,.07);box-shadow:0 0 12px rgba(0,245,255,.12);}
 .hero-btns{margin-top:40px;display:flex;gap:16px;animation:fadeIn 1s .6s ease both;}
 .btn-primary{padding:12px 28px;background:transparent;border:1px solid var(--cyan);color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;cursor:none;text-decoration:none;position:relative;overflow:hidden;transition:color .3s;}
 .btn-primary::before{content:'';position:absolute;inset:0;background:var(--cyan);transform:translateX(-101%);transition:transform .3s ease;}
@@ -239,9 +239,9 @@ body.edit-mode #edit-toggle{display:none;}
 #save-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
 /* editable */
-body.edit-mode [contenteditable="true"]{outline:1px dashed rgba(0,245,255,.35);cursor:text;min-width:20px;min-height:1em;transition:outline-color .2s,background .2s;}
-body.edit-mode [contenteditable="true"]:hover{outline-color:var(--cyan);background:rgba(0,245,255,.05);}
-body.edit-mode [contenteditable="true"]:focus{outline:1px solid var(--cyan);background:rgba(0,245,255,.07);box-shadow:0 0 12px rgba(0,245,255,.12);}
+body.edit-mode []{outline:1px dashed rgba(0,245,255,.35);cursor:text;min-width:20px;min-height:1em;transition:outline-color .2s,background .2s;}
+body.edit-mode []:hover{outline-color:var(--cyan);background:rgba(0,245,255,.05);}
+body.edit-mode []:focus{outline:1px solid var(--cyan);background:rgba(0,245,255,.07);box-shadow:0 0 12px rgba(0,245,255,.12);}
 
 /* drag states */
 .is-dragging{opacity:.35!important;}
@@ -375,7 +375,7 @@ body.modal-open body::before{z-index:1 !important;}
 <!-- ══════════════════════════════
      CHANGE PASSWORD MODAL
 ══════════════════════════════ -->
-<div id="cpw-overlay" style="position: fixed; inset: 0px; z-index: 999998; background: rgba(3, 8, 16, 0.94); backdrop-filter: blur(20px); cursor: auto; display: none; align-items: center; justify-content: center;">
+<div id="cpw-overlay">
   <div id="pw-box">
     <span class="pw-tag">// SECURITY SETTINGS</span>
     <div class="pw-title">修改密码</div>
@@ -405,19 +405,19 @@ body.modal-open body::before{z-index:1 !important;}
     <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--magenta));"></div>
     <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:20px;">// 上传封面图</div>
     <!-- 图片预览 + 焦点选择 -->
-    <div id="cp-img-wrap" style="display:none;position:relative;margin-bottom:16px;cursor:crosshair;" onclick="cpSetFocus(event)">
+    <div id="cp-img-wrap" onclick="cpSetFocus(event)">
       <img id="cp-img" src="" style="width:100%;max-height:260px;object-fit:cover;display:block;border:1px solid rgba(0,245,255,.15);">
       <div id="cp-dot" style="position:absolute;width:14px;height:14px;border-radius:50%;background:var(--cyan);border:2px solid #fff;transform:translate(-50%,-50%);pointer-events:none;box-shadow:0 0 8px rgba(0,245,255,.8);left:50%;top:50%;"></div>
     </div>
     <div id="cp-hint" style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:14px;display:none;">👆 点击图片选择展示焦点位置</div>
     <div id="cp-status" style="font-family: &quot;Share Tech Mono&quot;, monospace; font-size: 11px; letter-spacing: 2px; min-height: 20px; margin-bottom: 12px; color: var(--magenta);">✕ 上传失败：Bad credentials</div>
-    <label style="display: block; width: 100%; padding: 10px; background: transparent; border: 1px dashed rgba(0, 245, 255, 0.3); color: var(--muted); font-family: &quot;Share Tech Mono&quot;, monospace; font-size: 11px; letter-spacing: 2px; cursor: pointer; text-align: center; transition: 0.2s; margin-bottom: 10px;" onmouseover="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'" onmouseout="this.style.borderColor='rgba(0,245,255,.3)';this.style.color='var(--muted)'">
+    <label onmouseover="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'" onmouseout="this.style.borderColor='rgba(0,245,255,.3)';this.style.color='var(--muted)'">
       📷 选择图片上传
       <input type="file" accept="image/*" style="display:none" onchange="cpHandleUpload(this)" value="">
     </label>
     <div style="display:flex;gap:10px;">
-      <button onclick="cpConfirm()" style="flex: 1 1 0%; padding: 10px; background: transparent; border: 1px solid var(--cyan); color: var(--cyan); font-family: &quot;Share Tech Mono&quot;, monospace; font-size: 11px; letter-spacing: 2px; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='var(--cyan)';this.style.color='var(--bg)'" onmouseout="this.style.background='transparent';this.style.color='var(--cyan)'">确认</button>
-      <button onclick="cpCancel()" style="flex: 1 1 0%; padding: 10px; background: transparent; border-color: var(--muted); border-top-style: ; border-top-width: ; border-right-style: ; border-right-width: ; border-bottom-style: ; border-bottom-width: ; border-left-style: ; border-left-width: ; border-image-source: ; border-image-slice: ; border-image-width: ; border-image-outset: ; border-image-repeat: ; color: var(--muted); font-family: &quot;Share Tech Mono&quot;, monospace; font-size: 11px; letter-spacing: 2px; cursor: pointer; transition: 0.2s;" onmouseover="this.style.borderColor='var(--magenta)';this.style.color='var(--magenta)'" onmouseout="this.style.borderColor='var(--muted)';this.style.color='var(--muted)'">取消</button>
+      <button onclick="cpConfirm()" onmouseover="this.style.background='var(--cyan)';this.style.color='var(--bg)'" onmouseout="this.style.background='transparent';this.style.color='var(--cyan)'">确认</button>
+      <button onclick="cpCancel()" onmouseover="this.style.borderColor='var(--magenta)';this.style.color='var(--magenta)'" onmouseout="this.style.borderColor='var(--muted)';this.style.color='var(--muted)'">取消</button>
     </div>
   </div>
 </div>
@@ -469,24 +469,24 @@ body.modal-open body::before{z-index:1 !important;}
 
 <!-- ── NAV ── -->
 <nav>
-  <a class="nav-logo" contenteditable="false" spellcheck="false" href="/">_<span contenteditable="false" spellcheck="false">DEV</span>.LOG</a>
+  <a class="nav-logo" contenteditable="false"  href="/">_<span contenteditable="false" >DEV</span>.LOG</a>
   <div class="nav-links">
-    <a contenteditable="false" spellcheck="false" href="/blog/">博客</a>
-    <a contenteditable="false" spellcheck="false" href="/works/">项目</a>
-    <a contenteditable="false" spellcheck="false" href="/gallery/">创作</a>
-    <a contenteditable="false" spellcheck="false" href="/about/">关于我</a>
-    <a style="color:rgba(58,90,122,.5);font-size:10px;" contenteditable="false" spellcheck="false" href="#sec-projects">↓ 本页</a>
+    <a contenteditable="false"  href="/blog/">博客</a>
+    <a contenteditable="false"  href="/works/">项目</a>
+    <a contenteditable="false"  href="/gallery/">创作</a>
+    <a contenteditable="false"  href="/about/">关于我</a>
+    <a style="color:rgba(58,90,122,.5);font-size:10px;" contenteditable="false"  href="#sec-projects">↓ 本页</a>
   </div>
 </nav>
 
 <!-- ── HERO ── -->
 <section id="hero">
-  <div class="hero-tag" contenteditable="false" spellcheck="false">// INDEPENDENT DEVELOPER · GAME MAKER · CREATOR</div>
+  <div class="hero-tag" contenteditable="false" >// INDEPENDENT DEVELOPER · GAME MAKER · CREATOR</div>
   <h1 class="hero-name">
     <span class="glitch-wrap" data-text="HELLO,">HELLO,</span>
-    <span class="line2" contenteditable="false" spellcheck="false">WORLD.</span>
+    <span class="line2" contenteditable="false" >WORLD.</span>
   </h1>
-  <p id="hero-sub" class="hero-sub" contenteditable="false" spellcheck="false">独立开发者 · 卡牌游戏制作中<br><font color="#00f5ff">手绘画师</font>&nbsp; · 同人创作者<br>代码 / 绘画 / 游戏</p>
+  <p id="hero-sub" class="hero-sub" contenteditable="false" >独立开发者 · 卡牌游戏制作中<br><font color="#00f5ff">手绘画师</font>&nbsp; · 同人创作者<br>代码 / 绘画 / 游戏</p>
   <div class="hero-btns">
     <a class="btn-primary" href="#sec-projects">查看项目</a>
     <a class="btn-sec" href="#sec-blog">最新文章</a>
@@ -505,7 +505,7 @@ body.modal-open body::before{z-index:1 !important;}
   </div>
   <div class="sec-header">
     <span class="sec-num">01</span>
-    <h2 class="sec-title" contenteditable="false" spellcheck="false">游戏开发</h2>
+    <h2 class="sec-title" contenteditable="false" >游戏开发</h2>
     <div class="sec-line"></div>
   </div>
   <div class="projects-grid" id="dynamic-works-grid">
@@ -520,7 +520,7 @@ body.modal-open body::before{z-index:1 !important;}
   </div>
   <div class="sec-header">
     <span class="sec-num">02</span>
-    <h2 class="sec-title" contenteditable="false" spellcheck="false">技术博客</h2>
+    <h2 class="sec-title" contenteditable="false" >技术博客</h2>
     <div class="sec-line"></div>
   </div>
   <div class="posts-list" id="dynamic-posts-list"><div class="no-posts-placeholder" style="font-family:var(--font-mono);font-size:12px;color:var(--muted);letter-spacing:2px;padding:20px 24px;">// 暂无已发布文章 · 请在后台发布文章后推送</div><button class="add-post-btn" onclick="addPost(this)">＋ 添加条目</button>`;
