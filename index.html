@@ -1225,13 +1225,27 @@ async function uploadImageToGH(file){
   const user = localStorage.getItem('gh_user');
   const repo = localStorage.getItem('gh_repo');
   let token = null;
-  if(__aesKey){ try{ token = await decryptToken(); }catch(e){} }
-  if(!token) token = localStorage.getItem('gh_token')||'';
+  // 优先使用加密的 token
+  if(__aesKey){ 
+    try{ 
+      token = await decryptToken(); 
+    }catch(e){
+      console.error('解密 token 失败:', e);
+    } 
+  }
+  // 如果解密失败或没有密钥，尝试使用明文 token
+  if(!token) { 
+    token = localStorage.getItem('gh_token')||''; 
+  }
   if(!user||!repo||!token) throw new Error('请先在推送弹窗里填写 GitHub 配置');
   const apiUrl = `https://api.github.com/repos/${user}/${repo}/contents/${fname}`;
   const headers = {'Authorization':`token ${token}`,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'};
   const res = await fetch(apiUrl,{method:'PUT',headers,body:JSON.stringify({message:'upload image: '+fname,content:base64})});
-  if(!res.ok){ const d=await res.json().catch(()=>({})); throw new Error(d.message||'HTTP '+res.status); }
+  if(!res.ok){ 
+    const d=await res.json().catch(()=>({})); 
+    console.error('GitHub 上传失败:', res.status, d);
+    throw new Error(d.message||'HTTP '+res.status); 
+  }
   return `https://cdn.jsdelivr.net/gh/${user}/${repo}@main/${fname}`;
 }
 
