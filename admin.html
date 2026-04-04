@@ -456,6 +456,25 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
           <img id="works-cover-preview" src="" alt="封面" style="display:none;height:36px;width:60px;object-fit:cover;border:1px solid var(--border);cursor:pointer;" onclick="document.getElementById('works-cover-input').click()">
           <input type="file" id="works-cover-input" accept="image/*" style="display:none" onchange="handleWorksCover(this)">
         </div>
+        <!-- 排版设置行 -->
+        <div class="meta-row" style="padding:8px 0 2px;border-top:1px solid rgba(0,245,255,.08);gap:14px;flex-wrap:wrap;">
+          <span class="meta-label" style="color:rgba(0,245,255,.55);letter-spacing:2px;">⊟ 排版</span>
+          <label class="meta-label" style="display:flex;align-items:center;gap:5px;">正文宽度
+            <input class="meta-input" id="works-layout-width" type="text" placeholder="如：720px" value="720px" style="width:100px;">
+          </label>
+          <label class="meta-label" style="display:flex;align-items:center;gap:5px;">行距
+            <input class="meta-input" id="works-layout-lh" type="text" placeholder="如：1.9" value="1.9" style="width:90px;">
+          </label>
+          <label class="meta-label" style="display:flex;align-items:center;gap:5px;">正文字号
+            <input class="meta-input" id="works-layout-fontsize" type="text" placeholder="如：15px" value="15px" style="width:90px;">
+          </label>
+          <label class="meta-label" style="display:flex;align-items:center;gap:5px;">代码字号
+            <input class="meta-input" id="works-layout-code-size" type="text" placeholder="如：13px" value="13px" style="width:90px;">
+          </label>
+          <label class="meta-label" style="display:flex;align-items:center;gap:5px;">段落间距
+            <input class="meta-input" id="works-layout-pgap" type="text" placeholder="如：16px" value="16px" style="width:90px;">
+          </label>
+        </div>
       </div>
       <div id="works-editor-toolbar">
         <button class="et-btn" onclick="wfmt('h2')">H2</button>
@@ -544,42 +563,19 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         <div class="meta-row" style="padding:8px 0 2px;border-top:1px solid rgba(0,245,255,.08);gap:14px;flex-wrap:wrap;">
           <span class="meta-label" style="color:rgba(0,245,255,.55);letter-spacing:2px;">⊟ 排版</span>
           <label class="meta-label" style="display:flex;align-items:center;gap:5px;">正文宽度
-            <select class="meta-input" id="layout-width" style="width:100px;">
-              <option value="640px">窄 640</option>
-              <option value="720px" selected>标准 720</option>
-              <option value="800px">宽 800</option>
-              <option value="900px">全宽 900</option>
-            </select>
+            <input class="meta-input" id="layout-width" type="text" placeholder="如：720px" value="720px" style="width:100px;">
           </label>
           <label class="meta-label" style="display:flex;align-items:center;gap:5px;">行距
-            <select class="meta-input" id="layout-lh" style="width:90px;">
-              <option value="1.7">紧 1.7</option>
-              <option value="1.9" selected>标准 1.9</option>
-              <option value="2.1">舒 2.1</option>
-              <option value="2.4">松 2.4</option>
-            </select>
+            <input class="meta-input" id="layout-lh" type="text" placeholder="如：1.9" value="1.9" style="width:90px;">
           </label>
           <label class="meta-label" style="display:flex;align-items:center;gap:5px;">正文字号
-            <select class="meta-input" id="layout-fontsize" style="width:90px;">
-              <option value="14px">小 14</option>
-              <option value="15px" selected>标准 15</option>
-              <option value="16px">中 16</option>
-              <option value="17px">大 17</option>
-            </select>
+            <input class="meta-input" id="layout-fontsize" type="text" placeholder="如：15px" value="15px" style="width:90px;">
           </label>
           <label class="meta-label" style="display:flex;align-items:center;gap:5px;">代码字号
-            <select class="meta-input" id="layout-code-size" style="width:90px;">
-              <option value="12px">小 12</option>
-              <option value="13px" selected>标准 13</option>
-              <option value="14px">大 14</option>
-            </select>
+            <input class="meta-input" id="layout-code-size" type="text" placeholder="如：13px" value="13px" style="width:90px;">
           </label>
           <label class="meta-label" style="display:flex;align-items:center;gap:5px;">段落间距
-            <select class="meta-input" id="layout-pgap" style="width:90px;">
-              <option value="12px">紧 12</option>
-              <option value="16px" selected>标准 16</option>
-              <option value="22px">舒 22</option>
-            </select>
+            <input class="meta-input" id="layout-pgap" type="text" placeholder="如：16px" value="16px" style="width:90px;">
           </label>
         </div>
       </div>
@@ -1543,6 +1539,13 @@ function selectWork(i){
   const prev = document.getElementById('works-cover-preview');
   if(worksCoverData){ prev.src=worksCoverData; prev.style.display='block'; }
   else { prev.style.display='none'; }
+  // 恢复排版设置
+  const layout = w.layout || {};
+  document.getElementById('works-layout-width').value    = layout.width    || '720px';
+  document.getElementById('works-layout-lh').value       = layout.lh       || '1.9';
+  document.getElementById('works-layout-fontsize').value = layout.fontsize || '15px';
+  document.getElementById('works-layout-code-size').value= layout.codeSize || '13px';
+  document.getElementById('works-layout-pgap').value     = layout.pgap     || '16px';
   renderWorksList();
 }
 
@@ -1559,6 +1562,14 @@ function saveCurrentWork(isDraft=null){
   w.img = worksCoverData;
   w.imgFull = worksCoverFullData||worksCoverData;
   w.slug = slugify(w.title);
+  // 保存排版设置
+  w.layout = {
+    width:    document.getElementById('works-layout-width').value,
+    lh:       document.getElementById('works-layout-lh').value,
+    fontsize: document.getElementById('works-layout-fontsize').value,
+    codeSize: document.getElementById('works-layout-code-size').value,
+    pgap:     document.getElementById('works-layout-pgap').value
+  };
   saveState();
   renderWorksList();
 }
@@ -2495,7 +2506,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:cent
 .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--cyan);transition:width .3s;}
 .nav-links a:hover{color:var(--cyan);}
 .nav-links a:hover::after{width:100%;}
-.page-wrap{position:relative;z-index:1;padding:88px 10vw 80px;max-width:900px;margin:0 auto;}
+.page-wrap{position:relative;z-index:1;padding:88px 10vw 80px;}
 `;
 
 function cleanContent(html){
@@ -2625,39 +2636,49 @@ ${('<scr'+'ipt>\n(function(){\n  document.addEventListener(\'contextmenu\',funct
 
 function buildWorkDetailHTML(w){
   const slug=w.slug||slugify(w.title);
+  // 排版参数（有则用，无则用默认值）
+  const L = w.layout || {};
+  const bodyWidth  = L.width    || '720px';
+  const lineHeight = L.lh       || '1.9';
+  const fontSize   = L.fontsize || '15px';
+  const codeSize   = L.codeSize || '13px';
+  const pgap       = L.pgap     || '16px';
   return '<!DOCTYPE html>\n'
     +'<html lang="zh"><head>\n'
     +'<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">\n'
     +'<title>'+w.title+' · 游戏开发 · _DEV.LOG</title>\n'
     +'<style>\n'+BASE_CSS+'\n'
-    +'.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:\'Share Tech Mono\',monospace;font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:2px;margin-bottom:40px;transition:color .2s;}\n'
+    +'.back-btn{display:block;max-width:'+bodyWidth+';margin:0 auto 40px;font-family:\'Share Tech Mono\',monospace;font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:2px;transition:color .2s;}\n'
     +'.back-btn:hover{color:var(--cyan);}\n'
+    +'.wd-header{max-width:'+bodyWidth+';margin:0 auto 48px;}\n'
     +'.wd-tag{font-family:\'Share Tech Mono\',monospace;font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;display:block;}\n'
     +'.wd-title{font-size:clamp(28px,5vw,48px);font-weight:700;color:#fff;margin-bottom:16px;}\n'
     +'.wd-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px;}\n'
     +'.wd-tag-item{font-family:\'Share Tech Mono\',monospace;font-size:10px;color:var(--cyan);border:1px solid rgba(0,245,255,.3);padding:3px 8px;letter-spacing:1px;}\n'
-    +'.wd-cover{max-width:100%;max-height:500px;object-fit:cover;border:1px solid rgba(0,245,255,.15);display:block;margin:0 auto 40px;width:100%;}\n'
-    +'.wd-body{max-width:800px;}\n'
+    +'.wd-cover{max-width:'+bodyWidth+';max-height:500px;object-fit:cover;border:1px solid rgba(0,245,255,.15);display:block;margin:0 auto '+pgap+';width:100%;}\n'
+    +'.wd-body{max-width:'+bodyWidth+';margin:0 auto;font-size:'+fontSize+';}\n'
     +'.wd-body h2{font-size:22px;font-weight:700;color:#fff;margin:32px 0 12px;padding-left:12px;border-left:3px solid var(--magenta);}\n'
     +'.wd-body h3{font-size:18px;font-weight:700;color:#fff;margin:24px 0 10px;padding-left:10px;border-left:2px solid var(--cyan);}\n'
-    +'.wd-body p{margin:0 0 16px;line-height:1.9;color:var(--text);}\n'
-    +'.wd-body ul{margin:8px 0 16px 24px;}\n'
-    +'.wd-body li{margin-bottom:8px;line-height:1.8;color:var(--text);}\n'
-    +'.wd-body img{max-width:100%;border:1px solid rgba(0,245,255,.15);margin:8px 0;display:block;}\n'
-    +'.wd-body pre{background:#060d18;border:1px solid rgba(0,245,255,.15);padding:16px 20px;font-family:\'Fira Code\',monospace;font-size:13px;color:#a8c8e8;overflow-x:auto;margin:16px 0;white-space:pre-wrap;}\n'
+    +'.wd-body p{margin:0 0 '+pgap+';line-height:'+lineHeight+';color:var(--text);}\n'
+    +'.wd-body ul{margin:8px 0 '+pgap+' 24px;}\n'
+    +'.wd-body li{margin-bottom:8px;line-height:'+lineHeight+';color:var(--text);}\n'
+    +'.wd-body img{max-width:100%;border:1px solid rgba(0,245,255,.15);margin:'+pgap+' auto;display:block;}\n'
+    +'.wd-body pre{background:#060d18;border:1px solid rgba(0,245,255,.15);padding:16px 20px;font-family:\'Fira Code\',monospace;font-size:'+codeSize+';color:#a8c8e8;overflow-x:auto;margin:'+pgap+' 0;white-space:pre-wrap;}\n'
     +'.wd-body pre code{display:block;}\n'
     +'.video-embed{position:relative;width:100%;padding-bottom:56.25%;margin:24px 0;background:#000;}\n'
     +'.video-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}\n'
     +'</style></head><body>\n'
     +NAV_HTML()+'\n'
     +'<div class="page-wrap">\n'
-    +'  <a class="back-btn" href="/works/">\u2190 \u8fd4\u56de\u9879\u76ee</a>\n'
-    +'  <span class="wd-tag">// WORKS</span>\n'
-    +'  <h1 class="wd-title">'+(w.title||'')+'</h1>\n'
-    +'  <div class="wd-tags">'+(w.tags||[]).map(t=>'<span class="wd-tag-item">'+t+'</span>').join('')+'</div>\n'
+    +'  <a class="back-btn" href="/works/">← 返回项目</a>\n'
+    +'  <div class="wd-header">\n'
+    +'    <span class="wd-tag">// WORKS</span>\n'
+    +'    <h1 class="wd-title">'+(w.title||'')+'</h1>\n'
+    +'    <div class="wd-tags">'+(w.tags||[]).map(t=>'<span class="wd-tag-item">'+t+'</span>').join('')+'</div>\n'
+    +'  </div>\n'
     +(w.img?'  <img class="wd-cover" src="'+(w.imgFull||w.img)+'" style="object-position:'+(w.imgPos||'50% 50%')+'" alt="">\n':'')
     +'  <div class="wd-body">'+(w.content||('<p>'+( w.desc||'')+'</p>'))+'</div>\n'
-    +(w.link?'  <div style="margin-top:40px;"><a href="'+w.link+'" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border:1px solid var(--cyan);color:var(--cyan);font-family:\'Share Tech Mono\',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;text-decoration:none;transition:all .3s;">\u67e5\u770b\u9879\u76ee \u2192</a></div>\n':'')
+    +(w.link?'  <div style="margin-top:40px;"><a href="'+w.link+'" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border:1px solid var(--cyan);color:var(--cyan);font-family:\'Share Tech Mono\',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;text-decoration:none;transition:all .3s;">查看项目 →</a></div>\n':'')
     +'</div>\n'
     +'<scr'+'ipt>\n(function(){\n  document.addEventListener(\'contextmenu\',function(e){e.preventDefault();});\n  document.addEventListener(\'dragstart\',function(e){if(e.target.tagName===\'IMG\')e.preventDefault();});\n  document.addEventListener(\'keydown\',function(e){\n    if((e.ctrlKey||e.metaKey)&&(e.key===\'s\'||e.key===\'S\'||e.key===\'p\'||e.key===\'P\'))e.preventDefault();\n    if(e.key===\'PrintScreen\')e.preventDefault();\n  });\n})();\n</'+'script>'
     +'\n</body></html>';
