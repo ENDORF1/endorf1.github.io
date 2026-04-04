@@ -2135,7 +2135,7 @@ function pushLog(msg,type='info'){
 async function ghPut(path,content,msg){
   const apiBase=`https://api.github.com/repos/${GH.user}/${GH.repo}/contents/${path}`;
   const headers={'Authorization':`token ${GH.token}`,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'};
-  const encoded=(()=>{const bytes=new TextEncoder().encode(content);let b='';bytes.forEach(b2=>b+=String.fromCharCode(b2));return btoa(b);})();
+  const encoded=btoa(unescape(encodeURIComponent(content)));
   let sha=null;
   const getRes=await fetch(apiBase,{headers});
   if(getRes.ok){const d=await getRes.json();sha=d.sha;}
@@ -2324,16 +2324,21 @@ async function patchHomeHTML(){
   const postsId = html.indexOf('id="dynamic-posts-list"');
   if(postsId !== -1){
     const innerStart = html.indexOf('>', postsId) + 1;
-    // 找结束标记：add-post-btn 按钮，容错空白
-    let addBtnIdx = html.indexOf('add-post-btn', innerStart);
-    if(addBtnIdx !== -1){
-      // 往前找 < 
-      addBtnIdx = html.lastIndexOf('<', addBtnIdx);
-      html = html.slice(0, innerStart) + postsHTML + html.slice(addBtnIdx);
+    // 用锚点注释精确定位结束位置，避免误截断
+    const POSTS_ANCHOR = '<!--/dynamic-posts-list-->';
+    const anchorEnd = html.indexOf(POSTS_ANCHOR, innerStart);
+    if(anchorEnd !== -1){
+      html = html.slice(0, innerStart) + postsHTML + '</div>' + POSTS_ANCHOR + html.slice(anchorEnd + POSTS_ANCHOR.length);
     } else {
-      // 找 </div> 作为后备
-      const divEnd = html.indexOf('</div>', innerStart);
-      if(divEnd !== -1) html = html.slice(0, innerStart) + postsHTML + html.slice(divEnd);
+      // 后备：找 add-post-btn
+      let addBtnIdx = html.indexOf('add-post-btn', innerStart);
+      if(addBtnIdx !== -1){
+        addBtnIdx = html.lastIndexOf('<', addBtnIdx);
+        html = html.slice(0, innerStart) + postsHTML + '</div>' + html.slice(addBtnIdx);
+      } else {
+        const divEnd = html.indexOf('</div>', innerStart);
+        if(divEnd !== -1) html = html.slice(0, innerStart) + postsHTML + html.slice(divEnd);
+      }
     }
   }
 
