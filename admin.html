@@ -2560,11 +2560,15 @@ function buildPostHTML(p){
   const fontSize   = L.fontsize || '15px';
   const codeSize   = L.codeSize || '13px';
   const pgap       = L.pgap     || '16px';
+  
+  // HTML转义函数
+  const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/`/g,'&#x60;');
+  
   return`<!DOCTYPE html>
 <html lang="zh">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>${p.title} · _DEV.LOG</title>
+<title>${esc(p.title)} · _DEV.LOG</title>
 <style>
 ${BASE_CSS}
 /* post-header merged below */
@@ -2608,14 +2612,14 @@ ${NAV_HTML()}
 <div class="page-wrap">
   <a class="back-btn" href="/blog/">← 返回博客</a>
   <div class="post-header">
-    <span class="post-cat"># ${p.cat||'未分类'}</span>
-    <h1 class="post-title">${p.title}</h1>
+    <span class="post-cat"># ${esc(p.cat||'未分类')}</span>
+    <h1 class="post-title">${esc(p.title)}</h1>
     <div class="post-meta">
-      <span>${p.date||''}</span>
-      ${(p.tags||[]).map(t=>`<span>${t}</span>`).join('')}
+      <span>${esc(p.date||'')}</span>
+      ${(p.tags||[]).map(t=>`<span>${esc(t)}</span>`).join('')}
     </div>
   </div>
-  ${p.cover?`<img class="post-cover" src="${p.cover}" alt="封面">`:''}
+  ${p.cover?`<img class="post-cover" src="${esc(p.cover)}" alt="封面">`:''}
   <div class="post-body">${cleanContent(p.content||'')}</div>
 </div>
 ${('<scr'+'ipt>\n(function(){\n  document.addEventListener(\'contextmenu\',function(e){e.preventDefault();});\n  document.addEventListener(\'dragstart\',function(e){if(e.target.tagName===\'IMG\')e.preventDefault();});\n  document.addEventListener(\'keydown\',function(e){\n    if((e.ctrlKey||e.metaKey)&&(e.key===\'s\'||e.key===\'S\'||e.key===\'p\'||e.key===\'P\'))e.preventDefault();\n    if(e.key===\'PrintScreen\')e.preventDefault();\n  });\n})();\n</'+'script>')}
