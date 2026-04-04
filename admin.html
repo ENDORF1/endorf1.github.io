@@ -540,6 +540,48 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
           <img id="cover-preview" src="" alt="封面">
           <input type="file" id="cover-file-input" accept="image/*" onchange="handleCoverUpload(this)">
         </div>
+        <!-- 排版设置行 -->
+        <div class="meta-row" style="padding:8px 0 2px;border-top:1px solid rgba(0,245,255,.08);gap:14px;flex-wrap:wrap;">
+          <span class="meta-label" style="color:rgba(0,245,255,.55);letter-spacing:2px;">⊟ 排版</span>
+          <label class="meta-label" style="display:flex;align-items:center;gap:5px;">正文宽度
+            <select class="meta-input" id="layout-width" style="width:100px;">
+              <option value="640px">窄 640</option>
+              <option value="720px" selected>标准 720</option>
+              <option value="800px">宽 800</option>
+              <option value="900px">全宽 900</option>
+            </select>
+          </label>
+          <label class="meta-label" style="display:flex;align-items:center;gap:5px;">行距
+            <select class="meta-input" id="layout-lh" style="width:90px;">
+              <option value="1.7">紧 1.7</option>
+              <option value="1.9" selected>标准 1.9</option>
+              <option value="2.1">舒 2.1</option>
+              <option value="2.4">松 2.4</option>
+            </select>
+          </label>
+          <label class="meta-label" style="display:flex;align-items:center;gap:5px;">正文字号
+            <select class="meta-input" id="layout-fontsize" style="width:90px;">
+              <option value="14px">小 14</option>
+              <option value="15px" selected>标准 15</option>
+              <option value="16px">中 16</option>
+              <option value="17px">大 17</option>
+            </select>
+          </label>
+          <label class="meta-label" style="display:flex;align-items:center;gap:5px;">代码字号
+            <select class="meta-input" id="layout-code-size" style="width:90px;">
+              <option value="12px">小 12</option>
+              <option value="13px" selected>标准 13</option>
+              <option value="14px">大 14</option>
+            </select>
+          </label>
+          <label class="meta-label" style="display:flex;align-items:center;gap:5px;">段落间距
+            <select class="meta-input" id="layout-pgap" style="width:90px;">
+              <option value="12px">紧 12</option>
+              <option value="16px" selected>标准 16</option>
+              <option value="22px">舒 22</option>
+            </select>
+          </label>
+        </div>
       </div>
 
       <div id="editor-toolbar">
@@ -752,7 +794,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 /* ══════════════════════════════════════
    PASSWORD
 ══════════════════════════════════════ */
-let PW_HASH = 'aaffebecec560fec66e75f24062224ffa4e07696d2ae9a1fee3707c3f8fd9373';
+// 优先读取 localStorage 中的密码哈希（与 index.html 共享）
+// 若不存在则使用初始默认哈希（对应密码 admin888）
+let PW_HASH = localStorage.getItem('_pw_hash') || 'aaffebecec560fec66e75f24062224ffa4e07696d2ae9a1fee3707c3f8fd9373';
+// 确保 localStorage 始终有值（首次初始化）
+if(!localStorage.getItem('_pw_hash')) localStorage.setItem('_pw_hash', PW_HASH);
 
 async function sha256(str){
   const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));
@@ -1034,6 +1080,13 @@ function selectPost(i){
   const prev=document.getElementById('cover-preview');
   if(coverData){prev.src=coverData;prev.style.display='block';}
   else{prev.style.display='none';}
+  // 恢复排版设置
+  const layout = p.layout || {};
+  document.getElementById('layout-width').value    = layout.width    || '720px';
+  document.getElementById('layout-lh').value       = layout.lh       || '1.9';
+  document.getElementById('layout-fontsize').value = layout.fontsize || '15px';
+  document.getElementById('layout-code-size').value= layout.codeSize || '13px';
+  document.getElementById('layout-pgap').value     = layout.pgap     || '16px';
   renderPostList();
 }
 
@@ -1048,6 +1101,14 @@ function saveCurrentPost(isDraft=true){
   p.cover=coverData;
   p.draft=isDraft;
   p.slug=slugify(p.title);
+  // 保存排版设置
+  p.layout = {
+    width:    document.getElementById('layout-width').value,
+    lh:       document.getElementById('layout-lh').value,
+    fontsize: document.getElementById('layout-fontsize').value,
+    codeSize: document.getElementById('layout-code-size').value,
+    pgap:     document.getElementById('layout-pgap').value
+  };
   saveState();
   renderPostList();
 }
@@ -2452,6 +2513,13 @@ function cleanContent(html){
 }
 
 function buildPostHTML(p){
+  // 排版参数（有则用，无则用默认值）
+  const L = p.layout || {};
+  const bodyWidth  = L.width    || '720px';
+  const lineHeight = L.lh       || '1.9';
+  const fontSize   = L.fontsize || '15px';
+  const codeSize   = L.codeSize || '13px';
+  const pgap       = L.pgap     || '16px';
   return`<!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -2464,15 +2532,15 @@ ${BASE_CSS}
 .post-title{font-size:clamp(28px,5vw,48px);font-weight:700;color:#fff;line-height:1.2;margin-bottom:16px;}
 .post-meta{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:2px;display:flex;gap:20px;flex-wrap:wrap;}
 /* post-cover merged below */
-.post-body{max-width:720px;margin:0 auto;}
+.post-body{max-width:${bodyWidth};margin:0 auto;font-size:${fontSize};}
 .post-body h1{font-size:28px;font-weight:700;color:#fff;margin:40px 0 16px;padding-left:16px;border-left:4px solid var(--cyan);}
 .post-body h2{font-size:22px;font-weight:700;color:#fff;margin:32px 0 12px;padding-left:12px;border-left:3px solid var(--magenta);}
 .post-body h3{font-size:18px;font-weight:700;color:#fff;margin:24px 0 10px;padding-left:10px;border-left:2px solid var(--yellow);}
-.post-body p{margin:0 0 16px;line-height:1.9;color:var(--text);}
+.post-body p{margin:0 0 ${pgap};line-height:${lineHeight};color:var(--text);}
 .post-body strong{color:#fff;font-weight:700;}
 .post-body em{color:var(--cyan);font-style:italic;}
 .post-body ul,.post-body ol{margin:8px 0 16px 28px;}
-.post-body li{margin-bottom:8px;line-height:1.8;}
+.post-body li{margin-bottom:8px;line-height:${lineHeight};}
 .post-body a{color:var(--cyan);border-bottom:1px solid rgba(0,245,255,.3);text-decoration:none;}
 .post-body blockquote{border-left:3px solid var(--cyan);padding:12px 20px;margin:20px 0;background:rgba(0,245,255,.04);color:var(--muted);}
 .post-body hr{border:none;border-top:1px solid rgba(0,245,255,.15);margin:40px 0;}
@@ -2486,13 +2554,13 @@ ${BASE_CSS}
 .post-body table tr:hover td{background:rgba(0,245,255,.03);}
 .post-body pre{background:#0a0e1a;border:1px solid rgba(0,245,255,.15);margin:20px 0;overflow:hidden;position:relative;}
 .post-body pre .code-lang{position:absolute;top:0;right:0;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;padding:6px 12px;background:rgba(0,245,255,.05);border-bottom:1px solid rgba(0,245,255,.1);border-left:1px solid rgba(0,245,255,.1);}
-.post-body pre code{display:block;padding:16px 20px;font-family:'Fira Code',monospace;font-size:13px;line-height:1.7;color:#a8c8e8;overflow-x:auto;counter-reset:line;}
+.post-body pre code{display:block;padding:16px 20px;font-family:'Fira Code',monospace;font-size:${codeSize};line-height:1.7;color:#a8c8e8;overflow-x:auto;counter-reset:line;}
 .post-body pre code .line{display:block;position:relative;padding-left:40px;}
 .post-body pre code .line::before{content:counter(line);counter-increment:line;position:absolute;left:0;width:30px;text-align:right;color:var(--muted);user-select:none;font-size:11px;}
-.back-btn{display:block;max-width:720px;margin:0 auto 40px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:2px;transition:color .2s;}
+.back-btn{display:block;max-width:${bodyWidth};margin:0 auto 40px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:2px;transition:color .2s;}
 .back-btn:hover{color:var(--cyan);}
-.post-header{max-width:720px;margin:0 auto 48px;}
-.post-cover{display:block;width:100%;max-width:720px;max-height:400px;object-fit:cover;border:1px solid rgba(0,245,255,.15);margin:0 auto 48px;}
+.post-header{max-width:${bodyWidth};margin:0 auto 48px;}
+.post-cover{display:block;width:100%;max-width:${bodyWidth};max-height:400px;object-fit:cover;border:1px solid rgba(0,245,255,.15);margin:0 auto 48px;}
 </style>
 </head>
 <body>
@@ -3195,8 +3263,9 @@ async function submitCpw(){
     __aesKey = newKey;
   }
   PW_HASH=await sha256(newVal);
+  localStorage.setItem('_pw_hash', PW_HASH); // 同步到 index.html 共享的 localStorage key
   closeCpwModal();
-  showToast('ok','密码已修改 · 请重新推送 admin.html 使其永久生效 ✓');
+  showToast('ok','密码已修改并同步 ✓ · 首页和后台均已生效');
 }
 </script>
 </body>
