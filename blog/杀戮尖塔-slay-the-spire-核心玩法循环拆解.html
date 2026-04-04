@@ -40,10 +40,14 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:cent
 .post-body a{color:var(--cyan);border-bottom:1px solid rgba(0,245,255,.3);text-decoration:none;}
 .post-body blockquote{border-left:3px solid var(--cyan);padding:12px 20px;margin:20px 0;background:rgba(0,245,255,.04);color:var(--muted);}
 .post-body hr{border:none;border-top:1px solid rgba(0,245,255,.15);margin:40px 0;}
-.post-body img{display:block;max-width:100%;width:auto;border:1px solid rgba(0,245,255,.15);margin:20px auto 0;}
+.post-body img{display:block;max-width:100%;width:auto;border:1px solid rgba(0,245,255,.15);margin:20px auto;}
 .post-body figure.post-figure{margin:20px 0;text-align:center;}
 .post-body figure.post-figure img{margin:0 auto;}
 .post-body figure.post-figure figcaption{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:8px;padding:0 8px;}
+.post-body table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14px;}
+.post-body table td,.post-body table th{border:1px solid rgba(0,245,255,.25);padding:10px 14px;color:var(--text);line-height:1.6;}
+.post-body table th{background:rgba(0,245,255,.06);color:#fff;font-weight:600;}
+.post-body table tr:hover td{background:rgba(0,245,255,.03);}
 .post-body pre{background:#0a0e1a;border:1px solid rgba(0,245,255,.15);margin:20px 0;overflow:hidden;position:relative;}
 .post-body pre .code-lang{position:absolute;top:0;right:0;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;padding:6px 12px;background:rgba(0,245,255,.05);border-bottom:1px solid rgba(0,245,255,.1);border-left:1px solid rgba(0,245,255,.1);}
 .post-body pre code{display:block;padding:16px 20px;font-family:'Fira Code',monospace;font-size:13px;line-height:1.7;color:#a8c8e8;overflow-x:auto;counter-reset:line;}
@@ -70,19 +74,18 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:cent
     <span class="post-cat"># 玩法拆解</span>
     <h1 class="post-title">杀戮尖塔（Slay the Spire）核心玩法循环拆解</h1>
     <div class="post-meta">
-      <span>2026-04-03</span>
+      <span>2026-04-04</span>
       <span>Roguelike，独立游戏，DeckBuilding</span>
     </div>
   </div>
   <img class="post-cover" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775240433361-go9d5.png" alt="封面">
-  <div class="post-body">写在最前：今天想给大家分享的是我最最喜爱的卡组构建-Roguelike游戏，也就是早已鼎鼎大名的杀戮尖塔。我在电脑端上有着差不多快400小时，手机端上有差不多100小时的游戏经历，我想这足以证明我对它的喜爱。<div><figure class="post-figure"><img src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775255997433-c5sr3.png" alt="图片"><figcaption>我的steam游戏时间截图&nbsp;</figcaption><figcaption>
+  <div class="post-body">写在最前：今天想给大家分享的是我最最喜爱的卡组构建-Roguelike游戏，也就是早已鼎鼎大名的杀戮尖塔。我在电脑端上有着差不多快400小时，手机端上差不多100小时的游戏经历，我想这足以证明我对它的喜爱。<div><figure class="post-figure"><img src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775255997433-c5sr3.png" alt="图片"><figcaption>我的steam游戏时间截图&nbsp;</figcaption><figcaption>
 
-<h1>一、核心循环总览：三层嵌套结构<span lang="EN-US"><o:p></o:p></span></h1>
+<h1 style="text-align: center;">一、核心循环总览：三层嵌套结构<span lang="EN-US"><o:p></o:p></span></h1>
 
-<p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
-margin-left:0cm;line-height:133%">杀戮尖塔的玩法循环由三个层次构成，彼此嵌套、互相强化。而理解这三层结构是分析整个游戏设计的基础。<span lang="EN-US"><o:p></o:p></span></p>
+<p class="MsoNormal" style="text-align: center; margin: 3pt 0cm 5pt; line-height: 133%;">杀戮尖塔的玩法循环由三个层次构成，彼此嵌套、互相强化。而理解这三层结构是分析整个游戏设计的基础。<span lang="EN-US"><o:p></o:p></span></p>
 
-<p class="MsoNormal" style="margin-top:6.0pt"><span lang="EN-US">&nbsp;</span></p>
+<p class="MsoNormal" style="text-align: center; margin-top: 6pt;"><span lang="EN-US">&nbsp;</span></p>
 
 <div style="mso-element:para-border-div;border:none;border-bottom:solid #7F77DD 1.0pt;
 mso-border-bottom-alt:solid #7F77DD .5pt;padding:0cm 0cm 0cm 0cm">
@@ -95,69 +98,48 @@ mso-padding-alt:0cm 0cm 0cm 0cm"><span lang="EN-US">1.1&nbsp; </span>宏观循�
 <p class="MsoNormal" style="margin-top:3.0pt;margin-right:0cm;margin-bottom:5.0pt;
 margin-left:0cm;line-height:133%">时长：约<span lang="EN-US"> 45–90 </span>分钟<span lang="EN-US"> / </span>局<span lang="EN-US"><o:p></o:p></span></p>
 
-<p class="MsoNormal" style="margin-top:4.0pt"><span lang="EN-US">&nbsp;</span></p><table class="MsoNormalTable" border="1" cellspacing="0" cellpadding="0" width="624" style="width:468.0pt;border-collapse:collapse;border:none;mso-border-alt:none white 0cm;
- mso-padding-alt:0cm .5pt 0cm .5pt;mso-border-insideh:.5pt solid windowtext;
- mso-border-insidev:.5pt solid windowtext">
+<p class="MsoNormal" style="margin-top:4.0pt"><span lang="EN-US">&nbsp;</span></p><table class="MsoNormalTable" border="1" cellspacing="0" cellpadding="0" width="624" style="width: 468pt; border: none;">
  <tbody><tr>
-  <td style="border:solid #7F77DD 1.0pt;mso-border-alt:solid #7F77DD .25pt;
-  background:#EEEDFE;padding:4.0pt 5.0pt 4.0pt 5.0pt">
-  <p class="MsoNormal" align="center" style="text-align:center"><b><span style="font-size:10.0pt;mso-fareast-font-family:Arial;color:#3C3489">开始新局</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  <td style="border-width: 1pt; border-color: rgb(127, 119, 221); background: rgb(238, 237, 254); padding: 4pt 5pt;">
+  <p class="MsoNormal" align="center"><b><span style="font-size:10.0pt;mso-fareast-font-family:Arial;color:#3C3489">开始新局</span></b><span lang="EN-US"><o:p></o:p></span></p>
   </td>
-  <td style="border:none white 1.0pt;border-left:none;mso-border-left-alt:none white 0cm;
-  mso-border-alt:none white 0cm;background:white;padding:4.0pt 5.0pt 4.0pt 5.0pt">
-  <p class="MsoNormal" align="center" style="text-align:center"><span lang="EN-US" style="mso-fareast-font-family:Arial;color:#888780">→</span><span lang="EN-US"><o:p></o:p></span></p>
+  <td style="border-top: 1pt none white; border-right: 1pt none white; border-bottom: 1pt none white; border-left: none; background: white; padding: 4pt 5pt;">
+  <p class="MsoNormal" align="center"><span lang="EN-US" style="mso-fareast-font-family:Arial;color:#888780">→</span><span lang="EN-US"><o:p></o:p></span></p>
   </td>
-  <td style="border:solid #7F77DD 1.0pt;border-left:none;mso-border-left-alt:
-  solid #7F77DD .25pt;mso-border-alt:solid #7F77DD .25pt;background:#EEEDFE;
-  padding:4.0pt 5.0pt 4.0pt 5.0pt">
-  <p class="MsoNormal" align="center" style="text-align:center"><b><span style="font-size:10.0pt;mso-fareast-font-family:Arial;color:#3C3489">选择角色</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  <td style="border-top-width: 1pt; border-right-width: 1pt; border-bottom-width: 1pt; border-top-color: rgb(127, 119, 221); border-right-color: rgb(127, 119, 221); border-bottom-color: rgb(127, 119, 221); border-left: none; background: rgb(238, 237, 254); padding: 4pt 5pt;">
+  <p class="MsoNormal" align="center"><b><span style="font-size:10.0pt;mso-fareast-font-family:Arial;color:#3C3489">选择角色</span></b><span lang="EN-US"><o:p></o:p></span></p>
   </td>
-  <td style="border:none white 1.0pt;border-left:none;mso-border-left-alt:none white 0cm;
-  mso-border-alt:none white 0cm;background:white;padding:4.0pt 5.0pt 4.0pt 5.0pt">
-  <p class="MsoNormal" align="center" style="text-align:center"><span lang="EN-US" style="mso-fareast-font-family:Arial;color:#888780">→</span><span lang="EN-US"><o:p></o:p></span></p>
+  <td style="border-top: 1pt none white; border-right: 1pt none white; border-bottom: 1pt none white; border-left: none; background: white; padding: 4pt 5pt;">
+  <p class="MsoNormal" align="center"><span lang="EN-US" style="mso-fareast-font-family:Arial;color:#888780">→</span><span lang="EN-US"><o:p></o:p></span></p>
   </td>
-  <td style="border:solid #7F77DD 1.0pt;border-left:none;mso-border-left-alt:
-  solid #7F77DD .25pt;mso-border-alt:solid #7F77DD .25pt;background:#EEEDFE;
-  padding:4.0pt 5.0pt 4.0pt 5.0pt">
-  <p class="MsoNormal" align="center" style="text-align:center"><b><span style="font-size:10.0pt;mso-fareast-font-family:Arial;color:#3C3489">地图探索</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  <td style="border-top-width: 1pt; border-right-width: 1pt; border-bottom-width: 1pt; border-top-color: rgb(127, 119, 221); border-right-color: rgb(127, 119, 221); border-bottom-color: rgb(127, 119, 221); border-left: none; background: rgb(238, 237, 254); padding: 4pt 5pt;">
+  <p class="MsoNormal" align="center"><b><span style="font-size:10.0pt;mso-fareast-font-family:Arial;color:#3C3489">地图探索</span></b><span lang="EN-US"><o:p></o:p></span></p>
   </td>
-  <td style="border:none white 1.0pt;border-left:none;mso-border-left-alt:none white 0cm;
-  mso-border-alt:none white 0cm;background:white;padding:4.0pt 5.0pt 4.0pt 5.0pt">
-  <p class="MsoNormal" align="center" style="text-align:center"><span lang="EN-US" style="mso-fareast-font-family:Arial;color:#888780">→</span><span lang="EN-US"><o:p></o:p></span></p>
+  <td style="border-top: 1pt none white; border-right: 1pt none white; border-bottom: 1pt none white; border-left: none; background: white; padding: 4pt 5pt;">
+  <p class="MsoNormal" align="center"><span lang="EN-US" style="mso-fareast-font-family:Arial;color:#888780">→</span><span lang="EN-US"><o:p></o:p></span></p>
   </td>
-  <td style="border:solid #7F77DD 1.0pt;border-left:none;mso-border-left-alt:
-  solid #7F77DD .25pt;mso-border-alt:solid #7F77DD .25pt;background:#EEEDFE;
-  padding:4.0pt 5.0pt 4.0pt 5.0pt">
-  <p class="MsoNormal" align="center" style="text-align:center"><b><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:Arial;color:#3C3489">Boss
+  <td style="border-top-width: 1pt; border-right-width: 1pt; border-bottom-width: 1pt; border-top-color: rgb(127, 119, 221); border-right-color: rgb(127, 119, 221); border-bottom-color: rgb(127, 119, 221); border-left: none; background: rgb(238, 237, 254); padding: 4pt 5pt;">
+  <p class="MsoNormal" align="center"><b><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:Arial;color:#3C3489">Boss
   </span></b><b><span style="font-size:10.0pt;mso-fareast-font-family:Arial;
   color:#3C3489">挑战</span></b><span lang="EN-US"><o:p></o:p></span></p>
   </td>
-  <td style="border:none white 1.0pt;border-left:none;mso-border-left-alt:none white 0cm;
-  mso-border-alt:none white 0cm;background:white;padding:4.0pt 5.0pt 4.0pt 5.0pt">
-  <p class="MsoNormal" align="center" style="text-align:center"><span lang="EN-US" style="mso-fareast-font-family:Arial;color:#888780">→</span><span lang="EN-US"><o:p></o:p></span></p>
+  <td style="border-top: 1pt none white; border-right: 1pt none white; border-bottom: 1pt none white; border-left: none; background: white; padding: 4pt 5pt;">
+  <p class="MsoNormal" align="center"><span lang="EN-US" style="mso-fareast-font-family:Arial;color:#888780">→</span><span lang="EN-US"><o:p></o:p></span></p>
   </td>
-  <td style="border:solid #7F77DD 1.0pt;border-left:none;mso-border-left-alt:
-  solid #7F77DD .25pt;mso-border-alt:solid #7F77DD .25pt;background:#EEEDFE;
-  padding:4.0pt 5.0pt 4.0pt 5.0pt">
-  <p class="MsoNormal" align="center" style="text-align:center"><b><span style="font-size:10.0pt;mso-fareast-font-family:Arial;color:#3C3489">通关<span lang="EN-US"> / </span>死亡</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  <td style="border-top-width: 1pt; border-right-width: 1pt; border-bottom-width: 1pt; border-top-color: rgb(127, 119, 221); border-right-color: rgb(127, 119, 221); border-bottom-color: rgb(127, 119, 221); border-left: none; background: rgb(238, 237, 254); padding: 4pt 5pt;">
+  <p class="MsoNormal" align="center"><b><span style="font-size:10.0pt;mso-fareast-font-family:Arial;color:#3C3489">通关<span lang="EN-US"> / </span>死亡</span></b><span lang="EN-US"><o:p></o:p></span></p>
   </td>
-  <td style="border:none white 1.0pt;border-left:none;mso-border-left-alt:none white 0cm;
-  mso-border-alt:none white 0cm;background:white;padding:4.0pt 5.0pt 4.0pt 5.0pt">
-  <p class="MsoNormal" align="center" style="text-align:center"><span lang="EN-US" style="mso-fareast-font-family:Arial;color:#888780">→</span><span lang="EN-US"><o:p></o:p></span></p>
+  <td style="border-top: 1pt none white; border-right: 1pt none white; border-bottom: 1pt none white; border-left: none; background: white; padding: 4pt 5pt;">
+  <p class="MsoNormal" align="center"><span lang="EN-US" style="mso-fareast-font-family:Arial;color:#888780">→</span><span lang="EN-US"><o:p></o:p></span></p>
   </td>
-  <td style="border:solid #7F77DD 1.0pt;border-left:none;mso-border-left-alt:
-  solid #7F77DD .25pt;mso-border-alt:solid #7F77DD .25pt;background:#EEEDFE;
-  padding:4.0pt 5.0pt 4.0pt 5.0pt">
-  <p class="MsoNormal" align="center" style="text-align:center"><b><span style="font-size:10.0pt;mso-fareast-font-family:Arial;color:#3C3489">解锁内容</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  <td style="border-top-width: 1pt; border-right-width: 1pt; border-bottom-width: 1pt; border-top-color: rgb(127, 119, 221); border-right-color: rgb(127, 119, 221); border-bottom-color: rgb(127, 119, 221); border-left: none; background: rgb(238, 237, 254); padding: 4pt 5pt;">
+  <p class="MsoNormal" align="center"><b><span style="font-size:10.0pt;mso-fareast-font-family:Arial;color:#3C3489">解锁内容</span></b><span lang="EN-US"><o:p></o:p></span></p>
   </td>
-  <td style="border:none white 1.0pt;border-left:none;mso-border-left-alt:none white 0cm;
-  mso-border-alt:none white 0cm;background:white;padding:4.0pt 5.0pt 4.0pt 5.0pt">
-  <p class="MsoNormal" align="center" style="text-align:center"><span lang="EN-US" style="mso-fareast-font-family:Arial;color:#888780">→</span><span lang="EN-US"><o:p></o:p></span></p>
+  <td style="border-top: 1pt none white; border-right: 1pt none white; border-bottom: 1pt none white; border-left: none; background: white; padding: 4pt 5pt;">
+  <p class="MsoNormal" align="center"><span lang="EN-US" style="mso-fareast-font-family:Arial;color:#888780">→</span><span lang="EN-US"><o:p></o:p></span></p>
   </td>
-  <td style="border:solid #7F77DD 1.0pt;border-left:none;mso-border-left-alt:
-  solid #7F77DD .25pt;mso-border-alt:solid #7F77DD .25pt;background:#EEEDFE;
-  padding:4.0pt 5.0pt 4.0pt 5.0pt">
-  <p class="MsoNormal" align="center" style="text-align:center"><b><span style="font-size:10.0pt;mso-fareast-font-family:Arial;color:#3C3489">再次挑战</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  <td style="border-top-width: 1pt; border-right-width: 1pt; border-bottom-width: 1pt; border-top-color: rgb(127, 119, 221); border-right-color: rgb(127, 119, 221); border-bottom-color: rgb(127, 119, 221); border-left: none; background: rgb(238, 237, 254); padding: 4pt 5pt;">
+  <p class="MsoNormal" align="center"><b><span style="font-size:10.0pt;mso-fareast-font-family:Arial;color:#3C3489">再次挑战</span></b><span lang="EN-US"><o:p></o:p></span></p>
   </td>
  </tr>
 </tbody></table>
