@@ -418,12 +418,12 @@ body.modal-open body::before{z-index:1 !important;}
     <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--magenta));"></div>
     <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:20px;">// 上传封面图</div>
     <!-- 图片预览 + 焦点选择 -->
-    <div id="cp-img-wrap" onclick="cpSetFocus(event)">
+    <div id="cp-img-wrap" style="display:none;position:relative;margin-bottom:16px;cursor:crosshair;" onclick="cpSetFocus(event)">
       <img id="cp-img" src="" style="width:100%;max-height:260px;object-fit:cover;display:block;border:1px solid rgba(0,245,255,.15);">
       <div id="cp-dot" style="position:absolute;width:14px;height:14px;border-radius:50%;background:var(--cyan);border:2px solid #fff;transform:translate(-50%,-50%);pointer-events:none;box-shadow:0 0 8px rgba(0,245,255,.8);left:50%;top:50%;"></div>
     </div>
     <div id="cp-hint" style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:14px;display:none;">👆 点击图片选择展示焦点位置</div>
-    <div id="cp-status" style="font-family: &quot;Share Tech Mono&quot;, monospace; font-size: 11px; letter-spacing: 2px; min-height: 20px; margin-bottom: 12px; color: var(--magenta);">✕ 上传失败：Bad credentials</div>
+    <div id="cp-status" style="font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:2px;min-height:20px;margin-bottom:12px;"></div>
     <label onmouseover="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'" onmouseout="this.style.borderColor='rgba(0,245,255,.3)';this.style.color='var(--muted)'">
       📷 选择图片上传
       <input type="file" accept="image/*" style="display:none" onchange="cpHandleUpload(this)" value="">
