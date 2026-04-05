@@ -423,7 +423,7 @@ body.modal-open body::before{z-index:1 !important;}
       <div id="cp-dot" style="position:absolute;width:14px;height:14px;border-radius:50%;background:var(--cyan);border:2px solid #fff;transform:translate(-50%,-50%);pointer-events:none;box-shadow:0 0 8px rgba(0,245,255,.8);left:50%;top:50%;"></div>
     </div>
     <div id="cp-hint" style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:14px;display:none;">👆 点击图片选择展示焦点位置</div>
-    <div id="cp-status" style="font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:2px;min-height:20px;margin-bottom:12px;"></div>
+    <div id="cp-status" style="font-family:var(--font-mono);font-size:11px;letter-spacing:2px;min-height:20px;margin-bottom:12px;"></div>
     <label onmouseover="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'" onmouseout="this.style.borderColor='rgba(0,245,255,.3)';this.style.color='var(--muted)'">
       📷 选择图片上传
       <input type="file" accept="image/*" style="display:none" onchange="cpHandleUpload(this)" value="">
