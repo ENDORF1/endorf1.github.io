@@ -314,8 +314,14 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 
 .img-mgr-btn{font-family:var(--font-mono);font-size:10px;padding:4px 12px;border:1px solid rgba(0,245,255,.25);color:var(--muted);background:transparent;cursor:pointer;letter-spacing:1px;transition:all .2s;}
 .img-mgr-btn:hover{color:var(--cyan);border-color:var(--cyan);}
-.img-del-btn{border-color:rgba(255,0,110,.3)!important;color:var(--magenta)!important;display:none;}
+.img-del-btn{border-color:rgba(255,0,110,.3)!important;color:var(--magenta)!important;}
 .img-del-btn:hover{background:rgba(255,0,110,.15)!important;color:var(--magenta)!important;border-color:rgba(255,0,110,.5)!important;}
+/* 段落编号 */
+.para-num{display:inline-block;min-width:28px;font-family:var(--font-mono);font-size:10px;color:var(--magenta);letter-spacing:1px;margin-right:8px;user-select:none;opacity:.6;}
+.para-num-active #editor-content p::before,
+.para-num-active #works-editor-content p::before{content:counter(para-counter);counter-increment:para-counter;display:inline-block;min-width:26px;font-family:var(--font-mono);font-size:10px;color:var(--magenta);letter-spacing:1px;margin-right:8px;user-select:none;opacity:.6;vertical-align:top;}
+.para-num-active #editor-content{counter-reset:para-counter;}
+.para-num-active #works-editor-content{counter-reset:para-counter;}
 /* works / gallery / about panels */
 #page-panel{flex:1;display:none;flex-direction:column;overflow:hidden;}
 #page-panel.show{display:flex;}
@@ -476,7 +482,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
           </label>
         </div>
       </div>
-      <div id="works-editor-toolbar">
+      <div id="works-editor-toolbar" onmousedown="event.preventDefault()">
         <button class="et-btn" onclick="wfmt('h2')">H2</button>
         <button class="et-btn" onclick="wfmt('h3')">H3</button>
         <div class="et-sep"></div>
@@ -491,22 +497,20 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         <button class="et-btn" onclick="wexec('justifyCenter')" title="居中">⬤C</button>
         <button class="et-btn" onclick="wexec('justifyRight')" title="右对齐">⬤R</button>
         <div class="et-sep"></div>
-        <select class="et-select" onchange="applyFontSize(this,'works-editor-content')" title="字号">
-          <option value="">字号</option>
-          <option value="12px">小 · 12</option>
-          <option value="15px">正常 · 15</option>
-          <option value="18px">中 · 18</option>
-          <option value="22px">大 · 22</option>
-          <option value="28px">特大 · 28</option>
-        </select>
-        <select class="et-select" onchange="applyLineHeight(this.value,'works-editor-content');this.selectedIndex=0;" title="行距">
-          <option value="">行距</option>
-          <option value="1.2">紧 · 1.2</option>
-          <option value="1.5">稍紧 · 1.5</option>
-          <option value="1.9">正常 · 1.9</option>
-          <option value="2.4">宽松 · 2.4</option>
-          <option value="3.0">很宽 · 3.0</option>
-        </select>
+        <div style="position:relative;display:inline-flex;align-items:center;" id="works-fs-wrap">
+          <input type="number" class="et-select" id="works-fontsize" placeholder="字号" title="字号（px）" style="width:58px;padding-right:18px;" min="8" max="96" step="1" value="15"
+            oninput="previewFontSize(this.value,'works-editor-content')"
+            onchange="commitFontSize(this.value,'works-editor-content')"
+            onkeydown="if(event.key==='Enter'){commitFontSize(this.value,'works-editor-content');this.blur();}">
+          <span style="position:absolute;right:4px;font-family:var(--font-mono);font-size:9px;color:var(--muted);pointer-events:none;">px</span>
+        </div>
+        <div style="position:relative;display:inline-flex;align-items:center;">
+          <input type="number" class="et-select" id="works-lineheight" placeholder="行距" title="行距（如 1.9）" style="width:58px;padding-right:20px;" min="0.8" max="5" step="0.1" value="1.9"
+            oninput="previewLineHeight(this.value,'works-editor-content')"
+            onchange="commitLineHeight(this.value,'works-editor-content')"
+            onkeydown="if(event.key==='Enter'){commitLineHeight(this.value,'works-editor-content');this.blur();}">
+          <span style="position:absolute;right:4px;font-family:var(--font-mono);font-size:9px;color:var(--muted);pointer-events:none;">lh</span>
+        </div>
         <div class="et-color-wrap" title="文字颜色">
           <button class="et-btn" onclick="document.getElementById('works-text-color').click()" style="font-weight:700;position:relative;padding-bottom:8px;">A<span class="et-color-swatch" id="works-text-swatch" style="background:#00f5ff;"></span></button>
           <input type="color" id="works-text-color" class="et-hidden-input" value="#00f5ff" oninput="applyTextColor(this.value,'works-editor-content','works-text-swatch')">
@@ -529,6 +533,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         <button class="et-btn" onclick="wInsertLink()">🔗 链接</button>
         <button class="et-btn" onclick="openTableModal('works-editor-content')" title="插入表格">⊞ 表格</button>
         <div class="et-sep"></div>
+        <button class="et-btn" onclick="toggleParaNum('works-editor-content',this)" title="段落编号" id="works-paranum-btn">¶#</button>
         <button class="et-btn" onclick="wexec('removeFormat')" title="清除格式" style="color:var(--magenta);">Tx</button>
         <button class="et-btn" onclick="openFindReplace('works-editor-content')" title="查找替换">🔍</button>
         <button class="et-btn" onclick="toggleEditorFullscreen('works-editor-panel')" title="全屏编辑" id="works-fs-btn">⛶ 全屏</button>
@@ -569,7 +574,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         </div>
       </div>
 
-      <div id="editor-toolbar">
+      <div id="editor-toolbar" onmousedown="event.preventDefault()">
         <button class="et-btn" onclick="fmt('h1')" title="H1">H1</button>
         <button class="et-btn" onclick="fmt('h2')" title="H2">H2</button>
         <button class="et-btn" onclick="fmt('h3')" title="H3">H3</button>
@@ -585,15 +590,20 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         <button class="et-btn" onclick="exec('justifyCenter')" title="居中">⬤C</button>
         <button class="et-btn" onclick="exec('justifyRight')" title="右对齐">⬤R</button>
         <div class="et-sep"></div>
-        <input type="text" class="et-select" id="editor-fontsize" placeholder="字号" title="字号（如：15px）" style="width:80px;" value="15px" oninput="applyFontSize(this,'editor-content')">
-        <select class="et-select" onchange="applyLineHeight(this.value,'editor-content');this.selectedIndex=0;" title="行距">
-          <option value="">行距</option>
-          <option value="1.2">紧 · 1.2</option>
-          <option value="1.5">稍紧 · 1.5</option>
-          <option value="1.9">正常 · 1.9</option>
-          <option value="2.4">宽松 · 2.4</option>
-          <option value="3.0">很宽 · 3.0</option>
-        </select>
+        <div style="position:relative;display:inline-flex;align-items:center;" id="blog-fs-wrap">
+          <input type="number" class="et-select" id="editor-fontsize" placeholder="字号" title="字号（px）" style="width:58px;padding-right:18px;" min="8" max="96" step="1" value="15"
+            oninput="previewFontSize(this.value,'editor-content')"
+            onchange="commitFontSize(this.value,'editor-content')"
+            onkeydown="if(event.key==='Enter'){commitFontSize(this.value,'editor-content');this.blur();}">
+          <span style="position:absolute;right:4px;font-family:var(--font-mono);font-size:9px;color:var(--muted);pointer-events:none;">px</span>
+        </div>
+        <div style="position:relative;display:inline-flex;align-items:center;">
+          <input type="number" class="et-select" id="blog-lineheight" placeholder="行距" title="行距（如 1.9）" style="width:58px;padding-right:20px;" min="0.8" max="5" step="0.1" value="1.9"
+            oninput="previewLineHeight(this.value,'editor-content')"
+            onchange="commitLineHeight(this.value,'editor-content')"
+            onkeydown="if(event.key==='Enter'){commitLineHeight(this.value,'editor-content');this.blur();}">
+          <span style="position:absolute;right:4px;font-family:var(--font-mono);font-size:9px;color:var(--muted);pointer-events:none;">lh</span>
+        </div>
         <div class="et-color-wrap" title="文字颜色">
           <button class="et-btn" onclick="document.getElementById('blog-text-color').click()" style="font-weight:700;position:relative;padding-bottom:8px;">A<span class="et-color-swatch" id="blog-text-swatch" style="background:#00f5ff;"></span></button>
           <input type="color" id="blog-text-color" class="et-hidden-input" value="#00f5ff" oninput="applyTextColor(this.value,'editor-content','blog-text-swatch')">
@@ -616,6 +626,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         <button class="et-btn" onclick="openTableModal('editor-content')" title="插入表格">⊞ 表格</button>
         <div class="et-sep"></div>
         <button class="et-btn" onclick="toggleLayoutPanel()" title="排版">⊟ 排版</button>
+        <button class="et-btn" onclick="toggleParaNum('editor-content',this)" title="段落编号" id="blog-paranum-btn">¶#</button>
         <button class="et-btn" onclick="exec('removeFormat')" title="清除格式" style="color:var(--magenta);">Tx</button>
         <button class="et-btn" onclick="openFindReplace('editor-content')" title="查找替换">🔍</button>
         <button class="et-btn" onclick="toggleEditorFullscreen('editor-panel')" title="全屏编辑" id="blog-fs-btn">⛶ 全屏</button>
@@ -1171,8 +1182,29 @@ function slugify(str){
 setInterval(()=>{if(currentPost!==null)saveCurrentPost(true);},10000);
 
 /* word count listeners */
-document.getElementById('editor-content').addEventListener('input',()=>updateWordCount('editor-content','blog-word-count'));
-document.getElementById('works-editor-content').addEventListener('input',()=>updateWordCount('works-editor-content','works-word-count'));
+document.getElementById('editor-content').addEventListener('input',()=>{updateWordCount('editor-content','blog-word-count');refreshParaNum('editor-content');});
+document.getElementById('works-editor-content').addEventListener('input',()=>{updateWordCount('works-editor-content','works-word-count');refreshParaNum('works-editor-content');});
+
+// 持续保存选区：只要在编辑器里操作（鼠标/键盘），就更新全局选区缓存
+// 这样点击工具栏输入框时选区虽然消失，但我们已经存好了
+function _saveEditorSelection(edId){
+  const sel = window.getSelection();
+  if(!sel || !sel.rangeCount) return;
+  const range = sel.getRangeAt(0);
+  // 确认选区在目标编辑器内
+  const ed = document.getElementById(edId);
+  if(!ed) return;
+  const ancestor = range.commonAncestorContainer;
+  if(ed.contains(ancestor) || ed === ancestor){
+    _fsPreviewRange = range.cloneRange();
+    _lhSavedRange   = range.cloneRange();
+  }
+}
+['editor-content','works-editor-content'].forEach(edId=>{
+  const ed = document.getElementById(edId);
+  ed.addEventListener('mouseup', ()=>_saveEditorSelection(edId));
+  ed.addEventListener('keyup',   ()=>_saveEditorSelection(edId));
+});
 
 /* paste cleaner: strip Word/mso junk, fix table widths */
 function _cleanPaste(edId){
@@ -1293,51 +1325,207 @@ function _applyAlignToSelection(ed, align){
 }
 
 /* 行距：对选中的块元素设置 line-height；无选中则对光标所在块生效 */
+/* ── 行距系统（Word 风格：输入时实时预览，回车/失焦提交）── */
+let _lhSavedRange = null;        // 聚焦输入框前保存的选区
+let _lhPreviewBlocks = [];       // 预览时记录的 {el, oldLh} 用于还原
+let _lhPreviewSpan = null;       // 无块级选区时插入的预览 span
+
+const _LH_BLOCK = /^(P|DIV|H[1-6]|LI|BLOCKQUOTE|TD|TH)$/;
+
+function onLhFocus(edId){
+  const sel = window.getSelection();
+  if(sel && sel.rangeCount){
+    _lhSavedRange = sel.getRangeAt(0).cloneRange();
+  } else {
+    _lhSavedRange = null;
+  }
+}
+
+function _getLhBlocks(ed, range){
+  const ancestor = range.commonAncestorContainer;
+  const container = ancestor.nodeType === 3 ? ancestor.parentElement : ancestor;
+  if(_LH_BLOCK.test(container.tagName) && container !== ed) return [container];
+  const blocks = [];
+  const walker = document.createTreeWalker(ed, NodeFilter.SHOW_ELEMENT);
+  let node;
+  while((node = walker.nextNode())){
+    if(_LH_BLOCK.test(node.tagName) && range.intersectsNode(node)){
+      if(!blocks.some(b => b.contains(node))) blocks.push(node);
+    }
+  }
+  return blocks;
+}
+
+function _clearLhPreview(){
+  // 还原块级预览
+  _lhPreviewBlocks.forEach(({el, oldLh}) => { el.style.lineHeight = oldLh; });
+  _lhPreviewBlocks = [];
+  // 还原 span 预览
+  if(_lhPreviewSpan && _lhPreviewSpan.parentNode){
+    const p = _lhPreviewSpan.parentNode;
+    while(_lhPreviewSpan.firstChild) p.insertBefore(_lhPreviewSpan.firstChild, _lhPreviewSpan);
+    p.removeChild(_lhPreviewSpan);
+  }
+  _lhPreviewSpan = null;
+}
+
+function previewLineHeight(val, edId){
+  const lh = parseFloat(val);
+  if(!lh || lh < 0.5) return;
+  _clearLhPreview();
+  const range = _lhSavedRange;
+  if(!range) return;
+  const ed = document.getElementById(edId);
+  const selectedText = range.toString();
+
+  if(selectedText.length > 0){
+    const blocks = _getLhBlocks(ed, range);
+    if(blocks.length > 0){
+      blocks.forEach(b => {
+        _lhPreviewBlocks.push({el: b, oldLh: b.style.lineHeight});
+        b.style.lineHeight = String(lh);
+        b.style.outline = '1px dashed rgba(0,245,255,.4)';
+      });
+    } else {
+      // 行内：包 span
+      try {
+        const span = document.createElement('span');
+        span.setAttribute('data-lh-preview','1');
+        span.style.lineHeight = String(lh);
+        span.style.outline = '1px dashed rgba(0,245,255,.4)';
+        const tmpRange = range.cloneRange();
+        tmpRange.deleteContents();
+        tmpRange.insertNode(span);
+        span.textContent = selectedText;
+        _lhPreviewSpan = span;
+      } catch(e){}
+    }
+  } else {
+    // 无选中：预览光标所在块
+    let node = range.commonAncestorContainer;
+    if(node.nodeType === 3) node = node.parentElement;
+    let block = node;
+    while(block && block !== ed){
+      if(_LH_BLOCK.test(block.tagName)){
+        _lhPreviewBlocks.push({el: block, oldLh: block.style.lineHeight});
+        block.style.lineHeight = String(lh);
+        block.style.outline = '1px dashed rgba(0,245,255,.4)';
+        return;
+      }
+      block = block.parentElement;
+    }
+    // fallback：整个编辑器
+    _lhPreviewBlocks.push({el: ed, oldLh: ed.style.lineHeight});
+    ed.style.lineHeight = String(lh);
+  }
+}
+
+function commitLineHeight(val, edId){
+  const lh = parseFloat(val);
+  if(!lh || lh < 0.5) { _clearLhPreview(); return; }
+  const ed = document.getElementById(edId);
+
+  if(_lhPreviewBlocks.length > 0){
+    // 提交：去掉 outline，保留 lineHeight
+    _lhPreviewBlocks.forEach(({el}) => { el.style.outline = ''; });
+    _lhPreviewBlocks = [];
+    _lhSavedRange = null;
+    return;
+  }
+  if(_lhPreviewSpan){
+    _lhPreviewSpan.removeAttribute('data-lh-preview');
+    _lhPreviewSpan.style.outline = '';
+    _lhPreviewSpan = null;
+    _lhSavedRange = null;
+    return;
+  }
+
+  // 没有预览（直接回车）：用保存的选区重新应用
+  const range = _lhSavedRange;
+  if(!range){ ed.style.lineHeight = String(lh); return; }
+  const selectedText = range.toString();
+
+  if(selectedText.length > 0){
+    const blocks = _getLhBlocks(ed, range);
+    if(blocks.length > 0){
+      blocks.forEach(b => { b.style.lineHeight = String(lh); });
+    } else {
+      ed.focus();
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      document.execCommand('insertHTML', false, `<span style="line-height:${lh}">${selectedText}</span>`);
+    }
+  } else {
+    let node = range.commonAncestorContainer;
+    if(node.nodeType === 3) node = node.parentElement;
+    let block = node;
+    while(block && block !== ed){
+      if(_LH_BLOCK.test(block.tagName)){ block.style.lineHeight = String(lh); _lhSavedRange = null; return; }
+      block = block.parentElement;
+    }
+    ed.style.lineHeight = String(lh);
+  }
+  _lhSavedRange = null;
+}
+
+/* ── 段落编号 ── */
+let _paraNumState = {editor: false, works: false};
+
+function toggleParaNum(edId, btn){
+  const isEditor = edId === 'editor-content';
+  const key = isEditor ? 'editor' : 'works';
+  _paraNumState[key] = !_paraNumState[key];
+  const ed = document.getElementById(edId);
+  const wrap = ed ? ed.closest('#editor-wrap, #works-editor-wrap, [id$="-editor-wrap"]') : null;
+
+  if(_paraNumState[key]){
+    btn.classList.add('active');
+    // 给编辑器外层容器加 class，用 CSS counter 显示编号
+    ed.classList.add('para-num-active');
+    // 同时用 JS 给每个 p 加序号 span（推送时保留到 HTML）
+    _addParaNumSpans(ed);
+  } else {
+    btn.classList.remove('active');
+    ed.classList.remove('para-num-active');
+    _removeParaNumSpans(ed);
+  }
+}
+
+function _addParaNumSpans(ed){
+  // 先清除旧的
+  _removeParaNumSpans(ed);
+  const paras = [...ed.querySelectorAll('p, h1, h2, h3, h4, h5, h6')];
+  paras.forEach((p, i) => {
+    const span = document.createElement('span');
+    span.className = 'para-num';
+    span.setAttribute('contenteditable', 'false');
+    span.textContent = (i + 1) + '.';
+    p.insertBefore(span, p.firstChild);
+  });
+}
+
+function _removeParaNumSpans(ed){
+  ed.querySelectorAll('.para-num').forEach(s => s.remove());
+}
+
+// 每次内容变化时刷新编号
+function refreshParaNum(edId){
+  const key = edId === 'editor-content' ? 'editor' : 'works';
+  if(!_paraNumState[key]) return;
+  const ed = document.getElementById(edId);
+  if(ed) _addParaNumSpans(ed);
+}
+
+// 兼容旧接口
 function applyLineHeight(val, edId){
   if(!val) return;
+  _lhSavedRange = null;
   const ed = document.getElementById(edId);
   ed.focus();
   const sel = window.getSelection();
-  if(!sel||!sel.rangeCount) return;
-  const range = sel.getRangeAt(0);
-  const selectedText = sel.toString();
-  const blockTags = /^(P|DIV|H[1-6]|LI|BLOCKQUOTE|TD|TH)$/;
-
-  if(selectedText.length > 0){
-    const ancestor = range.commonAncestorContainer;
-    const container = ancestor.nodeType===3 ? ancestor.parentElement : ancestor;
-    let blocks = [];
-    if(blockTags.test(container.tagName) && container !== ed){
-      blocks = [container];
-    } else {
-      const walker = document.createTreeWalker(ed, NodeFilter.SHOW_ELEMENT);
-      let node;
-      while(node = walker.nextNode()){
-        if(blockTags.test(node.tagName) && range.intersectsNode(node)){
-          if(!blocks.some(b=>b.contains(node))) blocks.push(node);
-        }
-      }
-    }
-    if(blocks.length > 0){
-      blocks.forEach(b=>{ b.style.lineHeight = val; });
-    } else {
-      // 选中内容在同一行内，用 span 包裹
-      const span = document.createElement('span');
-      span.style.lineHeight = val;
-      try{ range.surroundContents(span); } catch(e){ document.execCommand('insertHTML',false,'<span style="line-height:'+val+'">'+selectedText+'</span>'); }
-    }
-  } else {
-    // 无选中：对光标所在块生效
-    let node = range.commonAncestorContainer;
-    if(node.nodeType===3) node = node.parentElement;
-    let block = node;
-    while(block && block !== ed){
-      if(blockTags.test(block.tagName)){ block.style.lineHeight = val; return; }
-      block = block.parentElement;
-    }
-    // 最后 fallback：整个编辑器
-    ed.style.lineHeight = val;
-  }
+  if(sel && sel.rangeCount) _lhSavedRange = sel.getRangeAt(0).cloneRange();
+  commitLineHeight(val, edId);
 }
 
 function exec(cmd,val=null){
@@ -1485,23 +1673,110 @@ function confirmDelete(){
 ══════════════════════════════════════ */
 
 /* Font size */
-function applyFontSize(sel, edId){
-  const size=sel.value; if(!size){ if(sel.selectedIndex!==undefined) sel.selectedIndex=0; return; }
-  const ed=document.getElementById(edId); ed.focus();
-  const selection=window.getSelection();
-  const selectedText=selection&&selection.toString();
-  if(selectedText){
-    document.execCommand('insertHTML',false,`<span style="font-size:${size}">${selectedText}</span>`);
+/* ── 字号系统（Word 风格：输入时预览，回车/失焦时提交）── */
+let _fsPreviewRange = null;  // 保存选区，避免焦点移到输入框后丢失
+let _fsPreviewSpans = [];    // 预览时插入的 span，提交时保留，取消时还原
+
+function _saveFsSelection(edId){
+  const sel = window.getSelection();
+  if(sel && sel.rangeCount && sel.toString()){
+    _fsPreviewRange = sel.getRangeAt(0).cloneRange();
   } else {
-    // 无选中时对光标所在块的字号生效
-    const range=selection&&selection.rangeCount?selection.getRangeAt(0):null;
-    if(range){
-      let node=range.commonAncestorContainer;
-      if(node.nodeType===3)node=node.parentElement;
-      node.style.fontSize=size;
+    _fsPreviewRange = null;
+  }
+}
+
+// 聚焦字号输入框前先保存选区
+function onFsFocus(edId){
+  _saveFsSelection(edId);
+}
+
+// 输入时实时预览（只改选中内容的视觉，不写入 DOM）
+function previewFontSize(val, edId){
+  const size = parseInt(val);
+  if(!size || size < 1) return;
+  const px = size + 'px';
+  // 清除上次预览 span
+  _clearFsPreview();
+  if(!_fsPreviewRange || _fsPreviewRange.collapsed) return;
+  try {
+    const span = document.createElement('span');
+    span.setAttribute('data-fs-preview', '1');
+    span.style.fontSize = px;
+    span.style.outline = '1px dashed rgba(0,245,255,.5)';
+    const frag = _fsPreviewRange.cloneContents();
+    span.appendChild(frag);
+    const tmpRange = _fsPreviewRange.cloneRange();
+    tmpRange.deleteContents();
+    tmpRange.insertNode(span);
+    _fsPreviewSpans = [span];
+    // 恢复视觉选区
+    const newSel = window.getSelection();
+    newSel.removeAllRanges();
+    const r = document.createRange();
+    r.selectNodeContents(span);
+    newSel.addRange(r);
+  } catch(e) {}
+}
+
+function _clearFsPreview(){
+  _fsPreviewSpans.forEach(sp => {
+    if(sp.parentNode){
+      const parent = sp.parentNode;
+      while(sp.firstChild) parent.insertBefore(sp.firstChild, sp);
+      parent.removeChild(sp);
+    }
+  });
+  _fsPreviewSpans = [];
+}
+
+// 提交：把预览 span 的 outline 去掉，保留 fontSize，写入 DOM
+function commitFontSize(val, edId){
+  const size = parseInt(val);
+  if(!size || size < 1) return;
+  const px = size + 'px';
+  const ed = document.getElementById(edId);
+
+  // 如果有预览 span，直接保留（去掉 outline）
+  if(_fsPreviewSpans.length > 0){
+    _fsPreviewSpans.forEach(sp => {
+      sp.removeAttribute('data-fs-preview');
+      sp.style.outline = '';
+    });
+    _fsPreviewSpans = [];
+    _fsPreviewRange = null;
+    return;
+  }
+
+  // 没有预览（直接回车）：用保存的选区
+  ed.focus();
+  const range = _fsPreviewRange;
+  if(range && !range.collapsed){
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    document.execCommand('insertHTML', false, `<span style="font-size:${px}">${sel.toString()}</span>`);
+  } else {
+    // 无选中：对光标所在块生效
+    const sel = window.getSelection();
+    if(sel && sel.rangeCount){
+      let node = sel.getRangeAt(0).commonAncestorContainer;
+      if(node.nodeType === 3) node = node.parentElement;
+      while(node && node !== ed){
+        if(/^(P|DIV|H[1-6]|LI)$/.test(node.tagName)){ node.style.fontSize = px; break; }
+        node = node.parentElement;
+      }
     }
   }
-  if(sel.selectedIndex!==undefined) sel.selectedIndex=0;
+  _fsPreviewRange = null;
+}
+
+// 兼容旧接口（行距select等地方用）
+function applyFontSize(sel, edId){
+  const size = sel.value;
+  if(!size){ if(sel.selectedIndex !== undefined) sel.selectedIndex = 0; return; }
+  commitFontSize(parseInt(size), edId);
+  if(sel.selectedIndex !== undefined) sel.selectedIndex = 0;
 }
 
 /* Text color */
@@ -2403,7 +2678,8 @@ async function patchHomeHTML(){
 
   // 生成 posts 静态列表
   const publishedPosts = posts.filter(p=>!p.draft&&p.title).slice(0,6);
-  const postsHTML = publishedPosts.length
+  // postsHTML 为 null 时不覆盖首页已有内容，避免推送其他 tab 时把博客列表清空
+  const postsHTML = publishedPosts.length > 0
     ? publishedPosts.map(p=>
         '<a class="post-item" href="/blog/'+esc(p.slug)+'.html">'
         +'<span class="post-drag-handle" style="display:none">\u283f</span>'
@@ -2413,12 +2689,12 @@ async function patchHomeHTML(){
         +'<span class="post-arrow">\u2192</span>'
         +'</a>'
       ).join('')
-    : '<div class="no-posts-placeholder" style="font-family:var(--font-mono);font-size:12px;color:var(--muted);letter-spacing:2px;padding:20px 24px;">'
-      +'// \u6682\u65e0\u5df2\u53d1\u5e03\u6587\u7ae0 \u00b7 \u8bf7\u5728\u540e\u53f0\u53d1\u5e03\u6587\u7ae0\u540e\u63a8\u9001</div>';
+    : null;
 
   // 生成 works 静态卡片
+  // publishedWorks 为空时不覆盖首页已有内容
   const publishedWorks = works.filter(w=>w.draft===false&&w.title).slice(0,6);
-  const worksHTML = publishedWorks.map(w=>{
+  const worksHTML = publishedWorks.length > 0 ? publishedWorks.map(w=>{
     const slug=w.slug||slugify(w.title);
     return '<a class="proj-card" href="/works/'+esc(slug)+'.html">'
       +'<div class="card-controls"><div class="card-drag-handle">\u283f\u283f</div>'
@@ -2428,16 +2704,17 @@ async function patchHomeHTML(){
       +'<div class="proj-desc">'+esc(w.desc||'')+'</div>'
       +'<div class="proj-meta">'+(w.tags||[]).map(t=>'<span class="tag">'+esc(t)+'</span>').join('')+'</div>'
       +'</a>';
-  }).join('') + '<button class="add-card-btn" onclick="addProject(this)">\uff0b \u6dfb\u52a0\u9879\u76ee</button>';
+  }).join('') + '<button class="add-card-btn" onclick="addProject(this)">\uff0b \u6dfb\u52a0\u9879\u76ee</button>'
+    : null;  // null = 不替换，保留 GitHub 上已有内容
 
   // 验证拉取到的是正确版本的 index.html
   if(html.indexOf('id="dynamic-posts-list"') === -1){
     throw new Error('首页结构不匹配：GitHub 上的 index.html 可能是旧版本，请先手动推送一次带编辑功能的 index.html');
   }
 
-  // 替换 dynamic-posts-list 内容
+  // 替换 dynamic-posts-list 内容（postsHTML 为 null 时跳过，保留已有内容）
   const postsId = html.indexOf('id="dynamic-posts-list"');
-  if(postsId !== -1){
+  if(postsId !== -1 && postsHTML !== null){
     const innerStart = html.indexOf('>', postsId) + 1;
     // 用锚点注释精确定位结束位置，避免误截断
     const POSTS_ANCHOR = '<!--/dynamic-posts-list-->';
@@ -2457,9 +2734,9 @@ async function patchHomeHTML(){
     }
   }
 
-  // 替换 dynamic-works-grid 内容
+  // 替换 dynamic-works-grid 内容（worksHTML 为 null 时跳过，保留已有内容）
   const worksId = html.indexOf('id="dynamic-works-grid"');
-  if(worksId !== -1){
+  if(worksId !== -1 && worksHTML !== null){
     const innerStart = html.indexOf('>', worksId) + 1;
     const secEnd = html.indexOf('</section>', innerStart);
     if(secEnd !== -1){
@@ -2606,10 +2883,13 @@ async function _deleteSelected(){
   if(_imgSelected.size===0) return;
   if(!confirm('确认删除选中的 '+_imgSelected.size+' 张图片？此操作不可撤销。')) return;
 
+  if(!GH.token) GH.token = await decryptToken() || '';
+  if(!GH.user||!GH.repo||!GH.token){ showToast('err','请先配置 GitHub'); return; }
+
   const headers = {'Authorization':`token ${GH.token}`,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'};
   const toDelete = _imgList.filter(f=>_imgSelected.has(f.path));
   const body = document.getElementById('pp-body');
-  body.innerHTML = '<div style="font-family:var(--font-mono);font-size:11px;color:var(--yellow);letter-spacing:2px;padding:20px 0;">⟳ 正在删除...</div>';
+  body.innerHTML = '<div style="font-family:var(--font-mono);font-size:11px;color:var(--yellow);letter-spacing:2px;padding:20px 0;">⟳ 正在删除 0 / '+toDelete.length+' ...</div>';
 
   let ok=0, fail=0;
   for(const f of toDelete){
@@ -2618,9 +2898,17 @@ async function _deleteSelected(){
         method:'DELETE', headers,
         body: JSON.stringify({message:'delete image: '+f.name, sha: f.sha})
       });
-      if(res.ok){ ok++; delete _shaCache[f.path]; }
-      else { fail++; console.warn('delete failed', f.path, res.status); }
-    }catch(e){ fail++; }
+      if(res.ok){
+        ok++;
+        _imgList = _imgList.filter(i=>i.path!==f.path);
+        _imgSelected.delete(f.path);
+      } else {
+        fail++;
+        const d = await res.json().catch(()=>({}));
+        console.warn('delete failed', f.path, res.status, d.message);
+      }
+    }catch(e){ fail++; console.error('delete error', f.path, e); }
+    body.innerHTML = '<div style="font-family:var(--font-mono);font-size:11px;color:var(--yellow);letter-spacing:2px;padding:20px 0;">⟳ 正在删除 '+ok+' / '+toDelete.length+' ...</div>';
   }
 
   showToast(fail===0?'ok':'info', '已删除 '+ok+' 张'+(fail>0?' · '+fail+' 张失败':''));
