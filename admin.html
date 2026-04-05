@@ -496,7 +496,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
           </label>
         </div>
       </div>
-      <div id="works-editor-toolbar" onmousedown="event.preventDefault()">
+      <div id="works-editor-toolbar">
         <button class="et-btn" onclick="wfmt('h2')">H2</button>
         <button class="et-btn" onclick="wfmt('h3')">H3</button>
         <div class="et-sep"></div>
@@ -593,7 +593,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         </div>
       </div>
 
-      <div id="editor-toolbar" onmousedown="event.preventDefault()">
+      <div id="editor-toolbar">
         <button class="et-btn" onclick="fmt('h1')" title="H1">H1</button>
         <button class="et-btn" onclick="fmt('h2')" title="H2">H2</button>
         <button class="et-btn" onclick="fmt('h3')" title="H3">H3</button>
@@ -1237,12 +1237,10 @@ document.getElementById('editor-content').addEventListener('input',()=>{updateWo
 document.getElementById('works-editor-content').addEventListener('input',()=>{updateWordCount('works-editor-content','works-word-count');refreshParaNum('works-editor-content');});
 
 // 持续保存选区：只要在编辑器里操作（鼠标/键盘），就更新全局选区缓存
-// 这样点击工具栏输入框时选区虽然消失，但我们已经存好了
 function _saveEditorSelection(edId){
   const sel = window.getSelection();
   if(!sel || !sel.rangeCount) return;
   const range = sel.getRangeAt(0);
-  // 确认选区在目标编辑器内
   const ed = document.getElementById(edId);
   if(!ed) return;
   const ancestor = range.commonAncestorContainer;
@@ -1255,6 +1253,25 @@ function _saveEditorSelection(edId){
   const ed = document.getElementById(edId);
   ed.addEventListener('mouseup', ()=>_saveEditorSelection(edId));
   ed.addEventListener('keyup',   ()=>_saveEditorSelection(edId));
+});
+
+// 工具栏 mousedown：只保存选区，不阻止默认行为（不能 preventDefault，否则按钮 click 失效）
+['editor-toolbar','works-editor-toolbar'].forEach(tbId=>{
+  const tb = document.getElementById(tbId);
+  if(!tb) return;
+  const edId = tbId === 'editor-toolbar' ? 'editor-content' : 'works-editor-content';
+  tb.addEventListener('mousedown', e=>{
+    // 只对输入框（字号/行距）阻止 mousedown 的编辑器失焦，对其他按钮不干预
+    if(e.target.tagName === 'INPUT') {
+      _saveEditorSelection(edId);
+      // 阻止 input 的 mousedown 抢走编辑器焦点，但允许 input 本身 focus
+      e.preventDefault();
+      e.target.focus();
+    } else {
+      // 普通按钮：只保存选区，不阻止任何事件
+      _saveEditorSelection(edId);
+    }
+  });
 });
 
 /* paste cleaner: strip Word/mso junk, fix table widths */
