@@ -115,6 +115,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .pi-meta{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:1px;display:flex;gap:8px;}
 .pi-cat{color:var(--magenta);}
 .pi-draft{position:absolute;right:12px;top:12px;font-family:var(--font-mono);font-size:9px;color:var(--yellow);letter-spacing:1px;border:1px solid rgba(255,230,0,.3);padding:1px 5px;}
+/* 草稿/发布状态切换 */
+#post-status-toggle{display:flex;align-items:center;gap:0;border:1px solid rgba(0,245,255,.2);overflow:hidden;flex-shrink:0;}
+#post-status-toggle button{font-family:var(--font-mono);font-size:10px;letter-spacing:1px;padding:4px 12px;border:none;background:transparent;cursor:pointer;transition:all .2s;color:var(--muted);}
+#post-status-toggle button.active-draft{background:rgba(255,230,0,.12);color:var(--yellow);border-color:rgba(255,230,0,.3);}
+#post-status-toggle button.active-pub{background:rgba(0,245,255,.1);color:var(--cyan);}
+#post-status-label{font-family:var(--font-mono);font-size:10px;letter-spacing:2px;padding:4px 8px;border-right:1px solid rgba(0,245,255,.15);color:var(--muted);}
 
 /* right: editor */
 #editor-panel{flex:1;display:flex;flex-direction:column;overflow:hidden;}
@@ -163,9 +169,17 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 
 /* image centering in editors */
 #editor-content img{max-width:100%;border:1px solid var(--border);margin:12px auto;display:block;}
-#editor-content figure.post-figure{margin:16px 0;text-align:center;}
-#editor-content figure.post-figure img{margin:0 auto;}
-#editor-content figure.post-figure figcaption{font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:6px;}
+#editor-content figure.post-figure,#works-editor-content figure.post-figure{margin:20px 0;text-align:center;}
+#editor-content figure.post-figure img,#works-editor-content figure.post-figure img{margin:0 auto;border:1px solid var(--border);}
+#editor-content figure.post-figure figcaption,#works-editor-content figure.post-figure figcaption{
+  font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:6px;
+  display:block;min-height:1.4em;outline:none;
+  border-bottom:1px dashed rgba(0,245,255,.15);padding-bottom:2px;
+}
+#editor-content figure.post-figure figcaption:empty::before,
+#works-editor-content figure.post-figure figcaption:empty::before{
+  content:'// 点击输入图片注释（可留空）';color:rgba(0,245,255,.2);pointer-events:none;
+}
 /* table in editor */
 #editor-content table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;}
 #editor-content .table-wrap{display:block;width:100%;overflow-x:auto;}
@@ -568,6 +582,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
           <input class="meta-input" id="post-tags" placeholder="如：Roguelike, Unity, 独立游戏" style="width:200px">
           <span class="meta-label">日期</span>
           <input class="meta-input" id="post-date" type="date" style="width:140px">
+          <div id="post-status-toggle">
+            <span id="post-status-label">状态</span>
+            <button id="btn-draft" onclick="setPostStatus('draft')" class="active-draft">草稿</button>
+            <button id="btn-pub"   onclick="setPostStatus('published')">发布</button>
+          </div>
           <button id="cover-upload-btn" onclick="document.getElementById('cover-file-input').click()">📷 封面图</button>
           <img id="cover-preview" src="" alt="封面">
           <input type="file" id="cover-file-input" accept="image/*" onchange="handleCoverUpload(this)">
@@ -1097,6 +1116,8 @@ function selectPost(i){
   const prev=document.getElementById('cover-preview');
   if(coverData){prev.src=coverData;prev.style.display='block';}
   else{prev.style.display='none';}
+  // 同步草稿/发布状态
+  _syncPostStatusUI(p.draft !== false);
   // 恢复排版设置
   const layout = p.layout || {};
   document.getElementById('layout-width').value    = layout.width    || '720px';
@@ -1142,6 +1163,33 @@ function updateEditorLayout(){
   `;
 }
 
+/* ── 文章状态切换 ── */
+function _syncPostStatusUI(isDraft){
+  const btnD = document.getElementById('btn-draft');
+  const btnP = document.getElementById('btn-pub');
+  const pubBtn = document.getElementById('pub-btn');
+  if(!btnD||!btnP) return;
+  if(isDraft){
+    btnD.classList.add('active-draft');    btnD.classList.remove('active-pub');
+    btnP.classList.remove('active-pub');   btnP.classList.remove('active-draft');
+    if(pubBtn){ pubBtn.textContent='⬆ 发布'; pubBtn.style.borderColor=''; pubBtn.style.color=''; }
+  } else {
+    btnP.classList.add('active-pub');      btnP.classList.remove('active-draft');
+    btnD.classList.remove('active-draft'); btnD.classList.remove('active-pub');
+    if(pubBtn){ pubBtn.textContent='✓ 已发布'; pubBtn.style.borderColor='rgba(0,245,255,.4)'; pubBtn.style.color='var(--cyan)'; }
+  }
+}
+
+function setPostStatus(status){
+  if(currentPost===null) return;
+  const isDraft = status==='draft';
+  posts[currentPost].draft = isDraft;
+  _syncPostStatusUI(isDraft);
+  saveState();
+  renderPostList();
+  showToast('info', isDraft ? '已切换为草稿' : '已标记为发布 · 点击「⬆ 发布」推送到网站');
+}
+
 function saveCurrentPost(isDraft=true){
   if(currentPost===null)return;
   const p=posts[currentPost];
@@ -1151,7 +1199,9 @@ function saveCurrentPost(isDraft=true){
   p.date=document.getElementById('post-date').value||new Date().toISOString().slice(0,10);
   p.content=document.getElementById('editor-content').innerHTML;
   p.cover=coverData;
-  p.draft=isDraft;
+  // 优先以 UI 切换的状态为准；isDraft 参数只在无 UI 时作为默认值
+  const uiStatus = document.getElementById('btn-pub');
+  p.draft = uiStatus ? !uiStatus.classList.contains('active-pub') : isDraft;
   p.slug=slugify(p.title);
   // 保存排版设置
   p.layout = {
@@ -1170,6 +1220,7 @@ function newPost(){
   posts.unshift(p);
   saveState();
   selectPost(0);
+  _syncPostStatusUI(true);
   document.getElementById('post-title-input').focus();
   showToast('info','新文章已创建，开始写作吧');
 }
@@ -1604,11 +1655,15 @@ async function handleInlineImage(input){
   showUploadStatus('loading','⟳ 上传中，请稍候...');
   try{
     const url=await uploadImageToGH(file);
-    const caption = prompt('图片注释（可留空）', '');
-    const figHtml = `<figure class="post-figure"><img src="${url}" alt="图片">${caption ? `<figcaption>${caption}</figcaption>` : ''}</figure><p><br></p>`;
-    document.getElementById('editor-content').focus();
+    const figHtml = `<figure class="post-figure"><img src="${url}" alt="图片"><figcaption contenteditable="true" spellcheck="false"></figcaption></figure><p><br></p>`;
+    const ed = document.getElementById('editor-content');
+    ed.focus();
     document.execCommand('insertHTML',false,figHtml);
-    showToast('ok','图片已插入 ✓');
+    // 将光标移到 figcaption 里
+    const caps = ed.querySelectorAll('figure.post-figure figcaption');
+    const cap = caps[caps.length-1];
+    if(cap){ const r=document.createRange();r.setStart(cap,0);r.collapse(true);const s=window.getSelection();s.removeAllRanges();s.addRange(r);cap.focus(); }
+    showToast('ok','图片已插入 · 请输入注释（可留空）');
   }catch(e){
     showUploadStatus('err','✕ 上传失败：'+e.message);
   }
@@ -2066,9 +2121,14 @@ async function wHandleImg(input){
   showUploadStatus('loading','⟳ 上传图片中...');
   try{
     const url=await uploadImageToGH(file);
-    document.getElementById('works-editor-content').focus();
-    document.execCommand('insertHTML',false,'<img src="'+url+'" alt=""><p><br></p>');
-    showUploadStatus('ok','✓ 图片已插入');
+    const figHtml = '<figure class="post-figure"><img src="'+url+'" alt="图片"><figcaption contenteditable="true" spellcheck="false"></figcaption></figure><p><br></p>';
+    const wed = document.getElementById('works-editor-content');
+    wed.focus();
+    document.execCommand('insertHTML',false,figHtml);
+    const wcaps = wed.querySelectorAll('figure.post-figure figcaption');
+    const wcap = wcaps[wcaps.length-1];
+    if(wcap){ const r=document.createRange();r.setStart(wcap,0);r.collapse(true);const s=window.getSelection();s.removeAllRanges();s.addRange(r);wcap.focus(); }
+    showUploadStatus('ok','✓ 图片已插入 · 请输入注释（可留空）');
   }catch(e){ showUploadStatus('err','✕ 上传失败：'+e.message); }
   input.value='';
 }
@@ -2576,6 +2636,9 @@ async function publishPost(){
     await patchHomeHTML();
     pushLog('首页已更新','ok');
     pushLog('全部完成 · Netlify 将在约1分钟内自动部署','info');
+    // 发布成功：把文章标记为已发布，同步 UI
+    if(currentPost!==null){ posts[currentPost].draft=false; saveState(); renderPostList(); }
+    _syncPostStatusUI(false);
     showToast('ok','发布成功 · Netlify 约1分钟后更新 ✓');
     setTimeout(()=>setStatus('idle','// 就绪'),4000);
   }catch(e){
@@ -2955,6 +3018,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:cent
 
 function cleanContent(html){
   if(!html)return '';
+  // 清理编辑态属性（figcaption contenteditable 等）
+  html=html.replace(/\s*contenteditable="[^"]*"/gi,'');
+  html=html.replace(/\s*spellcheck="[^"]*"/gi,'');
+  // 清理空 figcaption
+  html=html.replace(/<figcaption>\s*<\/figcaption>/gi,'');
   // Collapse 2+ consecutive empty paragraphs into a single one
   html=html.replace(/(<p[^>]*>\s*(<br\s*\/>|&nbsp;)?\s*<\/p>\s*){2,}/gi,'<p><br></p>');
   // Remove empty paragraphs immediately after block elements (h1-h6, table, pre, figure, blockquote, hr, div)
@@ -3132,7 +3200,7 @@ function buildWorkDetailHTML(w){
     +'    <div class="wd-tags">'+(w.tags||[]).map(t=>'<span class="wd-tag-item">'+esc(t)+'</span>').join('')+'</div>\n'
     +'  </div>\n'
     +(w.img?'  <img class="wd-cover" src="'+esc(w.imgFull||w.img)+'" style="object-position:'+esc(w.imgPos||'50% 50%')+'" alt="">\n':'')
-    +'  <div class="wd-body">'+(w.content||('<p>'+esc(w.desc||'')+'</p>'))+'</div>\n'
+    +'  <div class="wd-body">'+cleanContent(w.content||('<p>'+esc(w.desc||'')+'</p>'))+'</div>\n'
     +(w.link?'  <div style="margin-top:40px;"><a href="'+esc(w.link)+'" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border:1px solid var(--cyan);color:var(--cyan);font-family:\'Share Tech Mono\',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;text-decoration:none;transition:all .3s;">查看项目 →</a></div>\n':'')
     +'</div>\n'
     +'<scr'+'ipt>\n(function(){\n  document.addEventListener(\'contextmenu\',function(e){e.preventDefault();});\n  document.addEventListener(\'dragstart\',function(e){if(e.target.tagName===\'IMG\')e.preventDefault();});\n  document.addEventListener(\'keydown\',function(e){\n    if((e.ctrlKey||e.metaKey)&&(e.key===\'s\'||e.key===\'S\'||e.key===\'p\'||e.key===\'P\'))e.preventDefault();\n    if(e.key===\'PrintScreen\')e.preventDefault();\n  });\n})();\n</'+'script>'
