@@ -1255,21 +1255,21 @@ function _saveEditorSelection(edId){
   ed.addEventListener('keyup',   ()=>_saveEditorSelection(edId));
 });
 
-// 工具栏 mousedown：只保存选区，不阻止默认行为（不能 preventDefault，否则按钮 click 失效）
+// 工具栏 mousedown：
+// - 对所有元素都先保存选区
+// - 对非 input 元素 preventDefault，防止编辑器失焦（选区消失），click 事件仍会正常触发
+// - 对 input 元素不 preventDefault，让它自己正常获焦
 ['editor-toolbar','works-editor-toolbar'].forEach(tbId=>{
   const tb = document.getElementById(tbId);
   if(!tb) return;
   const edId = tbId === 'editor-toolbar' ? 'editor-content' : 'works-editor-content';
   tb.addEventListener('mousedown', e=>{
-    // 只对输入框（字号/行距）阻止 mousedown 的编辑器失焦，对其他按钮不干预
-    if(e.target.tagName === 'INPUT') {
-      _saveEditorSelection(edId);
-      // 阻止 input 的 mousedown 抢走编辑器焦点，但允许 input 本身 focus
+    _saveEditorSelection(edId);
+    // SELECT 和 INPUT 都不阻止（让它们正常获焦/展开）
+    // 其他元素（BUTTON、SPAN、DIV 等）阻止 mousedown 默认行为，防止编辑器失焦
+    const tag = e.target.tagName;
+    if(tag !== 'INPUT' && tag !== 'SELECT' && tag !== 'TEXTAREA' && tag !== 'LABEL'){
       e.preventDefault();
-      e.target.focus();
-    } else {
-      // 普通按钮：只保存选区，不阻止任何事件
-      _saveEditorSelection(edId);
     }
   });
 });
