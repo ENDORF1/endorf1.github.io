@@ -1360,58 +1360,56 @@ function _applyAlign(el,align){
 
 /* 对齐：有选中文字时只对选中段落生效，无选中时对光标所在块生效 */
 function _applyAlignToSelection(ed, align){
-  // 优先用缓存选区（点击按钮时编辑器已失焦，实时选区为空）
-  const savedRange = _fsPreviewRange;
+  // mousedown 已 preventDefault，编辑器焦点和选区均保持，直接读取即可
   const sel = window.getSelection();
-  let range, selectedText;
-  if(savedRange && !savedRange.collapsed){
-    range = savedRange;
-    selectedText = range.toString();
-    // 恢复选区以便视觉反馈
-    sel.removeAllRanges();
-    sel.addRange(range);
-    ed.focus();
-  } else if(sel && sel.rangeCount){
-    range = sel.getRangeAt(0);
-    selectedText = sel.toString();
-  } else {
-    ed.focus();
-    return;
-  }
+  if(!sel || !sel.rangeCount) return;
+  const range = sel.getRangeAt(0);
+  const selectedText = sel.toString();
 
   if(selectedText.length > 0){
-    // 找选区跨越的所有段落级块元素，对每个分别设置 text-align
-    const blockTags = /^(P|DIV|H[1-6]|LI|BLOCKQUOTE|TD|TH)$/;
+    // 找选区覆盖的最近块级祖先
+    // 同时支持 FIGURE/FIGCAPTION 内的情况
+    const blockTags = /^(P|DIV|H[1-6]|LI|BLOCKQUOTE|TD|TH|FIGURE|FIGCAPTION)$/;
     const ancestor = range.commonAncestorContainer;
-    const container = ancestor.nodeType===3 ? ancestor.parentElement : ancestor;
+    const container = ancestor.nodeType === 3 ? ancestor.parentElement : ancestor;
 
-    // 收集选区内所有块元素
+    // 向上找到最近的块级元素（但不超过编辑器本身）
+    function nearestBlock(node){
+      let cur = node;
+      while(cur && cur !== ed){
+        if(blockTags.test(cur.tagName)) return cur;
+        cur = cur.parentElement;
+      }
+      return null;
+    }
+
     let blocks = [];
-    // 如果 container 本身就是块，且选区只在一个块内
     if(blockTags.test(container.tagName) && container !== ed){
       blocks = [container];
     } else {
-      // 跨多个块：遍历 ed 内所有块，找与选区有交叉的
+      // 跨多个块
       const walker = document.createTreeWalker(ed, NodeFilter.SHOW_ELEMENT);
       let node;
-      while(node = walker.nextNode()){
+      while((node = walker.nextNode())){
         if(blockTags.test(node.tagName) && range.intersectsNode(node)){
-          // 排除子块（只取最外层的段落块）
-          if(!blocks.some(b=>b.contains(node))) blocks.push(node);
+          if(!blocks.some(b => b.contains(node))) blocks.push(node);
         }
+      }
+      // 如果还是空（选区在行内元素内），找最近块
+      if(blocks.length === 0){
+        const b = nearestBlock(container);
+        if(b) blocks = [b];
       }
     }
 
     if(blocks.length > 0){
-      blocks.forEach(b=>{ b.style.textAlign = align; });
+      blocks.forEach(b => { b.style.textAlign = align; });
     } else {
-      // fallback：包一个 div
-      const div = document.createElement('div');
-      div.style.textAlign = align;
-      range.surroundContents(div);
+      // 最后 fallback：用 execCommand
+      document.execCommand('justify'+(align.charAt(0).toUpperCase()+align.slice(1)), false, null);
     }
   } else {
-    // 无选中：找光标所在块，整块对齐
+    // 无选中：找光标所在块
     const target = _findAlignTarget(ed);
     if(target) _applyAlign(target, align);
     else document.execCommand('justify'+(align.charAt(0).toUpperCase()+align.slice(1)), false, null);
