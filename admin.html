@@ -2502,7 +2502,9 @@ async function handleCardImg(input){
   showCardUploadStatus('loading','⟳ 上传中（缩略图+原图）...');
   try{
     // 顺序上传避免同一 File 对象被两个 FileReader 并行读取导致其中一个失败
+    showCardUploadStatus('loading','⟳ 上传缩略图中（1/2）...');
     const thumbUrl = await uploadImageToGH(file);
+    showCardUploadStatus('loading','⟳ 上传原图中（2/2）...');
     const fullUrl = await uploadImageToGHRaw(file);
     if(mode==='catitem'){
       catItemImgData=thumbUrl;
@@ -3978,7 +3980,7 @@ async function compressImage(file, maxWidth=800, quality=0.85){
   });
 }
 
-async function uploadImageToGH(file, compress=true){
+async function uploadImageToGH(file, compress=true, suffix=''){
   let dataToUpload = file;
   let ext = file.name.split('.').pop().toLowerCase()||'jpg';
 
@@ -3997,7 +3999,7 @@ async function uploadImageToGH(file, compress=true){
   });
 
   // Build a unique filename
-  const fname='images/'+Date.now()+'-'+Math.random().toString(36).slice(2,7)+'.'+ext;
+  const fname='images/'+Date.now()+'-'+Math.random().toString(36).slice(2,7)+(suffix?'-'+suffix:'')+'.'+ext;
   const apiUrl=`https://api.github.com/repos/${GH.user}/${GH.repo}/contents/${fname}`;
   const headers={
     'Authorization':`token ${GH.token}`,
@@ -4031,7 +4033,7 @@ async function uploadImageToGH(file, compress=true){
 
 // Upload original image without compression
 async function uploadImageToGHRaw(file){
-  return uploadImageToGH(file, false);
+  return uploadImageToGH(file, false, 'full');
 }
 
 /* ══════════════════════════════════════
