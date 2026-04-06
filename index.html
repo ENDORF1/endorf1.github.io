@@ -5,7 +5,6 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="version" content="1775467994212">
 <meta name="version" content="1775422576956">
 <meta name="version" content="1775312342333">
 <meta name="version" content="1775250098936">
@@ -208,6 +207,30 @@ body.edit-mode .creation-controls{display:flex;}
 .add-creation-btn{aspect-ratio:3/4;background:transparent;border:1px dashed rgba(255,0,110,.18);display:none;align-items:center;justify-content:center;color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:28px;cursor:pointer;transition:all .3s;}
 body.edit-mode .add-creation-btn{display:flex;}
 .add-creation-btn:hover{border-color:var(--magenta);color:var(--magenta);}
+
+@media (max-width: 768px){
+nav{padding:14px 16px;align-items:flex-start;gap:12px;}
+.nav-logo{font-size:15px;letter-spacing:3px;}
+.nav-links{gap:12px;flex-wrap:wrap;justify-content:flex-end;}
+.nav-links a{font-size:11px;letter-spacing:1px;}
+#hero{min-height:auto;padding:120px 5.5vw 72px;}
+.hero-sub{max-width:none;font-size:12px;line-height:1.7;}
+.hero-btns{margin-top:28px;flex-wrap:wrap;}
+.btn-primary,.btn-sec{width:100%;justify-content:center;text-align:center;}
+.hero-deco,.hero-deco-center{display:none;}
+.page-section{padding:72px 5.5vw;}
+.sec-header{align-items:flex-start;gap:12px;margin-bottom:32px;flex-wrap:wrap;}
+.sec-title{font-size:28px;}
+.projects-grid{grid-template-columns:1fr;}
+.posts-list{gap:10px;}
+.post-item{flex-wrap:wrap;gap:8px 12px;padding:16px;}
+.post-date,.post-cat{min-width:0;}
+.post-title{width:100%;}
+.post-arrow{margin-left:auto;}
+.creations-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));}
+footer{padding:32px 5.5vw;flex-direction:column;align-items:flex-start;gap:16px;}
+.footer-links{flex-wrap:wrap;gap:12px;}
+}
 
 /* footer */
 footer{position:relative;z-index:1;padding:40px 10vw;border-top:1px solid rgba(0,245,255,.08);display:flex;align-items:center;justify-content:space-between;}
@@ -415,7 +438,7 @@ body.modal-open body::before{z-index:1 !important;}
 </div>
 
 <!-- ── COVER PICKER OVERLAY ── -->
-<div id="cover-picker-overlay">
+<div id="cover-picker-overlay" class="">
   <div style="background:var(--dim);border:1px solid rgba(0,245,255,.22);padding:36px 40px;width:460px;max-width:92vw;position:relative;box-shadow:0 0 60px rgba(0,245,255,.08);">
     <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--magenta));"></div>
     <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:20px;">// 上传封面图</div>
@@ -426,13 +449,13 @@ body.modal-open body::before{z-index:1 !important;}
     </div>
     <div id="cp-hint" style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:14px;display:none;">👆 点击图片选择展示焦点位置</div>
     <div id="cp-status" style="font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:2px;min-height:20px;margin-bottom:12px;"></div>
-    <label onmouseover="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'" onmouseout="this.style.borderColor='rgba(0,245,255,.3)';this.style.color='var(--muted)'" style="border-color: rgba(0, 245, 255, 0.3); color: var(--muted);">
+    <label onmouseover="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'" onmouseout="this.style.borderColor='rgba(0,245,255,.3)';this.style.color='var(--muted)'" style="display:block;border:1px dashed rgba(0,245,255,.3);color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:2px;padding:14px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:14px;">
       📷 选择图片上传
       <input type="file" accept="image/*" style="display:none" onchange="cpHandleUpload(this)" value="">
     </label>
     <div style="display:flex;gap:10px;">
-      <button onclick="cpConfirm()" onmouseover="this.style.background='var(--cyan)';this.style.color='var(--bg)'" onmouseout="this.style.background='transparent';this.style.color='var(--cyan)'" style="background: transparent; color: var(--cyan);">确认</button>
-      <button onclick="cpCancel()" onmouseover="this.style.borderColor='var(--magenta)';this.style.color='var(--magenta)'" onmouseout="this.style.borderColor='var(--muted)';this.style.color='var(--muted)'" style="border-color: var(--muted); color: var(--muted);">取消</button>
+      <button onclick="cpConfirm()" onmouseover="this.style.background='var(--cyan)';this.style.color='var(--bg)'" onmouseout="this.style.background='transparent';this.style.color='var(--cyan)'" style="flex:1;padding:10px;background:transparent;border:1px solid var(--cyan);color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:2px;cursor:pointer;transition:all .2s;">确认</button>
+      <button onclick="cpCancel()" onmouseover="this.style.borderColor='var(--magenta)';this.style.color='var(--magenta)'" onmouseout="this.style.borderColor='var(--muted)';this.style.color='var(--muted)'" style="flex:1;padding:10px;background:transparent;border:1px solid var(--muted);color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:2px;cursor:pointer;transition:all .2s;">取消</button>
     </div>
   </div>
 </div>
@@ -573,7 +596,7 @@ body.modal-open body::before{z-index:1 !important;}
 </div><!-- /sections-container -->
 
 <footer>
-  <div class="footer-text" contenteditable="false" spellcheck="false">© 2026 · BUILT WITH ♥ &amp; CODE</div>
+  <div class="footer-text" contenteditable="false" spellcheck="false">© 2025 · BUILT WITH ♥ &amp; CODE</div>
   <div class="footer-links">
     <div class="social-edit-wrap"><a class="social-label" id="sl-github" contenteditable="false" spellcheck="false" href="https://github.com/ENDORF1">GITHUB</a><input class="social-input" placeholder="GitHub URL" oninput="document.getElementById('sl-github').href=this.value" value="https://github.com/ENDORF1"></div>
     <div class="social-edit-wrap"><a class="social-label" id="sl-bili" contenteditable="false" spellcheck="false">BILIBILI</a><input class="social-input" placeholder="Bilibili URL" oninput="document.getElementById('sl-bili').href=this.value" value=""></div>
@@ -1418,11 +1441,7 @@ function cpConfirm(){
     const bg = _cpCard.querySelector('.creation-bg');
     if(img){ img.src=_cpUrl; img.style.display='block'; img.style.objectPosition=_cpPos; }
     if(bg) bg.style.opacity = '0';
-    // 更新按钮状态：高亮"上传封面图"按钮
-    const btns = _cpCard.querySelectorAll('.cc-mode-btn, .cc-upload-btn');
-    btns.forEach(b=>b.classList.remove('active'));
-    const uploadBtn = _cpCard.querySelector('.cc-upload-btn');
-    if(uploadBtn) uploadBtn.classList.add('active');
+    setCreationCoverModeButtonState(_cpCard, 'upload');
   }
   cpCancel();
 }
@@ -1436,16 +1455,25 @@ function cpCancel(){
 /* ══════════════════════════════════════
    CREATION CARD COVER MODE
 ══════════════════════════════════════ */
+function setCreationCoverModeButtonState(card, mode){
+  const modeBtns=card.querySelectorAll('.cc-mode-btn');
+  const uploadBtn=card.querySelector('.cc-upload-btn');
+  modeBtns.forEach(b=>b.classList.remove('active'));
+  if(uploadBtn) uploadBtn.classList.remove('active');
+  const btnIdx={gradient:0,latest:1};
+  if(mode==='upload'){
+    if(uploadBtn) uploadBtn.classList.add('active');
+    return;
+  }
+  if(modeBtns[btnIdx[mode]]) modeBtns[btnIdx[mode]].classList.add('active');
+}
+
 function setCoverMode(card, mode, e){
   if(e){e.preventDefault();e.stopPropagation();}
   card.dataset.coverMode=mode;
   const bg=card.querySelector('.creation-bg');
   const img=card.querySelector('.creation-cover');
-  const btns=card.querySelectorAll('.cc-mode-btn');
-  btns.forEach(b=>b.classList.remove('active'));
-  // activate clicked button
-  const btnIdx={'gradient':0,'latest':1,'upload':2};
-  if(btns[btnIdx[mode]]) btns[btnIdx[mode]].classList.add('active');
+  setCreationCoverModeButtonState(card, mode);
 
   if(mode==='gradient'){
     bg.style.opacity='';
@@ -1470,6 +1498,15 @@ function setCoverMode(card, mode, e){
       showToast('info','此分类还没有作品图，先在后台添加作品');
       setCoverMode(card,'gradient',null);
     }
+  } else if(mode==='upload'){
+    if(card.dataset.coverImg){
+      img.src=card.dataset.coverImg;
+      img.style.display='block';
+      img.style.objectPosition=card.dataset.coverPos||'50% 50%';
+      bg.style.opacity='0';
+    } else {
+      setCreationCoverModeButtonState(card, 'gradient');
+    }
   }
 }
 
@@ -1484,16 +1521,12 @@ async function uploadCreationCover(input){
     const url=await uploadImageToGH(file);
     card.dataset.coverImg=url;
     card.dataset.coverPos='50% 50%';
-    // 直接显示图片并切到 custom 模式
     const img=card.querySelector('.creation-cover');
     const bg=card.querySelector('.creation-bg');
     if(img){ img.src=url; img.style.display='block'; img.style.objectPosition='50% 50%'; }
     if(bg){ bg.style.opacity='0'; }
-    card.dataset.coverMode='custom';
-    // 激活 custom 按钮
-    const btns=card.querySelectorAll('.cc-mode-btn');
-    btns.forEach(b=>b.classList.remove('active'));
-    if(btns[1]) btns[1].classList.add('active');
+    card.dataset.coverMode='upload';
+    setCreationCoverModeButtonState(card, 'upload');
     // 点击图片可调整焦点
     if(img && !img.dataset.focusListenerAdded){
       img.style.cursor='crosshair';
