@@ -29,6 +29,10 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
 .page-wrap{padding:84px 5.5vw 56px;}
 }
 
+.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--cyan);text-decoration:none;letter-spacing:2px;padding:8px 18px;border:1px solid rgba(0,245,255,.35);background:rgba(0,245,255,.05);transition:all .2s;}
+.back-btn:hover{color:#fff;border-color:var(--cyan);background:rgba(0,245,255,.12);}
+.nav-btns{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:40px;}
+@media(max-width:768px){.nav-btns{margin-bottom:24px;}.back-btn{font-size:10px;letter-spacing:1px;padding:7px 14px;}}
 .page-title{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;}
 .page-heading{font-size:42px;font-weight:700;color:#fff;margin-bottom:48px;}
 .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;}
@@ -52,6 +56,9 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
   </div>
 </nav>
 <div class="page-wrap">
+  <div class="nav-btns">
+    <a class="back-btn" href="/">← 首页</a>
+  </div>
   <div class="page-title">// GALLERY</div>
   <h1 class="page-heading">同人创作</h1>
   <div class="gallery-grid">
