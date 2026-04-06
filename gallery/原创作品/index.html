@@ -21,6 +21,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:cent
 .nav-links a:hover{color:var(--cyan);}
 .nav-links a:hover::after{width:100%;}
 .page-wrap{position:relative;z-index:1;padding:88px 10vw 80px;}
+@media (max-width: 768px){
+nav{padding:14px 16px;align-items:flex-start;gap:12px;}
+.nav-logo{font-size:15px;letter-spacing:3px;}
+.nav-links{gap:12px;flex-wrap:wrap;justify-content:flex-end;}
+.nav-links a{font-size:11px;letter-spacing:1px;}
+.page-wrap{padding:84px 5.5vw 56px;}
+}
 
 .page-title{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;}
 .page-heading{font-size:42px;font-weight:700;color:#fff;margin-bottom:12px;}
