@@ -975,6 +975,18 @@ function initImgTooltip(){
     if(!file || !_tooltipImg) return;
     if(!GH.token) GH.token = await decryptToken() || '';
     if(!GH.user||!GH.repo||!GH.token){ showToast('err','请先配置 GitHub 才能上传图片'); replaceInput.value=''; return; }
+
+    // 在图片上叠加上传中遮罩
+    const targetImg = _tooltipImg;
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:absolute;inset:0;background:rgba(3,8,16,.75);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;z-index:10;pointer-events:none;';
+    overlay.innerHTML = '<div style="width:20px;height:20px;border:2px solid rgba(255,230,0,.3);border-top-color:var(--yellow);border-radius:50%;animation:spin 0.7s linear infinite;"></div><span style="font-family:var(--font-mono);font-size:10px;color:var(--yellow);letter-spacing:2px;">上传中...</span>';
+    const fig = targetImg.closest('figure.post-figure') || targetImg.parentElement;
+    const prevPosition = fig.style.position;
+    fig.style.position = 'relative';
+    fig.appendChild(overlay);
+
+    hideImgTooltip();
     showUploadStatus('loading','⟳ 替换图片中...');
     try{
       const mb = file.size / (1024 * 1024);
@@ -985,13 +997,15 @@ function initImgTooltip(){
         const quality = mb > 3 ? 0.80 : mb > 1 ? 0.85 : 0.92;
         url = await uploadImageToGH(file, true, '', 99999, quality);
       }
-      _tooltipImg.src = url;
+      targetImg.src = url;
       const label = file.size<=500*1024?'原图':'已动态压缩';
       showUploadStatus('ok',`✓ 图片已替换（${label}）`);
-      hideImgTooltip();
     } catch(e){
       showUploadStatus('err','✕ 上传失败：'+e.message);
     }
+    // 移除遮罩
+    overlay.remove();
+    fig.style.position = prevPosition;
     replaceInput.value = '';
   });
 }
@@ -3328,12 +3342,16 @@ ${BASE_CSS}
 .post-body pre code{display:block;padding:16px 20px;font-family:'Fira Code',monospace;font-size:${codeSize};line-height:1.7;color:#a8c8e8;counter-reset:line;min-width:max-content;}
 .post-body pre code .line{display:block;position:relative;padding-left:40px;}
 .post-body pre code .line::before{content:counter(line);counter-increment:line;position:absolute;left:0;width:30px;text-align:right;color:var(--muted);user-select:none;font-size:11px;}
-.back-btn{display:inline-flex;align-items:center;gap:6px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:2px;margin-bottom:32px;transition:color .2s;}
-.back-btn:hover{color:var(--cyan);}
+.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--cyan);text-decoration:none;letter-spacing:2px;padding:8px 18px;border:1px solid rgba(0,245,255,.35);background:rgba(0,245,255,.05);transition:all .2s;margin-bottom:32px;margin-right:10px;}
+.back-btn:hover{color:#fff;border-color:var(--cyan);background:rgba(0,245,255,.12);}
+.nav-btns{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px;}
+.nav-btns .back-btn{margin-bottom:0;margin-right:0;}
+@media(max-width:768px){.nav-btns{margin-bottom:24px;}.back-btn{font-size:10px;letter-spacing:1px;padding:7px 14px;}}
 .post-header{width:${safeWidth};max-width:100%;margin:0 auto 40px;}
 .post-cover{display:block;width:${safeWidth};max-width:100%;max-height:400px;object-fit:cover;border:1px solid rgba(0,245,255,.15);margin:0 auto 40px;}
 @media (max-width: 768px){
-  .back-btn{margin-bottom:24px;font-size:10px;letter-spacing:1px;}
+  .back-btn{font-size:10px;letter-spacing:1px;padding:7px 14px;}
+  .nav-btns{margin-bottom:24px;}
   .post-header{margin-bottom:28px;}
   .post-body h1{font-size:24px;margin:30px 0 14px;padding-left:12px;}
   .post-body h2{font-size:20px;margin:26px 0 10px;padding-left:10px;}
@@ -3354,7 +3372,10 @@ ${BASE_CSS}
 <body>
 ${NAV_HTML()}
 <div class="page-wrap">
-  <a class="back-btn" href="/blog/">← 返回博客</a>
+  <div class="nav-btns">
+    <a class="back-btn" href="/">← 首页</a>
+    <a class="back-btn" href="/blog/">← 返回博客</a>
+  </div>
   <div class="post-header">
     <span class="post-cat"># ${esc(p.cat||'未分类')}</span>
     <h1 class="post-title">${esc(p.title)}</h1>
@@ -3435,8 +3456,10 @@ function buildWorkDetailHTML(w){
     +'<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">\n'
     +'<title>'+esc(w.title)+' · 游戏开发 · _DEV.LOG</title>\n'
     +'<style>\n'+BASE_CSS+'\n'
-    +'.back-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:'+safeWidth+';max-width:100%;margin:0 auto 32px;padding:12px 18px;border:1px solid rgba(0,245,255,.28);background:rgba(0,245,255,.05);box-shadow:0 0 0 1px rgba(0,245,255,.06) inset;font-family:\'Share Tech Mono\',monospace;font-size:12px;color:var(--cyan);text-decoration:none;letter-spacing:2px;transition:all .2s;}\n'
-    +'.back-btn:hover,.back-btn:focus-visible{color:#fff;border-color:rgba(0,245,255,.55);background:rgba(0,245,255,.1);outline:none;}\n'
+    +'.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:\'Share Tech Mono\',monospace;font-size:11px;color:var(--cyan);text-decoration:none;letter-spacing:2px;padding:8px 18px;border:1px solid rgba(0,245,255,.35);background:rgba(0,245,255,.05);transition:all .2s;}\n'
+    +'.back-btn:hover{color:#fff;border-color:var(--cyan);background:rgba(0,245,255,.12);}\n'
+    +'.nav-btns{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px;}\n'
+    +'@media(max-width:768px){.nav-btns{margin-bottom:24px;}.back-btn{font-size:10px;letter-spacing:1px;padding:7px 14px;}}\n'
     +'.wd-header{width:'+safeWidth+';max-width:100%;margin:0 auto 40px;}\n'
     +'.wd-tag{font-family:\'Share Tech Mono\',monospace;font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;display:block;}\n'
     +'.wd-title{font-size:clamp(28px,5vw,48px);font-weight:700;color:#fff;margin-bottom:16px;}\n'
@@ -3459,7 +3482,8 @@ function buildWorkDetailHTML(w){
     +'.video-embed{position:relative;width:100%;padding-bottom:56.25%;margin:24px 0;background:#000;}\n'
     +'.video-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}\n'
     +'@media (max-width: 768px){\n'
-    +'  .back-btn{width:100%;margin-bottom:24px;padding:11px 14px;font-size:11px;letter-spacing:1px;}\n'
+    +'  .back-btn{font-size:10px;letter-spacing:1px;padding:7px 14px;}\n'
+    +'  .nav-btns{margin-bottom:24px;}\n'
     +'  .wd-header{margin-bottom:28px;}\n'
     +'  .wd-tags{margin-bottom:24px;}\n'
     +'  .wd-cover{max-height:320px;}\n'
@@ -3475,7 +3499,10 @@ function buildWorkDetailHTML(w){
     +'</style></head><body>\n'
     +NAV_HTML()+'\n'
     +'<div class="page-wrap">\n'
-    +'  <a class="back-btn" href="/works/">← 返回项目</a>\n'
+    +'  <div class="nav-btns">\n'
+    +'    <a class="back-btn" href="/">← 首页</a>\n'
+    +'    <a class="back-btn" href="/works/">← 返回项目</a>\n'
+    +'  </div>\n'
     +'  <div class="wd-header">\n'
     +'    <span class="wd-tag">// WORKS</span>\n'
     +'    <h1 class="wd-title">'+esc(w.title||'')+'</h1>\n'
@@ -3636,8 +3663,10 @@ function buildGalleryDetailHTML(g){
     '<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">\n'+
     '<title>'+g.title+' \xb7 \u540c\u4eba\u753b\u5eca \xb7 _DEV.LOG</title>\n'+
     '<style>\n'+BASE_CSS+'\n'+
-    '.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:\'Share Tech Mono\',monospace;font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:2px;margin-bottom:40px;transition:color .2s;}\n'+
-    '.back-btn:hover{color:var(--cyan);}\n'+
+    '.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:\'Share Tech Mono\',monospace;font-size:11px;color:var(--cyan);text-decoration:none;letter-spacing:2px;padding:8px 18px;border:1px solid rgba(0,245,255,.35);background:rgba(0,245,255,.05);transition:all .2s;}\n'+
+    '.back-btn:hover{color:#fff;border-color:var(--cyan);background:rgba(0,245,255,.12);}\n'+
+    '.nav-btns{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:40px;}\n'+
+    '@media(max-width:768px){.nav-btns{margin-bottom:24px;}.back-btn{font-size:10px;letter-spacing:1px;padding:7px 14px;}}\n'+
     '.gd-cat{font-family:\'Share Tech Mono\',monospace;font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;display:block;}\n'+
     '.gd-title{font-size:clamp(28px,5vw,48px);font-weight:700;color:#fff;margin-bottom:24px;}\n'+
     '.gd-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px;}\n'+
@@ -3648,7 +3677,10 @@ function buildGalleryDetailHTML(g){
     '</style></head><body>\n'+
     NAV_HTML()+'\n'+
     '<div class="page-wrap">\n'+
-    '  <a class="back-btn" href="/gallery/">\u2190 \u8fd4\u56de\u753b\u5eca</a>\n'+
+    '  <div class="nav-btns">\n'+
+    '    <a class="back-btn" href="/">\u2190 \u9996\u9875</a>\n'+
+    '    <a class="back-btn" href="/gallery/">\u2190 \u8fd4\u56de\u753b\u5eca</a>\n'+
+    '  </div>\n'+
     '  <span class="gd-cat"># '+((g.tags||[])[0]||'WORK')+'</span>\n'+
     '  <h1 class="gd-title">'+(g.title||'')+'</h1>\n'+
     '  <div class="gd-tags">'+(g.tags||[]).map(t=>'<span class="gd-tag">'+t+'</span>').join('')+'</div>\n'+
@@ -3877,8 +3909,11 @@ ${BASE_CSS}
 .page-title{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;}
 .page-heading{font-size:42px;font-weight:700;color:#fff;margin-bottom:12px;}
 .page-count{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:2px;margin-bottom:48px;}
-.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:2px;margin-bottom:40px;transition:color .2s;}
-.back-btn:hover{color:var(--cyan);}
+.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--cyan);text-decoration:none;letter-spacing:2px;padding:8px 18px;border:1px solid rgba(0,245,255,.35);background:rgba(0,245,255,.05);transition:all .2s;margin-right:10px;}
+.back-btn:hover{color:#fff;border-color:var(--cyan);background:rgba(0,245,255,.12);}
+.nav-btns{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:40px;}
+.nav-btns .back-btn{margin-right:0;}
+@media(max-width:768px){.nav-btns{margin-bottom:24px;}.back-btn{font-size:10px;letter-spacing:1px;padding:7px 14px;}}
 .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;}
 .gallery-card{background:#0a1628;border:1px solid rgba(255,0,110,.1);transition:border-color .3s,transform .3s;display:block;text-decoration:none;}
 .gallery-card:hover{border-color:rgba(255,0,110,.5);transform:translateY(-4px);}
@@ -3891,13 +3926,16 @@ ${BASE_CSS}
 </style></head><body>
 ${NAV_HTML()}
 <div class="page-wrap">
-  <a class="back-btn" href="/gallery/">← 返回画廊</a>
+  <div class="nav-btns">
+    <a class="back-btn" href="/">← 首页</a>
+    <a class="back-btn" href="/gallery/">← 返回画廊</a>
+  </div>
   <div class="page-title">// GALLERY · ${esc(cat.name.toUpperCase())}</div>
   <h1 class="page-heading">${esc(cat.name)}</h1>
   <div class="page-count">${cat.items.length} 件作品</div>
   <div class="gallery-grid">${cards||'<div style="font-family:Share Tech Mono,monospace;color:var(--muted);font-size:13px;letter-spacing:2px;">// 暂无作品</div>'}</div>
 </div>
-${('<scr'+'ipt>\n(function(){\n  document.addEventListener(\'contextmenu\',function(e){e.preventDefault();});\n  document.addEventListener(\'dragstart\',function(e){if(e.target.tagName===\'IMG\')e.preventDefault();});\n  document.addEventListener(\'keydown\',function(e){\n    if((e.ctrlKey||e.metaKey)&&(e.key===\'s\'||e.key===\'S\'||e.key===\'p\'||e.key===\'P\'))e.preventDefault();\n    if(e.key===\'PrintScreen\')e.preventDefault();\n  });\n  var preloaded=new Set();\n  function preload(url){if(!url||preloaded.has(url))return;preloaded.add(url);var img=new Image();img.src=url;}\n  document.querySelectorAll(\'.gallery-card[data-full]\').forEach(function(card){\n    card.addEventListener(\'mouseenter\',function(){preload(card.dataset.full);});\n    card.addEventListener(\'touchstart\',function(){preload(card.dataset.full);},{passive:true});\n  });\n})();\n</'+'script>')}
+${('<scr'+'ipt>\n(function(){\n  document.addEventListener(\'contextmenu\',function(e){e.preventDefault();});\n  document.addEventListener(\'dragstart\',function(e){if(e.target.tagName===\'IMG\')e.preventDefault();});\n  document.addEventListener(\'keydown\',function(e){\n    if((e.ctrlKey||e.metaKey)&&(e.key===\'s\'||e.key===\'S\'||e.key===\'p\'||e.key===\'P\'))e.preventDefault();\n    if(e.key===\'PrintScreen\')e.preventDefault();\n  });\n  // 页面加载完成后，利用浏览器空闲时间依次预加载所有原图\n  var urls=[];\n  document.querySelectorAll(\'.gallery-card[data-full]\').forEach(function(card){\n    if(card.dataset.full) urls.push(card.dataset.full);\n  });\n  if(urls.length===0) return;\n  var idx=0;\n  function loadNext(){\n    if(idx>=urls.length) return;\n    var img=new Image();\n    img.onload=img.onerror=function(){\n      idx++;\n      if(idx<urls.length){\n        if(\'requestIdleCallback\' in window) requestIdleCallback(loadNext,{timeout:2000});\n        else setTimeout(loadNext,200);\n      }\n    };\n    img.src=urls[idx];\n  }\n  if(\'requestIdleCallback\' in window) requestIdleCallback(loadNext,{timeout:1000});\n  else setTimeout(loadNext,500);\n})();\n</'+'script>')}
 </body></html>`;
 }
 
@@ -3965,8 +4003,10 @@ function buildItemDetailHTML(cat,item){
     '<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">\n'+
     '<title>'+esc(item.title)+' \xb7 '+esc(cat.name)+' \xb7 _DEV.LOG</title>\n'+
     '<style>\n'+BASE_CSS+'\n'+
-    '.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:\'Share Tech Mono\',monospace;font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:2px;margin-bottom:40px;transition:color .2s;}\n'+
-    '.back-btn:hover{color:var(--cyan);}\n'+
+    '.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:\'Share Tech Mono\',monospace;font-size:11px;color:var(--cyan);text-decoration:none;letter-spacing:2px;padding:8px 18px;border:1px solid rgba(0,245,255,.35);background:rgba(0,245,255,.05);transition:all .2s;}\n'+
+    '.back-btn:hover{color:#fff;border-color:var(--cyan);background:rgba(0,245,255,.12);}\n'+
+    '.nav-btns{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:40px;}\n'+
+    '@media(max-width:768px){.nav-btns{margin-bottom:24px;}.back-btn{font-size:10px;letter-spacing:1px;padding:7px 14px;}}\n'+
     '.gd-cat{font-family:\'Share Tech Mono\',monospace;font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;display:block;}\n'+
     '.gd-title{font-size:clamp(28px,5vw,48px);font-weight:700;color:#fff;margin-bottom:24px;}\n'+
     '.gd-canvas{max-width:100%;max-height:80vh;display:block;margin:0 auto 40px;border:1px solid rgba(255,0,110,.2);user-select:none;-webkit-user-drag:none;}\n'+
@@ -3975,7 +4015,11 @@ function buildItemDetailHTML(cat,item){
     '</style></head><body>\n'+
     NAV_HTML()+'\n'+
     '<div class="page-wrap">\n'+
-    '  <a class="back-btn" href="/gallery/'+esc(cat.slug)+'/">\u2190 \u8fd4\u56de'+esc(cat.name)+'</a>\n'+
+    '  <div class="nav-btns">\n'+
+    '    <a class="back-btn" href="/">\u2190 \u9996\u9875</a>\n'+
+    '    <a class="back-btn" href="/gallery/">\u2190 \u753b\u5ecc</a>\n'+
+    '    <a class="back-btn" href="/gallery/'+esc(cat.slug)+'/>\u2190 \u8fd4\u56de'+esc(cat.name)+'</a>\n'+
+    '  </div>\n'+
     '  <span class="gd-cat">// '+esc(cat.name.toUpperCase())+'</span>\n'+
     '  <h1 class="gd-title">'+esc(item.title||'')+'</h1>\n'+
     '  '+canvasBlock+'\n'+
