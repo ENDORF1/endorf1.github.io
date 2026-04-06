@@ -21,6 +21,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:cent
 .nav-links a:hover{color:var(--cyan);}
 .nav-links a:hover::after{width:100%;}
 .page-wrap{position:relative;z-index:1;padding:88px 10vw 80px;}
+@media (max-width: 768px){
+nav{padding:14px 16px;align-items:flex-start;gap:12px;}
+.nav-logo{font-size:15px;letter-spacing:3px;}
+.nav-links{gap:12px;flex-wrap:wrap;justify-content:flex-end;}
+.nav-links a{font-size:11px;letter-spacing:1px;}
+.page-wrap{padding:84px 5.5vw 56px;}
+}
 
 .page-title{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;}
 .page-heading{font-size:42px;font-weight:700;color:#fff;margin-bottom:48px;}
@@ -51,11 +58,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:cent
   <h1 class="page-heading">技术博客</h1>
   <div class="blog-grid">
     <a class="blog-card" href="/blog/杀戮尖塔-slay-the-spire-核心玩法循环拆解.html">
-      <img class="bc-cover" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775296575305-fr7i6.png" alt="">
+      <img class="bc-cover" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775296575305-fr7i6.png" alt="" loading="lazy" decoding="async">
       <div class="bc-body">
         <span class="bc-cat"># 玩法拆解</span>
         <div class="bc-title">杀戮尖塔（Slay the Spire）核心玩法循环拆解</div>
-        <div class="bc-meta">2026-04-05 <span>Roguelike，独立游戏，DeckBuilding</span></div>
+        <div class="bc-meta">2026-04-06 <span>Roguelike，独立游戏，DeckBuilding</span></div>
       </div>
     </a></div>
 </div>
