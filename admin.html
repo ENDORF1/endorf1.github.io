@@ -2501,8 +2501,9 @@ async function handleCardImg(input){
   const mode=document.getElementById('card-modal').dataset.mode;
   showCardUploadStatus('loading','⟳ 上传中（缩略图+原图）...');
   try{
-    // Always upload both compressed thumb and full-res original
-    const [thumbUrl, fullUrl] = await Promise.all([uploadImageToGH(file), uploadImageToGHRaw(file)]);
+    // 顺序上传避免同一 File 对象被两个 FileReader 并行读取导致其中一个失败
+    const thumbUrl = await uploadImageToGH(file);
+    const fullUrl = await uploadImageToGHRaw(file);
     if(mode==='catitem'){
       catItemImgData=thumbUrl;
       catItemImgFullData=fullUrl;
