@@ -168,7 +168,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 #editor-content img{max-width:100%;border:1px solid var(--border);margin:8px 0;}
 
 /* image centering in editors */
-#editor-content img{max-width:100%;border:1px solid var(--border);margin:12px auto;display:block;}
+#editor-content img{max-width:100%;border:1px solid var(--border);margin:12px auto;display:block;cursor:pointer;}
+#editor-content img:hover{border-color:var(--cyan);}
 #editor-content figure.post-figure,#works-editor-content figure.post-figure{margin:20px 0;text-align:center;}
 #editor-content figure.post-figure img,#works-editor-content figure.post-figure img{margin:0 auto;border:1px solid var(--border);}
 #editor-content figure.post-figure figcaption,#works-editor-content figure.post-figure figcaption{
@@ -852,6 +853,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 </div>
 
 <input type="file" id="img-file-input" accept="image/*" onchange="handleInlineImage(this)">
+<input type="file" id="img-replace-input" accept="image/*" style="display:none">
+<div id="img-tooltip" style="position:fixed;z-index:99999;display:none;flex-direction:column;gap:4px;background:rgba(4,10,20,.97);border:1px solid rgba(0,245,255,.25);padding:6px;">
+  <button onclick="imgTooltipReplace()" style="font-family:var(--font-mono);font-size:10px;letter-spacing:2px;padding:5px 12px;border:1px solid rgba(0,245,255,.3);background:transparent;color:var(--cyan);cursor:pointer;text-align:left;">📷 替换图片</button>
+  <button onclick="imgTooltipDelete()" style="font-family:var(--font-mono);font-size:10px;letter-spacing:2px;padding:5px 12px;border:1px solid rgba(255,0,110,.3);background:transparent;color:var(--magenta);cursor:pointer;text-align:left;">✕ 删除图片</button>
+</div>
 
 <script>
 /* ══════════════════════════════════════
@@ -927,8 +933,72 @@ function init(){
   if(posts.length) selectPost(0);
   else newPost();
   setStatus('idle','// 就绪');
-  // set today as default date
   document.getElementById('post-date').value = new Date().toISOString().slice(0,10);
+  // 图片点击浮层
+  initImgTooltip();
+}
+
+/* ── 博客编辑器图片替换浮层 ── */
+let _tooltipImg = null;
+function initImgTooltip(){
+  const ed = document.getElementById('editor-content');
+  const tooltip = document.getElementById('img-tooltip');
+  const replaceInput = document.getElementById('img-replace-input');
+
+  // 点击图片显示浮层
+  ed.addEventListener('click', function(e){
+    const img = e.target.closest('img');
+    if(!img){ hideImgTooltip(); return; }
+    e.preventDefault(); e.stopPropagation();
+    _tooltipImg = img;
+    const r = img.getBoundingClientRect();
+    tooltip.style.display = 'flex';
+    // 定位在图片右上角
+    let left = r.right + 8;
+    let top = r.top;
+    // 防止超出视口右边
+    if(left + 140 > window.innerWidth) left = r.left - 148;
+    tooltip.style.left = left + 'px';
+    tooltip.style.top = top + 'px';
+  });
+
+  // 点击其他地方关闭浮层
+  document.addEventListener('click', function(e){
+    if(!e.target.closest('#img-tooltip') && !e.target.closest('#editor-content img')){
+      hideImgTooltip();
+    }
+  });
+
+  // 替换图片文件选好后上传
+  replaceInput.addEventListener('change', async function(){
+    const file = replaceInput.files[0];
+    if(!file || !_tooltipImg) return;
+    if(!GH.token) GH.token = await decryptToken() || '';
+    if(!GH.user||!GH.repo||!GH.token){ showToast('err','请先配置 GitHub 才能上传图片'); replaceInput.value=''; return; }
+    showUploadStatus('loading','⟳ 替换图片中...');
+    try{
+      const url = await uploadImageToGH(file);
+      _tooltipImg.src = url;
+      showUploadStatus('ok','✓ 图片已替换');
+      hideImgTooltip();
+    } catch(e){
+      showUploadStatus('err','✕ 上传失败：'+e.message);
+    }
+    replaceInput.value = '';
+  });
+}
+function hideImgTooltip(){
+  document.getElementById('img-tooltip').style.display = 'none';
+  _tooltipImg = null;
+}
+function imgTooltipReplace(){
+  document.getElementById('img-replace-input').click();
+}
+function imgTooltipDelete(){
+  if(!_tooltipImg) return;
+  const fig = _tooltipImg.closest('figure.post-figure');
+  if(fig) fig.remove(); else _tooltipImg.remove();
+  hideImgTooltip();
 }
 
 /* ══════════════════════════════════════
@@ -2942,14 +3012,17 @@ async function patchHomeHTML(){
     }
   }
 
-  // 替换 dynamic-works-grid 内容（worksHTML 为 null 时跳过，保留已有内容）
+  // 替换 dynamic-works-grid 内容
   const worksId = html.indexOf('id="dynamic-works-grid"');
   if(worksId !== -1 && worksHTML !== null){
     const innerStart = html.indexOf('>', worksId) + 1;
     const secEnd = html.indexOf('</section>', innerStart);
     if(secEnd !== -1){
-      const innerEnd = html.lastIndexOf('</div>', secEnd);
-      if(innerEnd !== -1) html = html.slice(0, innerStart) + '\n    ' + worksHTML + '\n  ' + html.slice(innerEnd);
+      const gridClose = html.lastIndexOf('</div>', secEnd);
+      if(gridClose !== -1){
+        // gridClose 指向 grid 的 </div>，从 innerStart 到 gridClose 之间替换内容，保留 </div>
+        html = html.slice(0, innerStart) + '\n    ' + worksHTML + '\n  ' + html.slice(gridClose);
+      }
     }
   }
 
