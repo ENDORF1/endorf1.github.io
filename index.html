@@ -438,7 +438,7 @@ body.modal-open body::before{z-index:1 !important;}
 </div>
 
 <!-- ── COVER PICKER OVERLAY ── -->
-<div id="cover-picker-overlay">
+<div id="cover-picker-overlay" class="">
   <div style="background:var(--dim);border:1px solid rgba(0,245,255,.22);padding:36px 40px;width:460px;max-width:92vw;position:relative;box-shadow:0 0 60px rgba(0,245,255,.08);">
     <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--magenta));"></div>
     <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:20px;">// 上传封面图</div>
@@ -507,24 +507,24 @@ body.modal-open body::before{z-index:1 !important;}
 
 <!-- ── NAV ── -->
 <nav>
-  <a class="nav-logo" contenteditable="false"  href="/">_<span contenteditable="false" >DEV</span>.LOG</a>
+  <a class="nav-logo" contenteditable="false" spellcheck="false" href="/">_<span contenteditable="false" spellcheck="false">DEV</span>.LOG</a>
   <div class="nav-links">
-    <a contenteditable="false"  href="/blog/">博客</a>
-    <a contenteditable="false"  href="/works/">项目</a>
-    <a contenteditable="false"  href="/gallery/">创作</a>
-    <a contenteditable="false"  href="/about/">关于我</a>
-    <a style="color:rgba(58,90,122,.5);font-size:10px;" contenteditable="false"  href="#sec-projects">↓ 本页</a>
+    <a contenteditable="false" spellcheck="false" href="/blog/">博客</a>
+    <a contenteditable="false" spellcheck="false" href="/works/">项目</a>
+    <a contenteditable="false" spellcheck="false" href="/gallery/">创作</a>
+    <a contenteditable="false" spellcheck="false" href="/about/">关于我</a>
+    <a style="color:rgba(58,90,122,.5);font-size:10px;" contenteditable="false" spellcheck="false" href="#sec-projects">↓ 本页</a>
   </div>
 </nav>
 
 <!-- ── HERO ── -->
 <section id="hero">
-  <div class="hero-tag" contenteditable="false" >// INDEPENDENT DEVELOPER · GAME MAKER · CREATOR</div>
+  <div class="hero-tag" contenteditable="false" spellcheck="false">// INDEPENDENT DEVELOPER · GAME MAKER · CREATOR</div>
   <h1 class="hero-name">
     <span class="glitch-wrap" data-text="HELLO,">HELLO,</span>
-    <span class="line2" contenteditable="false" >WORLD.</span>
+    <span class="line2" contenteditable="false" spellcheck="false">WORLD.</span>
   </h1>
-  <p id="hero-sub" class="hero-sub" contenteditable="false" >独立开发者 · 卡牌游戏制作中<br><font color="#00f5ff">手绘画师</font>&nbsp; · 同人创作者<br>代码 / 绘画 / 游戏</p>
+  <p id="hero-sub" class="hero-sub" contenteditable="false" spellcheck="false">独立开发者 · 卡牌游戏制作中<br><font color="#00f5ff">手绘画师</font>&nbsp; · 同人创作者<br>代码 / 绘画 / 游戏</p>
   <div class="hero-btns">
     <a class="btn-primary" href="#sec-projects">查看项目</a>
     <a class="btn-sec" href="#sec-blog">最新文章</a>
@@ -543,7 +543,7 @@ body.modal-open body::before{z-index:1 !important;}
   </div>
   <div class="sec-header">
     <span class="sec-num">01</span>
-    <h2 class="sec-title" contenteditable="false" >游戏开发</h2>
+    <h2 class="sec-title" contenteditable="false" spellcheck="false">游戏开发</h2>
     <div class="sec-line"></div>
   </div>
   <div class="projects-grid" id="dynamic-works-grid">
@@ -552,10 +552,10 @@ body.modal-open body::before{z-index:1 !important;}
         <div class="card-drag-handle" data-drag-handle="1">⠿⠿</div>
         <button class="card-delete" onclick="this.closest('.proj-card').remove()">✕</button>
       </div>
-      <div class="proj-tag" contenteditable="false" >// IN PROGRESS</div>
-      <div class="proj-name" contenteditable="false" >希望 熄忘</div>
-      <div class="proj-desc" contenteditable="false" ></div>
-      <div class="proj-meta"><span class="tag" contenteditable="false" >IN PROGRESS</span><span class="tag" contenteditable="false" >ROGUELIKE</span><span class="tag" contenteditable="false" >CARDGAME</span><span class="tag" contenteditable="false" >UNITY</span></div>
+      <div class="proj-tag" contenteditable="false" spellcheck="false">// IN PROGRESS</div>
+      <div class="proj-name" contenteditable="false" spellcheck="false">希望 熄忘</div>
+      <div class="proj-desc" contenteditable="false" spellcheck="false"></div>
+      <div class="proj-meta"><span class="tag" contenteditable="false" spellcheck="false">IN PROGRESS</span><span class="tag" contenteditable="false" spellcheck="false">ROGUELIKE</span><span class="tag" contenteditable="false" spellcheck="false">CARDGAME</span><span class="tag" contenteditable="false" spellcheck="false">UNITY</span></div>
       <div class="proj-link-row"><input class="proj-link-input" type="text" placeholder="项目链接 https://..." value="" oninput="saveWorksToStorage();"></div>
     </a><button class="add-card-btn" onclick="addProject(this)">＋ 添加项目</button>
   </div>
@@ -568,10 +568,10 @@ body.modal-open body::before{z-index:1 !important;}
   </div>
   <div class="sec-header">
     <span class="sec-num">02</span>
-    <h2 class="sec-title" contenteditable="false" >技术博客</h2>
+    <h2 class="sec-title" contenteditable="false" spellcheck="false">技术博客</h2>
     <div class="sec-line"></div>
   </div>
-  <div class="posts-list" id="dynamic-posts-list"><a class="post-item" href="/blog/杀戮尖塔-slay-the-spire-核心玩法循环拆解.html"><span class="post-drag-handle" style="display:none">⠿</span><span class="post-date">2026-04-06</span><span class="post-cat">玩法拆解</span><span class="post-title">杀戮尖塔（Slay the Spire）核心玩法循环拆解</span><span class="post-arrow">→</span></a></div><!--/dynamic-posts-list-->
+  <div class="posts-list" id="dynamic-posts-list"><a class="post-item" data-draggable="1" href="/blog/杀戮尖塔-slay-the-spire-核心玩法循环拆解.html"><span class="post-drag-handle" style="display:none" data-drag-handle="1">⠿</span><span class="post-date" contenteditable="false" spellcheck="false">2026-04-05</span><span class="post-cat" contenteditable="false" spellcheck="false">玩法拆解</span><span class="post-title" contenteditable="false" spellcheck="false">杀戮尖塔（Slay the Spire）核心玩法循环拆解</span><span class="post-arrow">→</span></a></div><!--/dynamic-posts-list-->
 </section>
 
 <section class="page-section" id="sec-creations" data-draggable="1">
@@ -581,14 +581,14 @@ body.modal-open body::before{z-index:1 !important;}
   </div>
   <div class="sec-header">
     <span class="sec-num">03</span>
-    <h2 class="sec-title" contenteditable="false" >绘画创作</h2>
+    <h2 class="sec-title" contenteditable="false" spellcheck="false">绘画创作</h2>
     <div class="sec-line"></div>
   </div>
   <div class="creations-grid">
-    <a class="creation-card" data-cover-mode="upload" data-cat-slug="illust" data-cover-img="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775422506728-llwi3.png" data-cover-pos="47% 18%" data-draggable="1" href="/gallery/原创作品/"><div class="creation-bg c1" style="opacity: 0;"></div><img class="creation-cover" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775422506728-llwi3.png" style="display: block; object-position: 47% 18%;"><div class="creation-controls"><div class="creation-drag-handle" data-drag-handle="1">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><button class="cc-upload-btn active" onclick="openCoverPicker(this.closest('.creation-card'),event)">📷 上传封面图</button></div><div class="creation-type" contenteditable="false" >// original</div><div class="creation-name" contenteditable="false" >原创作品</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/原创作品/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
-    <a class="creation-card" data-cover-mode="upload" data-cat-slug="fanwork" data-cover-img="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775422537162-uujap.png" data-cover-pos="49% 18%" data-draggable="1" href="/gallery/fanwork/"><div class="creation-bg c3" style="opacity: 0;"></div><img class="creation-cover" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775422537162-uujap.png" style="display: block; object-position: 49% 18%;"><div class="creation-controls"><div class="creation-drag-handle" data-drag-handle="1">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><button class="cc-upload-btn active" onclick="openCoverPicker(this.closest('.creation-card'),event)">📷 上传封面图</button></div><div class="creation-type" contenteditable="false" >// FANWORK</div><div class="creation-name" contenteditable="false" >同人作品</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/fanwork/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a><a class="creation-card" data-cover-mode="upload" data-cat-slug="merch" data-cover-img="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775422562752-c1ly8.jpg" data-cover-pos="50% 37%" data-draggable="1" href="/gallery/merch/"><div class="creation-bg c2" style="opacity: 0;"></div><img class="creation-cover" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775422562752-c1ly8.jpg" style="display: block; object-position: 50% 37%;"><div class="creation-controls"><div class="creation-drag-handle" data-drag-handle="1">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><button class="cc-upload-btn active" onclick="openCoverPicker(this.closest('.creation-card'),event)">📷 上传封面图</button></div><div class="creation-type" contenteditable="false" >// MERCH</div><div class="creation-name" contenteditable="false" >漫展周边</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/merch/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
+    <a class="creation-card" data-cover-mode="upload" data-cat-slug="illust" data-cover-img="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775422506728-llwi3.png" data-cover-pos="47% 18%" data-draggable="1" href="/gallery/原创作品/"><div class="creation-bg c1" style="opacity: 0;"></div><img class="creation-cover" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775422506728-llwi3.png" style="display: block; object-position: 47% 18%;"><div class="creation-controls"><div class="creation-drag-handle" data-drag-handle="1">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><button class="cc-upload-btn active" onclick="openCoverPicker(this.closest('.creation-card'),event)">📷 上传封面图</button></div><div class="creation-type" contenteditable="false" spellcheck="false">// original</div><div class="creation-name" contenteditable="false" spellcheck="false">原创作品</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/原创作品/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
+    <a class="creation-card" data-cover-mode="upload" data-cat-slug="fanwork" data-cover-img="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775422537162-uujap.png" data-cover-pos="49% 18%" data-draggable="1" href="/gallery/fanwork/"><div class="creation-bg c3" style="opacity: 0;"></div><img class="creation-cover" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775422537162-uujap.png" style="display: block; object-position: 49% 18%;"><div class="creation-controls"><div class="creation-drag-handle" data-drag-handle="1">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><button class="cc-upload-btn active" onclick="openCoverPicker(this.closest('.creation-card'),event)">📷 上传封面图</button></div><div class="creation-type" contenteditable="false" spellcheck="false">// FANWORK</div><div class="creation-name" contenteditable="false" spellcheck="false">同人作品</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/fanwork/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a><a class="creation-card" data-cover-mode="upload" data-cat-slug="merch" data-cover-img="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775422562752-c1ly8.jpg" data-cover-pos="50% 37%" data-draggable="1" href="/gallery/merch/"><div class="creation-bg c2" style="opacity: 0;"></div><img class="creation-cover" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775422562752-c1ly8.jpg" style="display: block; object-position: 50% 37%;"><div class="creation-controls"><div class="creation-drag-handle" data-drag-handle="1">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><button class="cc-upload-btn active" onclick="openCoverPicker(this.closest('.creation-card'),event)">📷 上传封面图</button></div><div class="creation-type" contenteditable="false" spellcheck="false">// MERCH</div><div class="creation-name" contenteditable="false" spellcheck="false">漫展周边</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="/gallery/merch/" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
     
-    <a class="creation-card" data-cover-mode="gradient" data-cat-slug="other" data-cover-img="" data-cover-pos="50% 50%" data-draggable="1" href="https://www.pixiv.net/users/107152559"><div class="creation-bg c4"></div><img class="creation-cover" src="" style="display:none;object-position:50% 50%"><div class="creation-controls"><div class="creation-drag-handle" data-drag-handle="1">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><button class="cc-upload-btn" onclick="openCoverPicker(this.closest('.creation-card'),event)">📷 上传封面图</button></div><div class="creation-type" contenteditable="false" >// OTHER</div><div class="creation-name" contenteditable="false" >更多作品</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="https://www.pixiv.net/users/107152559" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
+    <a class="creation-card" data-cover-mode="gradient" data-cat-slug="other" data-cover-img="" data-cover-pos="50% 50%" data-draggable="1" href="https://www.pixiv.net/users/107152559"><div class="creation-bg c4"></div><img class="creation-cover" src="" style="display:none;object-position:50% 50%"><div class="creation-controls"><div class="creation-drag-handle" data-drag-handle="1">⠿⠿</div><button class="creation-delete" onclick="this.closest('.creation-card').remove()">✕</button></div><div class="creation-card-edit-overlay"><button class="cc-mode-btn active" onclick="setCoverMode(this.closest('.creation-card'),'gradient',event)">色块</button><button class="cc-mode-btn" onclick="setCoverMode(this.closest('.creation-card'),'latest',event)">最新作品图</button><button class="cc-upload-btn" onclick="openCoverPicker(this.closest('.creation-card'),event)">📷 上传封面图</button></div><div class="creation-type" contenteditable="false" spellcheck="false">// OTHER</div><div class="creation-name" contenteditable="false" spellcheck="false">更多作品</div><input class="creation-link-input" type="url" placeholder="🔗 跳转链接" value="https://www.pixiv.net/users/107152559" oninput="this.closest('.creation-card').href=this.value||'/gallery/'"></a>
     <button class="add-creation-btn" onclick="addCreation(this)">＋</button>
   </div>
 </section>
@@ -596,11 +596,11 @@ body.modal-open body::before{z-index:1 !important;}
 </div><!-- /sections-container -->
 
 <footer>
-  <div class="footer-text" contenteditable="false" >© 2025 · BUILT WITH ♥ &amp; CODE</div>
+  <div class="footer-text" contenteditable="false" spellcheck="false">© 2025 · BUILT WITH ♥ &amp; CODE</div>
   <div class="footer-links">
-    <div class="social-edit-wrap"><a class="social-label" id="sl-github" contenteditable="false"  href="https://github.com/ENDORF1">GITHUB</a><input class="social-input" placeholder="GitHub URL" oninput="document.getElementById('sl-github').href=this.value" value="https://github.com/ENDORF1"></div>
-    <div class="social-edit-wrap"><a class="social-label" id="sl-bili" contenteditable="false" >BILIBILI</a><input class="social-input" placeholder="Bilibili URL" oninput="document.getElementById('sl-bili').href=this.value" value=""></div>
-    <div class="social-edit-wrap"><a class="social-label" id="sl-twitter" contenteditable="false"  href="https://www.pixiv.net/users/107152559">Pixiv</a><input class="social-input" placeholder="Twitter URL" oninput="document.getElementById('sl-twitter').href=this.value" value="https://www.pixiv.net/users/107152559"></div>
+    <div class="social-edit-wrap"><a class="social-label" id="sl-github" contenteditable="false" spellcheck="false" href="https://github.com/ENDORF1">GITHUB</a><input class="social-input" placeholder="GitHub URL" oninput="document.getElementById('sl-github').href=this.value" value="https://github.com/ENDORF1"></div>
+    <div class="social-edit-wrap"><a class="social-label" id="sl-bili" contenteditable="false" spellcheck="false">BILIBILI</a><input class="social-input" placeholder="Bilibili URL" oninput="document.getElementById('sl-bili').href=this.value" value=""></div>
+    <div class="social-edit-wrap"><a class="social-label" id="sl-twitter" contenteditable="false" spellcheck="false" href="https://www.pixiv.net/users/107152559">Pixiv</a><input class="social-input" placeholder="Twitter URL" oninput="document.getElementById('sl-twitter').href=this.value" value="https://www.pixiv.net/users/107152559"></div>
   </div>
 </footer>
 
