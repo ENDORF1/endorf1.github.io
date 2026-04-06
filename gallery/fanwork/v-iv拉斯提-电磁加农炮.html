@@ -56,11 +56,10 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
 </div>
 <script>
 (function(){
-  var S="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775314678134-67kfd.gif",W="Xcale";
+  var THUMB="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775314678134-67kfd.gif",FULL="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775314678134-67kfd.gif",W="Xcale";
   var cv=document.getElementById("gd-c");if(!cv)return;
-  var cx=cv.getContext("2d"),im=new Image();
-  im.crossOrigin="anonymous";
-  function clean(){cx.clearRect(0,0,cv.width,cv.height);cx.drawImage(im,0,0,cv.width,cv.height);}
+  var cx=cv.getContext("2d"),currentImg=null;
+  function clean(){if(currentImg){cx.clearRect(0,0,cv.width,cv.height);cx.drawImage(currentImg,0,0,cv.width,cv.height);}}
   function drawWM(ctx,w,h){
     ctx.save();
     var fs=Math.max(18,Math.min(w,h)*0.045);
@@ -72,24 +71,33 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
       for(var x=-w*1.5;x<w+h*1.5;x+=sx){ctx.strokeText(W,x,y);ctx.fillText(W,x,y);}
     ctx.restore();
   }
-  im.onload=function(){
-    var mw=Math.min(im.naturalWidth,window.innerWidth-80),sc=mw/im.naturalWidth;
-    cv.width=im.naturalWidth*sc;cv.height=im.naturalHeight*sc;
+  function renderImg(img){
+    currentImg=img;
+    var mw=Math.min(img.naturalWidth,window.innerWidth-80),sc=mw/img.naturalWidth;
+    cv.width=img.naturalWidth*sc;cv.height=img.naturalHeight*sc;
     clean();
     var wc=document.createElement("canvas");wc.width=cv.width;wc.height=cv.height;
-    var wx=wc.getContext("2d");wx.drawImage(im,0,0,wc.width,wc.height);drawWM(wx,wc.width,wc.height);
+    var wx=wc.getContext("2d");wx.drawImage(img,0,0,wc.width,wc.height);drawWM(wx,wc.width,wc.height);
     cv.toDataURL=function(){return wc.toDataURL.apply(wc,arguments);};
     cv.toBlob=function(cb,t,q){return wc.toBlob(cb,t,q);};
-    document.addEventListener("contextmenu",function(e){e.preventDefault();});
-    cv.addEventListener("dragstart",function(e){e.preventDefault();});
-    cv.addEventListener("touchstart",function(e){e.preventDefault();},{passive:false});
-    document.addEventListener("keydown",function(e){
-      if((e.ctrlKey||e.metaKey)&&(e.key==="s"||e.key==="S"||e.key==="p"||e.key==="P"))e.preventDefault();
-      if(e.key==="PrintScreen")e.preventDefault();
-    });
-  };
-  im.onerror=function(){var fb=document.createElement("img");fb.src=S;fb.className="gd-img";cv.replaceWith(fb);};
-  im.src=S;
+  }
+  // Load thumbnail first for instant display
+  var thumbImg=new Image();thumbImg.crossOrigin="anonymous";
+  thumbImg.onload=function(){renderImg(thumbImg);};
+  thumbImg.src=THUMB;
+  // Then load full resolution in background
+  if(FULL!==THUMB){
+    var fullImg=new Image();fullImg.crossOrigin="anonymous";
+    fullImg.onload=function(){renderImg(fullImg);};
+    fullImg.src=FULL;
+  }
+  document.addEventListener("contextmenu",function(e){e.preventDefault();});
+  cv.addEventListener("dragstart",function(e){e.preventDefault();});
+  cv.addEventListener("touchstart",function(e){e.preventDefault();},{passive:false});
+  document.addEventListener("keydown",function(e){
+    if((e.ctrlKey||e.metaKey)&&(e.key==="s"||e.key==="S"||e.key==="p"||e.key==="P"))e.preventDefault();
+    if(e.key==="PrintScreen")e.preventDefault();
+  });
 })();
 </script>
 </body></html>
