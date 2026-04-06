@@ -72,14 +72,14 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
   .post-body h2{font-size:20px;margin:26px 0 10px;padding-left:10px;}
   .post-body h3{font-size:17px;margin:22px 0 8px;padding-left:8px;}
   .post-body ul,.post-body ol{margin-left:20px;}
-  .post-body pre{margin-left:-5.5vw;margin-right:-5.5vw;border-left:none;border-right:none;}
-  .post-body .table-wrap{margin-left:-5.5vw;margin-right:-5.5vw;}
+  .post-body pre{width:100vw;position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;border-left:none;border-right:none;overflow-x:auto;-webkit-overflow-scrolling:touch;box-sizing:border-box;}
+  .post-body pre code{min-width:max-content;padding:12px 5.5vw;font-size:12px;}
+  .post-body pre code .line{padding-left:30px;}
+  .post-body pre code .line::before{width:22px;font-size:10px;}
+  .post-body .table-wrap{width:100vw;position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;overflow-x:auto;-webkit-overflow-scrolling:touch;box-sizing:border-box;padding:0 5.5vw;}
   .post-body img,.post-body figure.post-figure{max-width:100%;}
   .post-body table{font-size:13px;min-width:480px;}
   .post-body table td,.post-body table th{padding:8px 10px;}
-  .post-body pre code{padding:12px 14px;font-size:12px;}
-  .post-body pre code .line{padding-left:30px;}
-  .post-body pre code .line::before{width:22px;font-size:10px;}
   .post-cover{max-height:280px;}
 }
 </style>
@@ -105,7 +105,7 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
       <span>Roguelike，独立游戏，DeckBuilding</span>
     </div>
   </div>
-  <img class="post-cover" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775296575305-fr7i6.png" alt="封面" decoding="async" fetchpriority="high">
+  <img class="post-cover" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775517204243-rbjlr.jpg" alt="封面" decoding="async" fetchpriority="high">
   <div class="post-body">写在最前：这大概是我最最喜爱的卡组构建-Roguelike游戏，也是我的启蒙之作。在我后来玩过的虚空穹牢，怪物火车等等相似品类游戏中，也难有出其右者。我在电脑端上有着差不多快400小时，手机端上差不多100小时的游戏经历，我想这足以说明我的经验和证明我对它的喜爱。<div style="line-height: 0.9; text-align: left;"><figure class="post-figure" style="margin-left: 0px; margin-right: auto; text-align: left;"><img src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775255997433-c5sr3.png" alt="图片"><figcaption style="text-align: center;">我的steam游戏时间截图&nbsp;</figcaption><figcaption style="text-align: left;">
 
 <h1 style="text-align: center;">一、核心循环总览：三层嵌套结构<span lang="EN-US"><o:p></o:p></span></h1>
