@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>绿皮 · 原创作品 · _DEV.LOG</title>
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Noto+Sans+SC:wght@300;400;700&family=Fira+Code:wght@400;500&display=swap');
+:root{--bg:#030810;--dim:#0a1628;--text:#c8e0f0;--muted:#3a5a7a;--cyan:#00f5ff;--magenta:#ff006e;--yellow:#ffe600;--glow-c:0 0 8px #00f5ff88,0 0 24px #00f5ff44;--glow-m:0 0 8px #ff006e88,0 0 24px #ff006e44;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans SC',sans-serif;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,245,255,.015) 2px,rgba(0,245,255,.015) 4px);pointer-events:none;z-index:100;}
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,245,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,255,.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;animation:gridShift 20s linear infinite;}
+@keyframes gridShift{to{transform:translateY(60px);}}
+nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px 48px;background:linear-gradient(180deg,rgba(3,8,16,.95),transparent);border-bottom:1px solid rgba(0,245,255,.1);}
+.nav-logo{font-family:'Share Tech Mono',monospace;font-size:18px;color:var(--cyan);letter-spacing:4px;text-shadow:var(--glow-c);text-decoration:none;}
+.nav-logo span{color:var(--magenta);}
+.nav-links{display:flex;gap:28px;}
+.nav-links a{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted);text-decoration:none;letter-spacing:2px;text-transform:uppercase;transition:color .2s;position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--cyan);transition:width .3s;}
+.nav-links a:hover{color:var(--cyan);}
+.nav-links a:hover::after{width:100%;}
+.page-wrap{position:relative;z-index:1;padding:88px 10vw 80px;}
+@media (max-width: 768px){
+nav{padding:14px 16px;align-items:flex-start;gap:12px;}
+.nav-logo{font-size:15px;letter-spacing:3px;}
+.nav-links{gap:12px;flex-wrap:wrap;justify-content:flex-end;}
+.nav-links a{font-size:11px;letter-spacing:1px;}
+.page-wrap{padding:84px 5.5vw 56px;}
+}
+
+.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:2px;margin-bottom:40px;transition:color .2s;}
+.back-btn:hover{color:var(--cyan);}
+.gd-cat{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;display:block;}
+.gd-title{font-size:clamp(28px,5vw,48px);font-weight:700;color:#fff;margin-bottom:24px;}
+.gd-canvas{max-width:100%;max-height:80vh;display:block;margin:0 auto 40px;border:1px solid rgba(255,0,110,.2);user-select:none;-webkit-user-drag:none;}
+.gd-body{max-width:720px;}
+.gd-body p{margin:0 0 16px;line-height:1.9;color:var(--text);}
+</style></head><body>
+<nav>
+  <div class="nav-logo">_<span>DEV</span>.LOG</div>
+  <div class="nav-links">
+    <a href="/">首页</a>
+    <a href="/blog/">博客</a>
+    <a href="/works/">项目</a>
+    <a href="/gallery/">创作</a>
+    <a href="/about/">关于</a>
+  </div>
+</nav>
+<div class="page-wrap">
+  <a class="back-btn" href="/gallery/illust/">← 返回原创作品</a>
+  <span class="gd-cat">// 原创作品</span>
+  <h1 class="gd-title">绿皮</h1>
+  <canvas id="gd-c" class="gd-canvas"></canvas>
+  <div class="gd-body"><p>受一位单主之托，画了一幅异头的角色。怀抱着婴儿这件事本身就带点故事感。构图改了几版，最后选了雨夜之下的氛围，光线也处理得比较柔和。成图发过去之后，他说“就是这个感觉”，那一刻还挺开心的。</p></div>
+</div>
+<script>
+(function(){
+  var THUMB="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515702197-vzzbc.jpg",FULL="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515705434-zcvs6-full.png",W="Xcale";
+  var cv=document.getElementById("gd-c");if(!cv)return;
+  var cx=cv.getContext("2d"),currentImg=null;
+  function clean(){if(currentImg){cx.clearRect(0,0,cv.width,cv.height);cx.drawImage(currentImg,0,0,cv.width,cv.height);}}
+  function drawWM(ctx,w,h){
+    ctx.save();
+    var fs=Math.max(18,Math.min(w,h)*0.045);
+    ctx.font="bold "+fs+"px Share Tech Mono,monospace";
+    ctx.fillStyle="rgba(255,0,110,0.75)";ctx.strokeStyle="rgba(0,0,0,0.4)";ctx.lineWidth=1;
+    ctx.rotate(-Math.PI/6);
+    var sx=w*0.26,sy=Math.max(fs*2.2,h*0.12);
+    for(var y=-h*1.5;y<w+h*1.5;y+=sy)
+      for(var x=-w*1.5;x<w+h*1.5;x+=sx){ctx.strokeText(W,x,y);ctx.fillText(W,x,y);}
+    ctx.restore();
+  }
+  function renderImg(img){
+    currentImg=img;
+    var mw=Math.min(img.naturalWidth,window.innerWidth-80),sc=mw/img.naturalWidth;
+    cv.width=img.naturalWidth*sc;cv.height=img.naturalHeight*sc;
+    clean();
+    var wc=document.createElement("canvas");wc.width=cv.width;wc.height=cv.height;
+    var wx=wc.getContext("2d");wx.drawImage(img,0,0,wc.width,wc.height);drawWM(wx,wc.width,wc.height);
+    cv.toDataURL=function(){return wc.toDataURL.apply(wc,arguments);};
+    cv.toBlob=function(cb,t,q){return wc.toBlob(cb,t,q);};
+  }
+  // Load thumbnail first for instant display
+  var thumbImg=new Image();thumbImg.crossOrigin="anonymous";
+  thumbImg.onload=function(){renderImg(thumbImg);};
+  thumbImg.src=THUMB;
+  // Then load full resolution in background
+  if(FULL!==THUMB){
+    var fullImg=new Image();fullImg.crossOrigin="anonymous";
+    fullImg.onload=function(){renderImg(fullImg);};
+    fullImg.src=FULL;
+  }
+  document.addEventListener("contextmenu",function(e){e.preventDefault();});
+  cv.addEventListener("dragstart",function(e){e.preventDefault();});
+  cv.addEventListener("touchstart",function(e){e.preventDefault();},{passive:false});
+  document.addEventListener("keydown",function(e){
+    if((e.ctrlKey||e.metaKey)&&(e.key==="s"||e.key==="S"||e.key==="p"||e.key==="P"))e.preventDefault();
+    if(e.key==="PrintScreen")e.preventDefault();
+  });
+})();
+</script>
+</body></html>
