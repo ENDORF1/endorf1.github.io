@@ -32,8 +32,11 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
 .page-title{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;}
 .page-heading{font-size:42px;font-weight:700;color:#fff;margin-bottom:12px;}
 .page-count{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:2px;margin-bottom:48px;}
-.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:2px;margin-bottom:40px;transition:color .2s;}
-.back-btn:hover{color:var(--cyan);}
+.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--cyan);text-decoration:none;letter-spacing:2px;padding:8px 18px;border:1px solid rgba(0,245,255,.35);background:rgba(0,245,255,.05);transition:all .2s;margin-right:10px;}
+.back-btn:hover{color:#fff;border-color:var(--cyan);background:rgba(0,245,255,.12);}
+.nav-btns{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:40px;}
+.nav-btns .back-btn{margin-right:0;}
+@media(max-width:768px){.nav-btns{margin-bottom:24px;}.back-btn{font-size:10px;letter-spacing:1px;padding:7px 14px;}}
 .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;}
 .gallery-card{background:#0a1628;border:1px solid rgba(255,0,110,.1);transition:border-color .3s,transform .3s;display:block;text-decoration:none;}
 .gallery-card:hover{border-color:rgba(255,0,110,.5);transform:translateY(-4px);}
@@ -55,7 +58,10 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
   </div>
 </nav>
 <div class="page-wrap">
-  <a class="back-btn" href="/gallery/">← 返回画廊</a>
+  <div class="nav-btns">
+    <a class="back-btn" href="/">← 首页</a>
+    <a class="back-btn" href="/gallery/">← 返回画廊</a>
+  </div>
   <div class="page-title">// GALLERY · 漫展周边</div>
   <h1 class="page-heading">漫展周边</h1>
   <div class="page-count">5 件作品</div>
@@ -109,12 +115,27 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
     if((e.ctrlKey||e.metaKey)&&(e.key==='s'||e.key==='S'||e.key==='p'||e.key==='P'))e.preventDefault();
     if(e.key==='PrintScreen')e.preventDefault();
   });
-  var preloaded=new Set();
-  function preload(url){if(!url||preloaded.has(url))return;preloaded.add(url);var img=new Image();img.src=url;}
+  // 页面加载完成后，利用浏览器空闲时间依次预加载所有原图
+  var urls=[];
   document.querySelectorAll('.gallery-card[data-full]').forEach(function(card){
-    card.addEventListener('mouseenter',function(){preload(card.dataset.full);});
-    card.addEventListener('touchstart',function(){preload(card.dataset.full);},{passive:true});
+    if(card.dataset.full) urls.push(card.dataset.full);
   });
+  if(urls.length===0) return;
+  var idx=0;
+  function loadNext(){
+    if(idx>=urls.length) return;
+    var img=new Image();
+    img.onload=img.onerror=function(){
+      idx++;
+      if(idx<urls.length){
+        if('requestIdleCallback' in window) requestIdleCallback(loadNext,{timeout:2000});
+        else setTimeout(loadNext,200);
+      }
+    };
+    img.src=urls[idx];
+  }
+  if('requestIdleCallback' in window) requestIdleCallback(loadNext,{timeout:1000});
+  else setTimeout(loadNext,500);
 })();
 </script>
 </body></html>
