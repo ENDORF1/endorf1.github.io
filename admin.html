@@ -2364,7 +2364,7 @@ function deleteCatItem(ci,ii,e){
 }
 
 // Cat item modal
-let editingCatIdx=null, editingItemIdx=null, catItemImgData=null, catItemImgPos='50% 50%';
+let editingCatIdx=null, editingItemIdx=null, catItemImgData=null, catItemImgFullData=null, catItemImgPos='50% 50%';
 
 function openCatItemModal(ci,ii){
   editingCatIdx=ci; editingItemIdx=ii;
@@ -2374,6 +2374,7 @@ function openCatItemModal(ci,ii){
   document.getElementById('card-content-input').value=item.content||'';
   document.getElementById('card-content-field').style.display='block';
   catItemImgData=item.img||null;
+  catItemImgFullData=item.imgFull||null;
   catItemImgPos=item.imgPos||'50% 50%';
   const prev=document.getElementById('card-img-preview');
   const picker=document.getElementById('focus-picker-wrap');
@@ -2497,20 +2498,28 @@ async function handleCardImg(input){
     showToast('err','请先配置 GitHub 才能上传图片');
     input.value=''; return;
   }
-  showCardUploadStatus('loading','⟳ 上传中，请稍候...');
+  const mode=document.getElementById('card-modal').dataset.mode;
+  showCardUploadStatus('loading','⟳ 上传中（缩略图+原图）...');
   try{
-    const url=await uploadImageToGH(file);
-    const mode=document.getElementById('card-modal').dataset.mode;
-    if(mode==='catitem'){ catItemImgData=url; catItemImgPos='50% 50%'; }
-    else { cardImgData=url; cardImgPos='50% 50%'; }
+    // Always upload both compressed thumb and full-res original
+    const [thumbUrl, fullUrl] = await Promise.all([uploadImageToGH(file), uploadImageToGHRaw(file)]);
+    if(mode==='catitem'){
+      catItemImgData=thumbUrl;
+      catItemImgFullData=fullUrl;
+      catItemImgPos='50% 50%';
+    } else {
+      cardImgData=thumbUrl;
+      cardImgFullData=fullUrl;
+      cardImgPos='50% 50%';
+    }
     const prev=document.getElementById('card-img-preview');
-    prev.src=url; prev.style.display='block';
+    prev.src=thumbUrl; prev.style.display='block';
     const pickerImg=document.getElementById('focus-picker-img');
     const picker=document.getElementById('focus-picker-wrap');
-    pickerImg.src=url; picker.classList.add('show');
+    pickerImg.src=thumbUrl; picker.classList.add('show');
     const dot=document.getElementById('focus-dot');
     dot.style.left='50%'; dot.style.top='50%';
-    showCardUploadStatus('ok','✓ 上传成功 · 点击图片选择焦点');
+    showCardUploadStatus('ok','✓ 上传成功（缩略图+原图）· 点击图片选择焦点');
   }catch(e){
     showCardUploadStatus('err','✕ 上传失败：'+e.message);
   }
@@ -2529,6 +2538,7 @@ function saveCard(){
       desc:document.getElementById('card-desc-input').value,
       content:document.getElementById('card-content-input').value,
       img:catItemImgData,
+      imgFull:catItemImgFullData||catItemImgData,
       imgPos:catItemImgPos,
       slug:slugify(title)
     };
@@ -3227,14 +3237,14 @@ ${BASE_CSS}
   .post-body h2{font-size:20px;margin:26px 0 10px;padding-left:10px;}
   .post-body h3{font-size:17px;margin:22px 0 8px;padding-left:8px;}
   .post-body ul,.post-body ol{margin-left:20px;}
-  .post-body pre{margin-left:-5.5vw;margin-right:-5.5vw;border-left:none;border-right:none;}
-  .post-body .table-wrap{margin-left:-5.5vw;margin-right:-5.5vw;}
+  .post-body pre{width:100vw;position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;border-left:none;border-right:none;overflow-x:auto;-webkit-overflow-scrolling:touch;box-sizing:border-box;}
+  .post-body pre code{min-width:max-content;padding:12px 5.5vw;font-size:12px;}
+  .post-body pre code .line{padding-left:30px;}
+  .post-body pre code .line::before{width:22px;font-size:10px;}
+  .post-body .table-wrap{width:100vw;position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;overflow-x:auto;-webkit-overflow-scrolling:touch;box-sizing:border-box;padding:0 5.5vw;}
   .post-body img,.post-body figure.post-figure{max-width:100%;}
   .post-body table{font-size:13px;min-width:480px;}
   .post-body table td,.post-body table th{padding:8px 10px;}
-  .post-body pre code{padding:12px 14px;font-size:12px;}
-  .post-body pre code .line{padding-left:30px;}
-  .post-body pre code .line::before{width:22px;font-size:10px;}
   .post-cover{max-height:280px;}
 }
 </style>
@@ -3356,7 +3366,9 @@ function buildWorkDetailHTML(w){
     +'  .wd-body ul{margin-left:20px;}\n'
     +'  .wd-body table{font-size:13px;min-width:480px;}\n'
     +'  .wd-body table td,.wd-body table th{padding:8px 10px;}\n'
-    +'  .wd-body pre{padding:12px 14px;font-size:12px;}\n'
+    +'  .wd-body pre{width:100vw;position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;border-left:none;border-right:none;overflow-x:auto;-webkit-overflow-scrolling:touch;box-sizing:border-box;padding:12px 5.5vw;font-size:12px;}\n'
+    +'  .wd-body pre code{min-width:max-content;}\n'
+    +'  .wd-body .table-wrap{width:100vw;position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;overflow-x:auto;-webkit-overflow-scrolling:touch;box-sizing:border-box;padding:0 5.5vw;}\n'
     +'}\n'
     +'</style></head><body>\n'
     +NAV_HTML()+'\n'
