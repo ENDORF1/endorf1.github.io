@@ -65,7 +65,8 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
   var THUMB="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514452914-nztqc.jpg",FULL="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514456005-gn7qp-full.png",W="Xcale";
   var cv=document.getElementById("gd-c");if(!cv)return;
   var cx=cv.getContext("2d"),currentImg=null;
-  function clean(){if(currentImg){cx.clearRect(0,0,cv.width,cv.height);cx.drawImage(currentImg,0,0,cv.width,cv.height);}}
+  var _cssW=0,_cssH=0;
+  function clean(){if(currentImg){cx.clearRect(0,0,_cssW,_cssH);cx.drawImage(currentImg,0,0,_cssW,_cssH);}}
   function drawWM(ctx,w,h){
     ctx.save();
     var fs=Math.max(18,Math.min(w,h)*0.045);
@@ -85,7 +86,9 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
     cv.width=cssW*dpr;cv.height=cssH*dpr;
     cv.style.width=cssW+"px";cv.style.height=cssH+"px";
     cx.setTransform(dpr,0,0,dpr,0,0);
-    clean();
+    _cssW=cssW;_cssH=cssH;
+    cx.clearRect(0,0,cssW,cssH);
+    cx.drawImage(img,0,0,cssW,cssH);
     var wc=document.createElement("canvas");wc.width=cv.width;wc.height=cv.height;
     var wx=wc.getContext("2d");wx.setTransform(dpr,0,0,dpr,0,0);wx.drawImage(img,0,0,cssW,cssH);drawWM(wx,cssW,cssH);
     cv.toDataURL=function(){return wc.toDataURL.apply(wc,arguments);};
