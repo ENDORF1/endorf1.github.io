@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>原创作品 · 同人画廊 · _DEV.LOG</title>
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Noto+Sans+SC:wght@300;400;700&family=Fira+Code:wght@400;500&display=swap');
+:root{--bg:#030810;--dim:#0a1628;--text:#c8e0f0;--muted:#3a5a7a;--cyan:#00f5ff;--magenta:#ff006e;--yellow:#ffe600;--glow-c:0 0 8px #00f5ff88,0 0 24px #00f5ff44;--glow-m:0 0 8px #ff006e88,0 0 24px #ff006e44;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans SC',sans-serif;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,245,255,.015) 2px,rgba(0,245,255,.015) 4px);pointer-events:none;z-index:100;}
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,245,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,255,.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;animation:gridShift 20s linear infinite;}
+@keyframes gridShift{to{transform:translateY(60px);}}
+nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px 48px;background:linear-gradient(180deg,rgba(3,8,16,.95),transparent);border-bottom:1px solid rgba(0,245,255,.1);}
+.nav-logo{font-family:'Share Tech Mono',monospace;font-size:18px;color:var(--cyan);letter-spacing:4px;text-shadow:var(--glow-c);text-decoration:none;}
+.nav-logo span{color:var(--magenta);}
+.nav-links{display:flex;gap:28px;}
+.nav-links a{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted);text-decoration:none;letter-spacing:2px;text-transform:uppercase;transition:color .2s;position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--cyan);transition:width .3s;}
+.nav-links a:hover{color:var(--cyan);}
+.nav-links a:hover::after{width:100%;}
+.page-wrap{position:relative;z-index:1;padding:88px 10vw 80px;}
+@media (max-width: 768px){
+nav{padding:14px 16px;align-items:flex-start;gap:12px;}
+.nav-logo{font-size:15px;letter-spacing:3px;}
+.nav-links{gap:12px;flex-wrap:wrap;justify-content:flex-end;}
+.nav-links a{font-size:11px;letter-spacing:1px;}
+.page-wrap{padding:84px 5.5vw 56px;}
+}
+
+.page-title{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;}
+.page-heading{font-size:42px;font-weight:700;color:#fff;margin-bottom:12px;}
+.page-count{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:2px;margin-bottom:48px;}
+.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--cyan);text-decoration:none;letter-spacing:2px;padding:8px 18px;border:1px solid rgba(0,245,255,.35);background:rgba(0,245,255,.05);transition:all .2s;margin-right:10px;}
+.back-btn:hover{color:#fff;border-color:var(--cyan);background:rgba(0,245,255,.12);}
+.nav-btns{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:40px;}
+.nav-btns .back-btn{margin-right:0;}
+@media(max-width:768px){.nav-btns{margin-bottom:24px;}.back-btn{font-size:10px;letter-spacing:1px;padding:7px 14px;}}
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;}
+.gallery-card{background:#0a1628;border:1px solid rgba(255,0,110,.1);transition:border-color .3s,transform .3s;display:block;text-decoration:none;}
+.gallery-card:hover{border-color:rgba(255,0,110,.5);transform:translateY(-4px);}
+.gc-img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;}
+.gc-img-ph{width:100%;aspect-ratio:3/4;background:rgba(255,0,110,.04);}
+.gc-body{padding:16px;}
+.gc-type{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--magenta);letter-spacing:3px;margin-bottom:6px;}
+.gc-title{font-size:16px;font-weight:700;color:#fff;margin-bottom:6px;}
+.gc-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+</style></head><body>
+<nav>
+  <div class="nav-logo">_<span>DEV</span>.LOG</div>
+  <div class="nav-links">
+    <a href="/">首页</a>
+    <a href="/blog/">博客</a>
+    <a href="/works/">项目</a>
+    <a href="/gallery/">创作</a>
+    <a href="/about/">关于</a>
+  </div>
+</nav>
+<div class="page-wrap">
+  <div class="nav-btns">
+    <a class="back-btn" href="/">← 首页</a>
+    <a class="back-btn" href="/gallery/">← 返回画廊</a>
+  </div>
+  <div class="page-title">// GALLERY · 原创作品</div>
+  <h1 class="page-heading">原创作品</h1>
+  <div class="page-count">13 件作品</div>
+  <div class="gallery-grid">
+    <a class="gallery-card" href="/gallery/illust/endora.html" data-full="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775513027401-trhv0-full.png">
+      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775513024283-ke9yr.jpg" style="object-position:50.9% 20.2%" alt="">
+      <div class="gc-body">
+        <div class="gc-type">// WORK</div>
+        <div class="gc-title">ENDORA</div>
+        <div class="gc-desc">祈愿拯救世界之人。</div>
+      </div>
+    </a>
+    <a class="gallery-card" href="/gallery/illust/eudora.html" data-full="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775513173337-9m9j5-full.png">
+      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775513170282-rt1ij.jpg" style="object-position:51.4% 23.3%" alt="">
+      <div class="gc-body">
+        <div class="gc-type">// WORK</div>
+        <div class="gc-title">EUDORA</div>
+        <div class="gc-desc">起誓沉默世界之人。</div>
+      </div>
+    </a>
+    <a class="gallery-card" href="/gallery/illust/柩世熄忘.html" data-full="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775513736062-ehovq-full.png">
+      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775513733047-sqnxe.jpg" style="object-position:51.2% 21.9%" alt="">
+      <div class="gc-body">
+        <div class="gc-type">// WORK</div>
+        <div class="gc-title">柩世熄忘</div>
+        <div class="gc-desc">埋葬世界于柩中之物。</div>
+      </div>
+    </a>
+    <a class="gallery-card" href="/gallery/illust/模型a.html" data-full="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514362417-fijep-full.png">
+      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514359495-051c5.jpg" style="object-position:52.1% 28.6%" alt="">
+      <div class="gc-body">
+        <div class="gc-type">// WORK</div>
+        <div class="gc-title">模型A</div>
+        <div class="gc-desc">降低噪声。</div>
+      </div>
+    </a>
+    <a class="gallery-card" href="/gallery/illust/模型b.html" data-full="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514419029-fafsh-full.png">
+      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514416739-eewja.jpg" style="object-position:49.1% 61.7%" alt="">
+      <div class="gc-body">
+        <div class="gc-type">// WORK</div>
+        <div class="gc-title">模型B</div>
+        <div class="gc-desc">计算混沌。</div>
+      </div>
+    </a>
+    <a class="gallery-card" href="/gallery/illust/合翼卫.html" data-full="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514456005-gn7qp-full.png">
+      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514452914-nztqc.jpg" style="object-position:50.7% 30.8%" alt="">
+      <div class="gc-body">
+        <div class="gc-type">// WORK</div>
+        <div class="gc-title">合翼卫</div>
+        <div class="gc-desc">手持大剑的战士。</div>
+      </div>
+    </a>
+    <a class="gallery-card" href="/gallery/illust/fg204.html" data-full="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514810601-o5y8r-full.png">
+      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514807324-hm5ye.jpg" style="object-position:49.1% 24.1%" alt="">
+      <div class="gc-body">
+        <div class="gc-type">// WORK</div>
+        <div class="gc-title">FG204</div>
+        <div class="gc-desc">行走在钢铁丛林中的机器人。胸腔中跳动的是心脏吗？</div>
+      </div>
+    </a>
+    <a class="gallery-card" href="/gallery/illust/braindead.html" data-full="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515214537-jc4q2-full.png">
+      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515211651-de4s5.jpg" style="object-position:50.0% 27.2%" alt="">
+      <div class="gc-body">
+        <div class="gc-type">// WORK</div>
+        <div class="gc-title">BRAINDEAD</div>
+        <div class="gc-desc">我是它的心脏。</div>
+      </div>
+    </a>
+    <a class="gallery-card" href="/gallery/illust/h-e-r.html" data-full="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515027795-ihs4s-full.png">
+      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515024966-5w1ny.jpg" style="object-position:50.7% 21.9%" alt="">
+      <div class="gc-body">
+        <div class="gc-type">// WORK</div>
+        <div class="gc-title">H.E.R.</div>
+        <div class="gc-desc">它来了。</div>
+      </div>
+    </a>
+    <a class="gallery-card" href="/gallery/illust/绿皮.html" data-full="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515705434-zcvs6-full.png">
+      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515702197-vzzbc.jpg" style="object-position:48.1% 23.0%" alt="">
+      <div class="gc-body">
+        <div class="gc-type">// WORK</div>
+        <div class="gc-title">绿皮</div>
+        <div class="gc-desc">他到底有着什么样的故事？</div>
+      </div>
+    </a>
+    <a class="gallery-card" href="/gallery/illust/鸡煲.html" data-full="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514571571-jpwr8-full.png">
+      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514568510-br4py.jpg" style="object-position:60.0% 20.8%" alt="">
+      <div class="gc-body">
+        <div class="gc-type">// WORK</div>
+        <div class="gc-title">鸡煲</div>
+        <div class="gc-desc">百般武艺。</div>
+      </div>
+    </a>
+    <a class="gallery-card" href="/gallery/illust/莫辛.html" data-full="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514723763-6ozfw-full.png">
+      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514721313-1vfi8.jpg" style="object-position:53.9% 54.1%" alt="">
+      <div class="gc-body">
+        <div class="gc-type">// WORK</div>
+        <div class="gc-title">莫辛</div>
+        <div class="gc-desc">战损的机械龙。</div>
+      </div>
+    </a>
+    <a class="gallery-card" href="/gallery/illust/战车vii.html" data-full="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515176179-9zskj-full.jpg">
+      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515172664-ygjal.jpg" style="object-position:51.9% 30.2%" alt="">
+      <div class="gc-body">
+        <div class="gc-type">// WORK</div>
+        <div class="gc-title">战车VII</div>
+        <div class="gc-desc">愿您所向披靡。</div>
+      </div>
+    </a></div>
+</div>
+<script>
+(function(){
+  document.addEventListener('contextmenu',function(e){e.preventDefault();});
+  document.addEventListener('dragstart',function(e){if(e.target.tagName==='IMG')e.preventDefault();});
+  document.addEventListener('keydown',function(e){
+    if((e.ctrlKey||e.metaKey)&&(e.key==='s'||e.key==='S'||e.key==='p'||e.key==='P'))e.preventDefault();
+    if(e.key==='PrintScreen')e.preventDefault();
+  });
+  // 页面加载完成后，利用浏览器空闲时间依次预加载所有原图
+  var urls=[];
+  document.querySelectorAll('.gallery-card[data-full]').forEach(function(card){
+    if(card.dataset.full) urls.push(card.dataset.full);
+  });
+  if(urls.length===0) return;
+  var idx=0;
+  function loadNext(){
+    if(idx>=urls.length) return;
+    var img=new Image();
+    img.onload=img.onerror=function(){
+      idx++;
+      if(idx<urls.length){
+        if('requestIdleCallback' in window) requestIdleCallback(loadNext,{timeout:2000});
+        else setTimeout(loadNext,200);
+      }
+    };
+    img.src=urls[idx];
+  }
+  if('requestIdleCallback' in window) requestIdleCallback(loadNext,{timeout:1000});
+  else setTimeout(loadNext,500);
+})();
+</script>
+</body></html>
