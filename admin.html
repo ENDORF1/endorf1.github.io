@@ -754,27 +754,26 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
     <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--magenta));"></div>
     <div style="font-family:var(--font-mono);font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:4px;">// 封面图裁切</div>
     <div id="crop-file-info" style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:16px;"></div>
-    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:start;margin-bottom:16px;">
-      <!-- 左：原图 + 焦点选择 -->
+    <div style="display:grid;grid-template-columns:1fr auto 90px;gap:16px;align-items:start;margin-bottom:16px;">
+      <!-- 左：原图 + 焦点选择，固定高度 -->
       <div>
         <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:6px;">点击选择焦点</div>
-        <div id="crop-src-wrap" style="position:relative;cursor:crosshair;border:1px solid var(--border);overflow:hidden;">
-          <img id="crop-src-img" src="" style="width:100%;display:block;user-select:none;">
-          <!-- 裁切框遮罩 -->
-          <div id="crop-overlay-top"    style="position:absolute;left:0;right:0;top:0;background:rgba(0,0,0,.55);pointer-events:none;"></div>
-          <div id="crop-overlay-bottom" style="position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.55);pointer-events:none;"></div>
-          <div id="crop-overlay-left"   style="position:absolute;top:0;bottom:0;left:0;background:rgba(0,0,0,.55);pointer-events:none;"></div>
-          <div id="crop-overlay-right"  style="position:absolute;top:0;bottom:0;right:0;background:rgba(0,0,0,.55);pointer-events:none;"></div>
-          <div id="crop-box-border"     style="position:absolute;border:1px solid var(--cyan);box-shadow:0 0 0 1px rgba(0,245,255,.3);pointer-events:none;"></div>
+        <div id="crop-src-wrap" style="position:relative;cursor:crosshair;border:1px solid var(--border);overflow:hidden;height:300px;background:#000;">
+          <img id="crop-src-img" src="" style="width:100%;height:100%;object-fit:contain;display:block;user-select:none;">
+          <div id="crop-overlay-top"    style="position:absolute;left:0;right:0;top:0;pointer-events:none;"></div>
+          <div id="crop-overlay-bottom" style="position:absolute;left:0;right:0;bottom:0;pointer-events:none;"></div>
+          <div id="crop-overlay-left"   style="position:absolute;pointer-events:none;"></div>
+          <div id="crop-overlay-right"  style="position:absolute;pointer-events:none;"></div>
+          <div id="crop-box-border"     style="position:absolute;pointer-events:none;"></div>
           <div id="crop-dot"            style="position:absolute;width:12px;height:12px;border-radius:50%;background:var(--cyan);border:2px solid #fff;transform:translate(-50%,-50%);pointer-events:none;box-shadow:0 0 6px rgba(0,245,255,.8);"></div>
         </div>
       </div>
       <!-- 中间箭头 -->
-      <div style="font-family:var(--font-mono);font-size:18px;color:var(--muted);padding-top:40px;">→</div>
-      <!-- 右：裁切结果预览 -->
+      <div style="font-family:var(--font-mono);font-size:18px;color:var(--muted);padding-top:36px;">→</div>
+      <!-- 右：裁切结果预览，固定高度匹配左侧 -->
       <div>
-        <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:6px;">裁切预览（3:4）</div>
-        <div style="aspect-ratio:3/4;overflow:hidden;border:1px solid var(--border);background:#000;">
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:6px;">裁切（3:4）</div>
+        <div style="height:300px;overflow:hidden;border:1px solid var(--border);background:#000;">
           <img id="crop-preview-img" src="" style="width:100%;height:100%;object-fit:cover;object-position:50% 50%;">
         </div>
       </div>
@@ -3848,10 +3847,10 @@ function buildGalleryDetailHTML(g){
     '    var cssW=img.naturalWidth*sc,cssH=img.naturalHeight*sc;\n'+
     '    cv.width=cssW*dpr;cv.height=cssH*dpr;\n'+
     '    cv.style.width=cssW+"px";cv.style.height=cssH+"px";\n'+
-    '    cx.scale(dpr,dpr);\n'+
+    '    cx.setTransform(dpr,0,0,dpr,0,0);\n'+
     '    cx.clearRect(0,0,cssW,cssH);cx.drawImage(img,0,0,cssW,cssH);\n'+
     '    var wc=document.createElement("canvas");wc.width=cv.width;wc.height=cv.height;\n'+
-    '    var wx=wc.getContext("2d");wx.scale(dpr,dpr);wx.drawImage(img,0,0,cssW,cssH);\n'+
+    '    var wx=wc.getContext("2d");wx.setTransform(dpr,0,0,dpr,0,0);wx.drawImage(img,0,0,cssW,cssH);\n'+
     '    var fs=Math.max(18,Math.min(cssW,cssH)*0.045);\n'+
     '    wx.save();wx.font="bold "+fs+"px Share Tech Mono,monospace";\n'+
     '    wx.fillStyle="rgba(255,0,110,0.75)";wx.strokeStyle="rgba(0,0,0,0.4)";wx.lineWidth=1;\n'+
@@ -4199,10 +4198,10 @@ function buildItemDetailHTML(cat,item){
     '    var cssW=img.naturalWidth*sc,cssH=img.naturalHeight*sc;\n'+
     '    cv.width=cssW*dpr;cv.height=cssH*dpr;\n'+
     '    cv.style.width=cssW+"px";cv.style.height=cssH+"px";\n'+
-    '    cx.scale(dpr,dpr);\n'+
+    '    cx.setTransform(dpr,0,0,dpr,0,0);\n'+
     '    clean();\n'+
     '    var wc=document.createElement("canvas");wc.width=cv.width;wc.height=cv.height;\n'+
-    '    var wx=wc.getContext("2d");wx.scale(dpr,dpr);wx.drawImage(img,0,0,cssW,cssH);drawWM(wx,cssW,cssH);\n'+
+    '    var wx=wc.getContext("2d");wx.setTransform(dpr,0,0,dpr,0,0);wx.drawImage(img,0,0,cssW,cssH);drawWM(wx,cssW,cssH);\n'+
     '    cv.toDataURL=function(){return wc.toDataURL.apply(wc,arguments);};\n'+
     '    cv.toBlob=function(cb,t,q){return wc.toBlob(cb,t,q);};\n'+
     '  }\n'+
