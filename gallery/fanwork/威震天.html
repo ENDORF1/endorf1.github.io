@@ -79,11 +79,15 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
   }
   function renderImg(img){
     currentImg=img;
+    var dpr=window.devicePixelRatio||1;
     var mw=Math.min(img.naturalWidth,window.innerWidth-80),sc=mw/img.naturalWidth;
-    cv.width=img.naturalWidth*sc;cv.height=img.naturalHeight*sc;
+    var cssW=img.naturalWidth*sc,cssH=img.naturalHeight*sc;
+    cv.width=cssW*dpr;cv.height=cssH*dpr;
+    cv.style.width=cssW+"px";cv.style.height=cssH+"px";
+    cx.scale(dpr,dpr);
     clean();
     var wc=document.createElement("canvas");wc.width=cv.width;wc.height=cv.height;
-    var wx=wc.getContext("2d");wx.drawImage(img,0,0,wc.width,wc.height);drawWM(wx,wc.width,wc.height);
+    var wx=wc.getContext("2d");wx.scale(dpr,dpr);wx.drawImage(img,0,0,cssW,cssH);drawWM(wx,cssW,cssH);
     cv.toDataURL=function(){return wc.toDataURL.apply(wc,arguments);};
     cv.toBlob=function(cb,t,q){return wc.toBlob(cb,t,q);};
   }
