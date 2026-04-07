@@ -35,7 +35,7 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
 @media(max-width:768px){.nav-btns{margin-bottom:24px;}.back-btn{font-size:10px;letter-spacing:1px;padding:7px 14px;}}
 .gd-cat{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;display:block;}
 .gd-title{font-size:clamp(28px,5vw,48px);font-weight:700;color:#fff;margin-bottom:24px;}
-.gd-canvas{max-width:100%;display:block;margin:0 auto 40px;border:1px solid rgba(255,0,110,.2);user-select:none;-webkit-user-drag:none;}
+.gd-canvas{max-width:100%;max-height:80vh;display:block;margin:0 auto 40px;border:1px solid rgba(255,0,110,.2);user-select:none;-webkit-user-drag:none;}
 .gd-body{max-width:720px;}
 .gd-body p{margin:0 0 16px;line-height:1.9;color:var(--text);}
 </style></head><body>
@@ -81,9 +81,7 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
   function renderImg(img){
     currentImg=img;
     var dpr=window.devicePixelRatio||1;
-    var maxW=window.innerWidth-80;
-    var maxH=window.innerHeight*0.8;
-    var sc=Math.min(1,maxW/img.naturalWidth,maxH/img.naturalHeight);
+    var mw=Math.min(img.naturalWidth,window.innerWidth-80),sc=mw/img.naturalWidth;
     var cssW=img.naturalWidth*sc,cssH=img.naturalHeight*sc;
     cv.width=cssW*dpr;cv.height=cssH*dpr;
     cv.style.width=cssW+"px";cv.style.height=cssH+"px";
