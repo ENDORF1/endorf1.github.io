@@ -3865,11 +3865,15 @@ function buildGalleryDetailHTML(g){
     '  var cv=document.getElementById("gd-c");if(!cv)return;\n'+
     '  var cx=cv.getContext("2d");\n'+
     '  function renderImg(img){\n'+
+    '    var dpr=window.devicePixelRatio||1;\n'+
     '    var mw=Math.min(img.naturalWidth,window.innerWidth-80),sc=mw/img.naturalWidth;\n'+
-    '    cv.width=img.naturalWidth*sc;cv.height=img.naturalHeight*sc;\n'+
-    '    cx.clearRect(0,0,cv.width,cv.height);cx.drawImage(img,0,0,cv.width,cv.height);\n'+
+    '    var cssW=img.naturalWidth*sc,cssH=img.naturalHeight*sc;\n'+
+    '    cv.width=cssW*dpr;cv.height=cssH*dpr;\n'+
+    '    cv.style.width=cssW+"px";cv.style.height=cssH+"px";\n'+
+    '    cx.setTransform(dpr,0,0,dpr,0,0);\n'+
+    '    cx.clearRect(0,0,cssW,cssH);cx.drawImage(img,0,0,cssW,cssH);\n'+
     '    var wc=document.createElement("canvas");wc.width=cv.width;wc.height=cv.height;\n'+
-    '    var wx=wc.getContext("2d");wx.drawImage(img,0,0,wc.width,wc.height);\n'+
+    '    var wx=wc.getContext("2d");wx.setTransform(dpr,0,0,dpr,0,0);wx.drawImage(img,0,0,cssW,cssH);\n'+
     '    var fs=Math.max(18,Math.min(cssW,cssH)*0.045);\n'+
     '    wx.save();wx.font="bold "+fs+"px Share Tech Mono,monospace";\n'+
     '    wx.fillStyle="rgba(255,0,110,0.75)";wx.strokeStyle="rgba(0,0,0,0.4)";wx.lineWidth=1;\n'+
@@ -3913,7 +3917,7 @@ function buildGalleryDetailHTML(g){
     '.gd-title{font-size:clamp(28px,5vw,48px);font-weight:700;color:#fff;margin-bottom:24px;}\n'+
     '.gd-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px;}\n'+
     '.gd-tag{font-family:\'Share Tech Mono\',monospace;font-size:10px;color:var(--cyan);border:1px solid rgba(0,245,255,.3);padding:3px 8px;letter-spacing:1px;}\n'+
-    '.gd-canvas{max-width:100%;display:block;margin:0 auto 40px;border:1px solid rgba(255,0,110,.2);user-select:none;-webkit-user-drag:none;}\n'+
+    '.gd-canvas{max-width:100%;max-height:80vh;display:block;margin:0 auto 40px;border:1px solid rgba(255,0,110,.2);user-select:none;-webkit-user-drag:none;}\n'+
     '.gd-body{max-width:720px;margin:0 auto;}\n'+
     '.gd-body p{margin:0 0 16px;line-height:1.9;color:var(--text);}\n'+
     '</style></head><body>\n'+
@@ -4191,53 +4195,58 @@ function buildItemDetailHTML(cat,item){
   const imgThumb=item.img||'';
   const imgFull=(item.imgFull||item.img)||'';
   const WM='Xcale';
-  const canvasBlock=imgFull?
-    '<div class="gd-img-wrap">'+
-      '<img id="gd-img" class="gd-img" src="'+esc(imgThumb)+'" alt="" draggable="false">'+
-      '<canvas id="gd-wm" class="gd-wm"></canvas>'+
-    '</div>':'';
+  const canvasBlock=imgFull?'<canvas id="gd-c" class="gd-canvas"></canvas>':'';
   const scriptBlock=imgFull?(
     '<scr'+'ipt>\n'+
     '(function(){\n'+
     '  var THUMB='+JSON.stringify(imgThumb)+',FULL='+JSON.stringify(imgFull)+',W='+JSON.stringify(WM)+';\n'+
-    '  var imgEl=document.getElementById("gd-img");\n'+
-    '  var wmCv=document.getElementById("gd-wm");\n'+
-    '  var wmCx=wmCv.getContext("2d");\n'+
-    '  var currentSrc=THUMB;\n'+
-    '  // 先显示缩略图，后台加载原图\n'+
-    '  if(FULL!==THUMB){\n'+
-    '    var fullImg=new Image();\n'+
-    '    fullImg.onload=function(){imgEl.src=FULL;currentSrc=FULL;};\n'+
-    '    fullImg.src=FULL;\n'+
-    '  }\n'+
-    '  function drawWM(){\n'+
-    '    var w=imgEl.offsetWidth,h=imgEl.offsetHeight;\n'+
-    '    if(!w||!h)return;\n'+
-    '    var dpr=window.devicePixelRatio||1;\n'+
-    '    wmCv.width=w*dpr;wmCv.height=h*dpr;\n'+
-    '    wmCv.style.width=w+"px";wmCv.style.height=h+"px";\n'+
-    '    wmCx.setTransform(dpr,0,0,dpr,0,0);\n'+
-    '    wmCx.clearRect(0,0,w,h);\n'+
+    '  var cv=document.getElementById("gd-c");if(!cv)return;\n'+
+    '  var cx=cv.getContext("2d"),currentImg=null;\n'+
+    '  var _cssW=0,_cssH=0;\n'+
+    '  function clean(){if(currentImg){cx.clearRect(0,0,_cssW,_cssH);cx.drawImage(currentImg,0,0,_cssW,_cssH);}}\n'+
+    '  function drawWM(ctx,w,h){\n'+
+    '    ctx.save();\n'+
     '    var fs=Math.max(18,Math.min(w,h)*0.045);\n'+
-    '    wmCx.save();\n'+
-    '    wmCx.font="bold "+fs+"px Share Tech Mono,monospace";\n'+
-    '    wmCx.fillStyle="rgba(255,0,110,0.75)";wmCx.strokeStyle="rgba(0,0,0,0.4)";wmCx.lineWidth=1;\n'+
-    '    wmCx.rotate(-Math.PI/6);\n'+
+    '    ctx.font="bold "+fs+"px Share Tech Mono,monospace";\n'+
+    '    ctx.fillStyle="rgba(255,0,110,0.75)";ctx.strokeStyle="rgba(0,0,0,0.4)";ctx.lineWidth=1;\n'+
+    '    ctx.rotate(-Math.PI/6);\n'+
     '    var sx=w*0.26,sy=Math.max(fs*2.2,h*0.12);\n'+
     '    for(var y=-h*1.5;y<w+h*1.5;y+=sy)\n'+
-    '      for(var x=-w*1.5;x<w+h*1.5;x+=sx){wmCx.strokeText(W,x,y);wmCx.fillText(W,x,y);}\n'+
-    '    wmCx.restore();\n'+
-    '    wmCv.style.display="block";\n'+
+    '      for(var x=-w*1.5;x<w+h*1.5;x+=sx){ctx.strokeText(W,x,y);ctx.fillText(W,x,y);}\n'+
+    '    ctx.restore();\n'+
     '  }\n'+
-    '  function hideWM(){wmCv.style.display="none";}\n'+
-    '  // 右键菜单：显示水印\n'+
-    '  document.addEventListener("contextmenu",function(e){e.preventDefault();drawWM();setTimeout(hideWM,2000);});\n'+
-    '  // 拖拽禁止\n'+
-    '  imgEl.addEventListener("dragstart",function(e){e.preventDefault();});\n'+
-    '  // 快捷键：显示水印\n'+
+    '  function renderImg(img){\n'+
+    '    currentImg=img;\n'+
+    '    var dpr=window.devicePixelRatio||1;\n'+
+    '    var mw=Math.min(img.naturalWidth,window.innerWidth-80),sc=mw/img.naturalWidth;\n'+
+    '    var cssW=img.naturalWidth*sc,cssH=img.naturalHeight*sc;\n'+
+    '    cv.width=cssW*dpr;cv.height=cssH*dpr;\n'+
+    '    cv.style.width=cssW+"px";cv.style.height=cssH+"px";\n'+
+    '    cx.setTransform(dpr,0,0,dpr,0,0);\n'+
+    '    _cssW=cssW;_cssH=cssH;\n'+
+    '    cx.clearRect(0,0,cssW,cssH);\n'+
+    '    cx.drawImage(img,0,0,cssW,cssH);\n'+
+    '    var wc=document.createElement("canvas");wc.width=cv.width;wc.height=cv.height;\n'+
+    '    var wx=wc.getContext("2d");wx.setTransform(dpr,0,0,dpr,0,0);wx.drawImage(img,0,0,cssW,cssH);drawWM(wx,cssW,cssH);\n'+
+    '    cv.toDataURL=function(){return wc.toDataURL.apply(wc,arguments);};\n'+
+    '    cv.toBlob=function(cb,t,q){return wc.toBlob(cb,t,q);};\n'+
+    '  }\n'+
+    '  // Load thumbnail first for instant display\n'+
+    '  var thumbImg=new Image();thumbImg.crossOrigin="anonymous";\n'+
+    '  thumbImg.onload=function(){renderImg(thumbImg);};\n'+
+    '  thumbImg.src=THUMB;\n'+
+    '  // Then load full resolution in background\n'+
+    '  if(FULL!==THUMB){\n'+
+    '    var fullImg=new Image();fullImg.crossOrigin="anonymous";\n'+
+    '    fullImg.onload=function(){renderImg(fullImg);};\n'+
+    '    fullImg.src=FULL;\n'+
+    '  }\n'+
+    '  document.addEventListener("contextmenu",function(e){e.preventDefault();});\n'+
+    '  cv.addEventListener("dragstart",function(e){e.preventDefault();});\n'+
+    '  cv.addEventListener("touchstart",function(e){e.preventDefault();},{passive:false});\n'+
     '  document.addEventListener("keydown",function(e){\n'+
-    '    if((e.ctrlKey||e.metaKey)&&(e.key==="s"||e.key==="S"||e.key==="p"||e.key==="P")){e.preventDefault();drawWM();setTimeout(hideWM,2000);}\n'+
-    '    if(e.key==="PrintScreen"){drawWM();setTimeout(hideWM,2000);}\n'+
+    '    if((e.ctrlKey||e.metaKey)&&(e.key==="s"||e.key==="S"||e.key==="p"||e.key==="P"))e.preventDefault();\n'+
+    '    if(e.key==="PrintScreen")e.preventDefault();\n'+
     '  });\n'+
     '})();\n'+
     '</scr'+'ipt>'
@@ -4253,9 +4262,7 @@ function buildItemDetailHTML(cat,item){
     '@media(max-width:768px){.nav-btns{margin-bottom:24px;}.back-btn{font-size:10px;letter-spacing:1px;padding:7px 14px;}}\n'+
     '.gd-cat{font-family:\'Share Tech Mono\',monospace;font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;display:block;}\n'+
     '.gd-title{font-size:clamp(28px,5vw,48px);font-weight:700;color:#fff;margin-bottom:24px;}\n'+
-    '.gd-img-wrap{position:relative;display:block;margin:0 auto 40px;max-width:100%;width:fit-content;border:1px solid rgba(255,0,110,.2);}\n'+
-    '.gd-img{max-width:100%;display:block;user-select:none;-webkit-user-drag:none;}\n'+
-    '.gd-wm{position:absolute;inset:0;display:none;pointer-events:none;}\n'+
+    '.gd-canvas{max-width:100%;max-height:80vh;display:block;margin:0 auto 40px;border:1px solid rgba(255,0,110,.2);user-select:none;-webkit-user-drag:none;}\n'+
     '.gd-body{max-width:720px;}\n'+
     '.gd-body p{margin:0 0 16px;line-height:1.9;color:var(--text);}\n'+
     '</style></head><body>\n'+
