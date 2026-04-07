@@ -758,8 +758,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
       <!-- 左：原图 + 焦点选择，固定高度 -->
       <div>
         <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:6px;">点击选择焦点</div>
-        <div id="crop-src-wrap" style="position:relative;cursor:crosshair;border:1px solid var(--border);overflow:hidden;height:300px;background:#000;">
-          <img id="crop-src-img" src="" style="width:100%;height:100%;object-fit:contain;display:block;user-select:none;">
+        <div id="crop-src-wrap" style="position:relative;cursor:crosshair;border:1px solid var(--border);overflow:hidden;">
+          <img id="crop-src-img" src="" style="width:100%;display:block;user-select:none;max-height:320px;object-fit:cover;">
           <div id="crop-overlay-top"    style="position:absolute;left:0;right:0;top:0;pointer-events:none;"></div>
           <div id="crop-overlay-bottom" style="position:absolute;left:0;right:0;bottom:0;pointer-events:none;"></div>
           <div id="crop-overlay-left"   style="position:absolute;pointer-events:none;"></div>
@@ -2651,31 +2651,54 @@ function cropUpdateOverlay(fx, fy){
   if(!img.naturalWidth || !img.offsetWidth) return;
   const dispW = img.offsetWidth;
   const dispH = img.offsetHeight;
-  const scale = dispW / _cropImgW;
+  const natW = img.naturalWidth;
+  const natH = img.naturalHeight;
+
+  // object-fit:cover 下图片在容器内的实际映射
+  const imgRatio = natW / natH;
+  const boxRatio = dispW / dispH;
+  let rendW, rendH, offX, offY;
+  if(imgRatio > boxRatio){
+    // 图比容器宽：高度填满，宽度溢出
+    rendH = dispH; rendW = dispH * imgRatio;
+    offX = (dispW - rendW) / 2; offY = 0;
+  } else {
+    // 图比容器高：宽度填满，高度溢出
+    rendW = dispW; rendH = dispW / imgRatio;
+    offX = 0; offY = (dispH - rendH) / 2;
+  }
+  // fx/fy 是容器内坐标 → 转换为原图像素坐标
+  const realFx = ((fx * dispW) - offX) / rendW;
+  const realFy = ((fy * dispH) - offY) / rendH;
+  const clampedFx = Math.max(0, Math.min(1, realFx));
+  const clampedFy = Math.max(0, Math.min(1, realFy));
+
+  // 裁切框在原图像素坐标系中的尺寸
   const targetRatio = 3/4;
   let cw, ch;
-  if(_cropImgW/_cropImgH > targetRatio){
-    ch = _cropImgH; cw = ch * targetRatio;
-  } else {
-    cw = _cropImgW; ch = cw / targetRatio;
-  }
-  let cx = fx * _cropImgW;
-  let cy = fy * _cropImgH;
-  let sx = cx - cw/2;
-  let sy = cy - ch/2;
-  sx = Math.max(0, Math.min(sx, _cropImgW - cw));
-  sy = Math.max(0, Math.min(sy, _cropImgH - ch));
-  const dx = sx*scale, dy = sy*scale, dw = cw*scale, dh = ch*scale;
+  if(natW/natH > targetRatio){ ch = natH; cw = ch * targetRatio; }
+  else { cw = natW; ch = cw / targetRatio; }
 
-  // 用单个裁切框边框表示选区，四个遮罩覆盖选区外
+  let sx = clampedFx * natW - cw/2;
+  let sy = clampedFy * natH - ch/2;
+  sx = Math.max(0, Math.min(sx, natW - cw));
+  sy = Math.max(0, Math.min(sy, natH - ch));
+
+  // 裁切框在显示坐标系中的位置
+  const scale = rendW / natW;
+  const dx = sx*scale + offX;
+  const dy = sy*scale + offY;
+  const dw = cw*scale;
+  const dh = ch*scale;
+
   document.getElementById('crop-overlay-top').style.cssText    = 'position:absolute;left:0;right:0;top:0;height:'+dy+'px;background:rgba(0,0,0,.55);pointer-events:none;';
   document.getElementById('crop-overlay-bottom').style.cssText = 'position:absolute;left:0;right:0;bottom:0;height:'+(dispH-dy-dh)+'px;background:rgba(0,0,0,.55);pointer-events:none;';
   document.getElementById('crop-overlay-left').style.cssText   = 'position:absolute;left:0;top:'+dy+'px;height:'+dh+'px;width:'+dx+'px;background:rgba(0,0,0,.55);pointer-events:none;';
   document.getElementById('crop-overlay-right').style.cssText  = 'position:absolute;right:0;top:'+dy+'px;height:'+dh+'px;width:'+(dispW-dx-dw)+'px;background:rgba(0,0,0,.55);pointer-events:none;';
   document.getElementById('crop-box-border').style.cssText     = 'position:absolute;border:1px solid var(--cyan);box-shadow:0 0 0 1px rgba(0,245,255,.3);pointer-events:none;left:'+dx+'px;top:'+dy+'px;width:'+dw+'px;height:'+dh+'px;';
   document.getElementById('crop-dot').style.cssText            = 'position:absolute;width:12px;height:12px;border-radius:50%;background:var(--cyan);border:2px solid #fff;transform:translate(-50%,-50%);pointer-events:none;box-shadow:0 0 6px rgba(0,245,255,.8);left:'+(fx*dispW)+'px;top:'+(fy*dispH)+'px;';
-  document.getElementById('crop-preview-img').style.objectPosition = (fx*100)+'% '+(fy*100)+'%';
-  _cropFocusX = fx; _cropFocusY = fy;
+  document.getElementById('crop-preview-img').style.objectPosition = (clampedFx*100)+'% '+(clampedFy*100)+'%';
+  _cropFocusX = clampedFx; _cropFocusY = clampedFy;
   _cropSX = sx; _cropSY = sy; _cropSW = cw; _cropSH = ch;
 }
 
@@ -4179,7 +4202,8 @@ function buildItemDetailHTML(cat,item){
     '  var THUMB='+JSON.stringify(imgThumb)+',FULL='+JSON.stringify(imgFull)+',W='+JSON.stringify(WM)+';\n'+
     '  var cv=document.getElementById("gd-c");if(!cv)return;\n'+
     '  var cx=cv.getContext("2d"),currentImg=null;\n'+
-    '  function clean(){if(currentImg){cx.clearRect(0,0,cv.width,cv.height);cx.drawImage(currentImg,0,0,cv.width,cv.height);}}\n'+
+    '  var _cssW=0,_cssH=0;\n'+
+    '  function clean(){if(currentImg){cx.clearRect(0,0,_cssW,_cssH);cx.drawImage(currentImg,0,0,_cssW,_cssH);}}\n'+
     '  function drawWM(ctx,w,h){\n'+
     '    ctx.save();\n'+
     '    var fs=Math.max(18,Math.min(w,h)*0.045);\n'+
@@ -4199,6 +4223,7 @@ function buildItemDetailHTML(cat,item){
     '    cv.width=cssW*dpr;cv.height=cssH*dpr;\n'+
     '    cv.style.width=cssW+"px";cv.style.height=cssH+"px";\n'+
     '    cx.setTransform(dpr,0,0,dpr,0,0);\n'+
+    '    _cssW=cssW;_cssH=cssH;\n'+
     '    clean();\n'+
     '    var wc=document.createElement("canvas");wc.width=cv.width;wc.height=cv.height;\n'+
     '    var wx=wc.getContext("2d");wx.setTransform(dpr,0,0,dpr,0,0);wx.drawImage(img,0,0,cssW,cssH);drawWM(wx,cssW,cssH);\n'+
