@@ -2708,7 +2708,8 @@ async function handleCardImg(input){
       _cropImgH = srcImg.naturalHeight;
       document.getElementById('crop-file-info').textContent =
         '文件大小：'+sizeStr+'　原始尺寸：'+_cropImgW+' × '+_cropImgH+'px';
-      cropUpdateOverlay(0.5, 0.5);
+      // 等弹窗渲染完成后再计算遮罩位置
+      requestAnimationFrame(()=>requestAnimationFrame(()=>cropUpdateOverlay(0.5, 0.5)));
     };
     // 焦点点击/拖动事件
     const wrap = document.getElementById('crop-src-wrap');
@@ -2740,6 +2741,9 @@ async function handleCardImg(input){
       wrap.ontouchmove = function(ev2){ ev2.preventDefault(); setFocusT(ev2); };
     };
     document.getElementById('crop-preview-modal').style.display='flex';
+    // 窗口resize时重新计算遮罩
+    window._cropResizeHandler = ()=>{ if(_cropImgW) cropUpdateOverlay(_cropFocusX,_cropFocusY); };
+    window.addEventListener('resize', window._cropResizeHandler);
   };
   reader.readAsDataURL(file);
   input.value='';
@@ -2747,6 +2751,7 @@ async function handleCardImg(input){
 
 async function cropPreviewConfirm(mode){
   document.getElementById('crop-preview-modal').style.display='none';
+  if(window._cropResizeHandler) window.removeEventListener('resize', window._cropResizeHandler);
   if(!_cropFile) return;
   const file = _cropFile;
   const cardMode = _cropMode;
@@ -2788,6 +2793,7 @@ async function cropPreviewConfirm(mode){
 
 function cropPreviewCancel(){
   document.getElementById('crop-preview-modal').style.display='none';
+  if(window._cropResizeHandler) window.removeEventListener('resize', window._cropResizeHandler);
   _cropFile=null; _cropMode=null;
 }
 
