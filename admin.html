@@ -3866,7 +3866,8 @@ function buildGalleryDetailHTML(g){
     '  var cx=cv.getContext("2d");\n'+
     '  function renderImg(img){\n'+
     '    var dpr=window.devicePixelRatio||1;\n'+
-    '    var mw=Math.min(img.naturalWidth,window.innerWidth-80),sc=mw/img.naturalWidth;\n'+
+    '    var maxW=window.innerWidth-80,maxH=window.innerHeight*0.85;\n'+
+    '    var sc=Math.min(1,maxW/img.naturalWidth,maxH/img.naturalHeight);\n'+
     '    var cssW=img.naturalWidth*sc,cssH=img.naturalHeight*sc;\n'+
     '    cv.width=cssW*dpr;cv.height=cssH*dpr;\n'+
     '    cv.style.width=cssW+"px";cv.style.height=cssH+"px";\n'+
@@ -4218,7 +4219,8 @@ function buildItemDetailHTML(cat,item){
     '  function renderImg(img){\n'+
     '    currentImg=img;\n'+
     '    var dpr=window.devicePixelRatio||1;\n'+
-    '    var mw=Math.min(img.naturalWidth,window.innerWidth-80),sc=mw/img.naturalWidth;\n'+
+    '    var maxW=window.innerWidth-80,maxH=window.innerHeight*0.85;\n'+
+    '    var sc=Math.min(1,maxW/img.naturalWidth,maxH/img.naturalHeight);\n'+
     '    var cssW=img.naturalWidth*sc,cssH=img.naturalHeight*sc;\n'+
     '    cv.width=cssW*dpr;cv.height=cssH*dpr;\n'+
     '    cv.style.width=cssW+"px";cv.style.height=cssH+"px";\n'+
