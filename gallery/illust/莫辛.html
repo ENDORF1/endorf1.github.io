@@ -81,7 +81,7 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
   function renderImg(img){
     currentImg=img;
     var dpr=window.devicePixelRatio||1;
-    var maxW=window.innerWidth-80,maxH=window.innerHeight*0.85;
+    var maxW=window.innerWidth*0.8,maxH=window.innerHeight*0.85;
     var sc=Math.min(1,maxW/img.naturalWidth,maxH/img.naturalHeight);
     var cssW=img.naturalWidth*sc,cssH=img.naturalHeight*sc;
     cv.width=cssW*dpr;cv.height=cssH*dpr;
