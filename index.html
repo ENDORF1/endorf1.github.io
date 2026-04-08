@@ -750,12 +750,14 @@ async function submitChangePw() {
 ══════════════════════════════════════ */
 const $cur=document.getElementById('cursor'),$ring=document.getElementById('cursorRing');
 let mx=0,my=0,rx=0,ry=0,_cursorVisible=false;
-document.addEventListener('mousemove',e=>{
-  mx=e.clientX;my=e.clientY;
-  $cur.style.left=mx+'px';$cur.style.top=my+'px';
-  if(!_cursorVisible){_cursorVisible=true;$cur.style.opacity='1';$ring.style.opacity='.5';}
-});
-(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;$ring.style.left=rx+'px';$ring.style.top=ry+'px';requestAnimationFrame(loop);})();
+try{
+  document.addEventListener('mousemove',e=>{
+    mx=e.clientX;my=e.clientY;
+    $cur.style.left=mx+'px';$cur.style.top=my+'px';
+    if(!_cursorVisible){_cursorVisible=true;$cur.style.opacity='1';$ring.style.opacity='.5';}
+  });
+  (function loop(){try{rx+=(mx-rx)*.12;ry+=(my-ry)*.12;$ring.style.left=rx+'px';$ring.style.top=ry+'px';}catch(e){} requestAnimationFrame(loop);})();
+}catch(e){}
 function cursorHover(el){
   el.addEventListener('mouseenter',()=>{$cur.style.transform='translate(-50%,-50%) scale(2)';$cur.style.background='var(--magenta)';$ring.style.width='60px';$ring.style.height='60px';});
   el.addEventListener('mouseleave',()=>{$cur.style.transform='translate(-50%,-50%) scale(1)';$cur.style.background='var(--cyan)';$ring.style.width='36px';$ring.style.height='36px';});
@@ -853,7 +855,7 @@ function saveChanges(){
   // 清除游标内联坐标，避免保存到文件中
   const $c=document.getElementById('cursor');const $r=document.getElementById('cursorRing');
   const _cs=$c?$c.getAttribute('style'):'';const _rs=$r?$r.getAttribute('style'):'';
-  if($c)$c.removeAttribute('style');if($r)$r.removeAttribute('style');
+  if($c)$c.setAttribute('style','opacity:0');if($r)$r.setAttribute('style','opacity:0');
   // 确保 gh-log 不以 show 状态保存
   const ghLog=document.getElementById('gh-log');const _ghLogCls=ghLog?ghLog.className:'';
   if(ghLog)ghLog.className='';
@@ -877,7 +879,10 @@ function saveChanges(){
   if(_cpDot) _cpDot.setAttribute('style','position:absolute;width:14px;height:14px;border-radius:50%;background:var(--cyan);border:2px solid #fff;transform:translate(-50%,-50%);pointer-events:none;box-shadow:0 0 8px rgba(0,245,255,.8);left:50%;top:50%;');
   if(_cpHint) _cpHint.setAttribute('style','font-family:\'Share Tech Mono\',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:14px;display:none;');
   if(_cpStatus){_cpStatus.setAttribute('style','font-family:\'Share Tech Mono\',monospace;font-size:11px;letter-spacing:2px;min-height:20px;margin-bottom:12px;');_cpStatus.textContent='';}
-  const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+  const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML
+    .replace(/<div id="aix-action-loading-host">[\s\S]*$/, '</body></html>')
+    .replace(/<div id="sc-translator-shadow"[^>]*>[\s\S]*?<\/div>/g, '')
+    .replace(/<div style="position: fixed[^"]*"[^>]*>[\s\S]*?<\/div>/g, '');
   // 还原
   if($c&&_cs)$c.setAttribute('style',_cs);if($r&&_rs)$r.setAttribute('style',_rs);
   if(ghLog)ghLog.className=_ghLogCls;
@@ -1258,7 +1263,9 @@ async function pushToGithub() {
     if(_cpStatus2){_cpStatus2.setAttribute('style','font-family:\'Share Tech Mono\',monospace;font-size:11px;letter-spacing:2px;min-height:20px;margin-bottom:12px;');_cpStatus2.textContent='';}
     const ts = Date.now();
     const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML
-        .replace(/content="0">/, `content="0">\n<meta name="version" content="${ts}">`);
+        .replace(/content="0">/, `content="0">\n<meta name="version" content="${ts}">`)
+        .replace(/<div id="aix-action-loading-host">[\s\S]*$/, '</body></html>')
+        .replace(/<div id="sc-translator-shadow"[^>]*>[\s\S]*?<\/div>/g, '');
     // 还原瞬态 DOM
     if($c2&&_cs2)$c2.setAttribute('style',_cs2);if($r2&&_rs2)$r2.setAttribute('style',_rs2);
     if(ghLogEl)ghLogEl.className=_ghCls;
@@ -1711,26 +1718,4 @@ document.addEventListener('DOMContentLoaded', ()=>{
 ══════════════════════════════════════ */
 // Link navigation handled by clearing hrefs in enterEditMode
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-<div id="aix-action-loading-host"></div><script src="chrome-extension://pljfekbkmmbkdfhddpebdlmfngigcohc/content/windowDataMessage.js"></script><div id="aix-drop-panel">
-    <a id="aix-drop-panel-close-btn">×</a>
-        <div id="aix-drop-panel-inner">
-            <div class="aix-content">
-                <svg class="aix-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5892"><path d="M494.933333 782.933333c2.133333 2.133333 4.266667 4.266667 8.533334 6.4h8.533333c6.4 0 10.666667-2.133333 14.933333-6.4l2.133334-2.133333 275.2-275.2c8.533333-8.533333 8.533333-21.333333 0-29.866667-8.533333-8.533333-21.333333-8.533333-29.866667 0L533.333333 716.8V128c0-12.8-8.533333-21.333333-21.333333-21.333333s-21.333333 8.533333-21.333333 21.333333v588.8L249.6 475.733333c-8.533333-8.533333-21.333333-8.533333-29.866667 0-8.533333 8.533333-8.533333 21.333333 0 29.866667l275.2 277.333333zM853.333333 874.666667H172.8c-12.8 0-21.333333 8.533333-21.333333 21.333333s8.533333 21.333333 21.333333 21.333333H853.333333c12.8 0 21.333333-8.533333 21.333334-21.333333s-10.666667-21.333333-21.333334-21.333333z" p-id="5893"></path></svg>
-                <div class="aix-title">拖拽到此处完成下载</div>
-                <div class="aix-desc">图片将完成下载</div>
-            </div>
-            <div id="aix-supported-by">AIX智能下载器</div>
-        </div>
-    </div></body><div style="position: fixed; width: 400px; height: 200px; background-color: rgb(255, 255, 255); display: none; padding: 10px 14px; font-size: 14px; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 15px; z-index: 2147483647; white-space: pre-wrap; overflow-y: auto; border-radius: 4px;"></div><div id="sc-translator-shadow" style="all: initial;"></div></html>
+</body></html>
