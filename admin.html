@@ -3976,6 +3976,13 @@ function buildHomeHTML(){
       : `<div class="proj-card-live">${inner}</div>`;
   }).join('');
 
+  // 收集所有预加载 URL
+  const preloadUrls = JSON.stringify([
+    ...galleryCategories.flatMap(cat=>cat.items.filter(i=>i.img).map(i=>i.img)),
+    ...galleryCategories.flatMap(cat=>cat.items.filter(i=>i.imgFull&&i.imgFull!==i.img).map(i=>i.imgFull)),
+    ...posts.filter(p=>!p.draft&&p.coverImg).map(p=>p.coverImg),
+  ].filter(Boolean));
+
   return `<!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -4130,15 +4137,7 @@ ${gallery.length ? `
   </div>
 </footer>
 <script>
-// 预加载数据：按优先级排列
-window.__PRELOAD_URLS__=${JSON.stringify([
-  // 1. 画廊缩略图（所有分类所有作品）
-  ...galleryCategories.flatMap(cat=>cat.items.filter(i=>i.img).map(i=>i.img)),
-  // 2. 画廊原图
-  ...galleryCategories.flatMap(cat=>cat.items.filter(i=>i.imgFull&&i.imgFull!==i.img).map(i=>i.imgFull)),
-  // 3. 博客封面图
-  ...posts.filter(p=>!p.draft&&p.coverImg).map(p=>p.coverImg),
-].filter(Boolean))};
+window.__PRELOAD_URLS__=${preloadUrls};
 (function(){
   var urls=window.__PRELOAD_URLS__;
   if(!urls||!urls.length)return;
@@ -4156,7 +4155,7 @@ window.__PRELOAD_URLS__=${JSON.stringify([
   if('requestIdleCallback' in window) requestIdleCallback(loadNext,{timeout:2000});
   else setTimeout(loadNext,1000);
 })();
-</script>
+<\/script>
 </body></html>`;
 }
 
