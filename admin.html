@@ -481,6 +481,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
           </select>
           <span class="meta-label">外链</span>
           <input class="meta-input" id="works-link" placeholder="https://..." style="width:200px">
+          <span class="meta-label">试玩</span>
+          <input class="meta-input" id="works-play" placeholder="/play/... 或 https://..." style="width:240px" title="填写后，项目页会出现浏览器内游玩">
           <button id="works-cover-btn" onclick="document.getElementById('works-cover-input').click()">📷 封面图</button>
           <img id="works-cover-preview" src="" alt="封面" style="display:none;height:36px;width:60px;object-fit:cover;border:1px solid var(--border);cursor:pointer;" onclick="document.getElementById('works-cover-input').click()">
           <input type="file" id="works-cover-input" accept="image/*" style="display:none" onchange="handleWorksCover(this)">
@@ -2387,6 +2389,9 @@ function selectWork(i){
   document.getElementById('works-date').value = w.date||new Date().toISOString().slice(0,10);
   document.getElementById('works-status').value = w.draft===false?'published':'draft';
   document.getElementById('works-link').value = w.link||'';
+  const playSlug = w.slug || slugify(w.title||'');
+  const playDefault = playSlug === '烬明-emberlight' ? '/play/emberlight/index.html' : '';
+  document.getElementById('works-play').value = (typeof w.play === 'string') ? w.play : playDefault;
   document.getElementById('works-editor-content').innerHTML = _sanitizePastedHTML(w.content||'');
   worksCoverData = w.img||null;
   worksCoverFullData = w.imgFull||null;
@@ -2412,6 +2417,7 @@ function saveCurrentWork(isDraft=null){
   const statusVal = document.getElementById('works-status').value;
   w.draft = isDraft !== null ? isDraft : (statusVal==='published'?false:true);
   w.link = document.getElementById('works-link').value;
+  w.play = document.getElementById('works-play').value.trim();
   w.content = _sanitizePastedHTML(document.getElementById('works-editor-content').innerHTML);
   w.img = worksCoverData;
   w.imgFull = worksCoverFullData||worksCoverData;
@@ -2429,7 +2435,7 @@ function saveCurrentWork(isDraft=null){
 }
 
 function newWork(){
-  const w={title:'',tags:[],date:new Date().toISOString().slice(0,10),content:'',img:null,link:'',draft:true,slug:''};
+  const w={title:'',tags:[],date:new Date().toISOString().slice(0,10),content:'',img:null,link:'',play:'',draft:true,slug:''};
   works.unshift(w);
   saveState();
   selectWork(0);
@@ -3855,6 +3861,28 @@ ${('<scr'+'ipt>\n(function(){\n  document.addEventListener(\'contextmenu\',funct
 </body></html>`;
 }
 
+function workPlayUrl(w){
+  if(typeof w.play==='string') return w.play.trim();
+  const slug=w.slug||slugify(w.title||'');
+  if(slug==='烬明-emberlight') return '/play/emberlight/index.html';
+  return '';
+}
+
+function renderWorkMedia(w, esc, coverThumb, coverFull){
+  const play=workPlayUrl(w);
+  if(!play){
+    return coverThumb?'  <img class="wd-cover" src="'+esc(coverThumb)+'" data-full-src="'+esc(coverFull)+'" style="object-position:'+esc(w.imgPos||'50% 50%')+'" alt="" decoding="async" fetchpriority="high">\n':'';
+  }
+  const poster=coverThumb
+    ? '    <img class="wd-cover play-poster" src="'+esc(coverThumb)+'" data-full-src="'+esc(coverFull)+'" style="object-position:'+esc(w.imgPos||'50% 50%')+'" alt="" decoding="async">\n'
+    : '    <div class="play-poster play-poster-empty"></div>\n';
+  return '  <div class="play-shell" data-src="'+esc(play)+'">\n'
+    +poster
+    +'    <button type="button" class="play-launch">▶ 开始游戏</button>\n'
+    +'    <div class="play-hint">浏览器内直接游玩 · 点按后开始加载</div>\n'
+    +'  </div>\n';
+}
+
 function buildWorkDetailHTML(w){
   const slug=w.slug||slugify(w.title);
   // 排版参数（有则用，无则用默认值）
@@ -3908,6 +3936,17 @@ function buildWorkDetailHTML(w){
     +'.wd-body pre code{display:block;min-width:max-content;}\n'
     +'.video-embed{position:relative;width:100%;padding-bottom:56.25%;margin:24px 0;background:#000;}\n'
     +'.video-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}\n'
+    +'.play-shell{position:relative;width:min(100%,960px);margin:0 auto 28px;background:#05080f;border:1px solid rgba(0,245,255,.25);aspect-ratio:16/9;min-height:280px;overflow:hidden;}\n'
+    +'.play-shell .play-poster{position:absolute;inset:0;width:100%;height:100%;max-height:none;margin:0;object-fit:cover;border:none;}\n'
+    +'.play-poster-empty{background:rgba(0,245,255,.05);}\n'
+    +'.play-launch{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);z-index:2;font-family:\'Share Tech Mono\',monospace;font-size:14px;letter-spacing:3px;color:#041018;background:var(--cyan);border:none;padding:14px 28px;cursor:pointer;}\n'
+    +'.play-launch:hover{background:#fff;}\n'
+    +'.play-hint{position:absolute;left:0;right:0;bottom:18px;text-align:center;z-index:2;font-family:\'Share Tech Mono\',monospace;font-size:11px;letter-spacing:1px;color:#d7fff6;text-shadow:0 1px 8px #000;}\n'
+    +'.play-frame{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000;z-index:3;}\n'
+    +'.play-bar{position:absolute;top:8px;right:8px;z-index:4;display:flex;gap:8px;}\n'
+    +'.play-bar button,.play-bar a{font-family:\'Share Tech Mono\',monospace;font-size:10px;letter-spacing:1px;color:var(--cyan);background:rgba(4,16,24,.82);border:1px solid rgba(0,245,255,.35);padding:6px 10px;text-decoration:none;cursor:pointer;}\n'
+    +'.play-shell.is-playing .play-poster,.play-shell.is-playing .play-launch,.play-shell.is-playing .play-hint{display:none;}\n'
+    +'.play-shell:fullscreen,.play-shell:-webkit-full-screen{width:100%;height:100%;max-width:none;aspect-ratio:auto;margin:0;border:none;background:#000;}\n'
     +'@media (max-width: 768px){\n'
     +'  .back-btn{font-size:10px;letter-spacing:1px;padding:7px 14px;}\n'
     +'  .nav-btns{margin-bottom:24px;}\n'
@@ -3935,11 +3974,40 @@ function buildWorkDetailHTML(w){
     +'    <h1 class="wd-title">'+esc(w.title||'')+'</h1>\n'
     +'    <div class="wd-tags">'+(w.tags||[]).map(t=>'<span class="wd-tag-item">'+esc(t)+'</span>').join('')+'</div>\n'
     +'  </div>\n'
-    +(coverThumb?'  <img class="wd-cover" src="'+esc(coverThumb)+'" data-full-src="'+esc(coverFull)+'" style="object-position:'+esc(w.imgPos||'50% 50%')+'" alt="" decoding="async" fetchpriority="high">\n':'')
+    +renderWorkMedia(w, esc, coverThumb, coverFull)
     +'  <div class="wd-body">'+cleanContent(w.content||('<p>'+esc(w.desc||'')+'</p>'))+'</div>\n'
     +(w.link?'  <div style="margin-top:40px;"><a href="'+esc(w.link)+'" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border:1px solid var(--cyan);color:var(--cyan);font-family:\'Share Tech Mono\',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;text-decoration:none;transition:all .3s;">查看项目 →</a></div>\n':'')
     +'</div>\n'
     +'<scr'+'ipt>\n(function(){\n  document.addEventListener(\'contextmenu\',function(e){e.preventDefault();});\n  document.addEventListener(\'dragstart\',function(e){if(e.target.tagName===\'IMG\')e.preventDefault();});\n  document.addEventListener(\'keydown\',function(e){\n    if((e.ctrlKey||e.metaKey)&&(e.key===\'s\'||e.key===\'S\'||e.key===\'p\'||e.key===\'P\'))e.preventDefault();\n    if(e.key===\'PrintScreen\')e.preventDefault();\n  });\n  var cover=document.querySelector(\'.wd-cover[data-full-src]\');\n  if(cover){\n    var full=cover.getAttribute(\'data-full-src\');\n    var thumb=cover.getAttribute(\'src\');\n    if(full&&full!==thumb){\n      var swap=function(){\n        var img=new Image();\n        img.decoding=\'async\';\n        img.onload=function(){cover.src=full;};\n        img.src=full;\n      };\n      if(\'requestIdleCallback\' in window) requestIdleCallback(swap,{timeout:1500});\n      else setTimeout(swap,300);\n    }\n  }\n})();\n</'+'script>'
+    +'<scr'+'ipt>\n'
+    +'(function(){\n'
+    +'  var shell=document.querySelector(".play-shell");\n'
+    +'  if(!shell) return;\n'
+    +'  var btn=shell.querySelector(".play-launch");\n'
+    +'  if(!btn) return;\n'
+    +'  btn.addEventListener("click", function(){\n'
+    +'    if(shell.querySelector(".play-frame")) return;\n'
+    +'    var src=shell.getAttribute("data-src");\n'
+    +'    var frame=document.createElement("iframe");\n'
+    +'    frame.className="play-frame";\n'
+    +'    frame.src=src;\n'
+    +'    frame.title="在线游玩";\n'
+    +'    frame.setAttribute("allow","autoplay; fullscreen; gamepad; pointer-lock");\n'
+    +'    frame.setAttribute("allowfullscreen","");\n'
+    +'    shell.classList.add("is-playing");\n'
+    +'    shell.appendChild(frame);\n'
+    +'    var bar=document.createElement("div");\n'
+    +'    bar.className="play-bar";\n'
+    +'    bar.innerHTML="<button type=\\"button\\" data-act=\\"fs\\">全屏</button><a href=\\""+src+"\\" target=\\"_blank\\" rel=\\"noopener\\">新标签</a>";\n'
+    +'    shell.appendChild(bar);\n'
+    +'    bar.querySelector("[data-act=fs]").addEventListener("click", function(){\n'
+    +'      if(document.fullscreenElement) document.exitFullscreen();\n'
+    +'      else if(shell.requestFullscreen) shell.requestFullscreen();\n'
+    +'    });\n'
+    +'    frame.addEventListener("load", function(){ try{ frame.focus(); }catch(e){} });\n'
+    +'  });\n'
+    +'})();\n'
+    +'</'+'script>\n'
     +'\n</body></html>';
 }
 
