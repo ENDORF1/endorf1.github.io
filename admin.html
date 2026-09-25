@@ -160,8 +160,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 #editor-content p{margin:0 0 12px;color:var(--text);}
 #editor-content strong{color:var(--white);font-weight:700;}
 #editor-content em{color:var(--cyan);font-style:italic;}
-#editor-content ul,#editor-content ol{margin:8px 0 16px 24px;}
-#editor-content li{margin-bottom:6px;color:var(--text);}
+#editor-content ul,#editor-content ol{margin:8px 0 16px;padding-left:1.7em;color:var(--text);}
+#editor-content ul{list-style:disc outside;}
+#editor-content ol{list-style:decimal outside;}
+#editor-content li{margin-bottom:8px;color:var(--text);line-height:1.8;padding-left:.15em;}
+#editor-content li>div,#editor-content li>p{margin:0;}
 #editor-content a{color:var(--cyan);text-decoration:none;border-bottom:1px solid rgba(0,245,255,.3);}
 #editor-content blockquote{border-left:3px solid var(--cyan);padding:12px 20px;margin:16px 0;background:rgba(0,245,255,.04);color:var(--muted);}
 #editor-content hr{border:none;border-top:1px solid var(--border);margin:32px 0;}
@@ -269,8 +272,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 #works-editor-content p{margin:0 0 12px;color:var(--text);}
 #works-editor-content strong{color:var(--white);font-weight:700;}
 #works-editor-content em{color:var(--cyan);font-style:italic;}
-#works-editor-content ul,#works-editor-content ol{margin:8px 0 16px 24px;}
-#works-editor-content li{margin-bottom:6px;color:var(--text);}
+#works-editor-content ul,#works-editor-content ol{margin:8px 0 16px;padding-left:1.7em;color:var(--text);}
+#works-editor-content ul{list-style:disc outside;}
+#works-editor-content ol{list-style:decimal outside;}
+#works-editor-content li{margin-bottom:8px;color:var(--text);line-height:1.8;padding-left:.15em;}
+#works-editor-content li>div,#works-editor-content li>p{margin:0;}
+#works-editor-content .ace-line{margin:0 0 12px;line-height:1.9;color:var(--text);}
 #works-editor-content a{color:var(--cyan);text-decoration:none;border-bottom:1px solid rgba(0,245,255,.3);}
 #works-editor-content blockquote{border-left:3px solid var(--cyan);padding:12px 20px;margin:16px 0;background:rgba(0,245,255,.04);color:var(--muted);}
 #works-editor-content hr{border:none;border-top:1px solid var(--border);margin:32px 0;}
@@ -542,8 +549,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
           <input type="color" id="works-hl-color" class="et-hidden-input" value="#ffe600" oninput="applyHighlight(this.value,'works-editor-content','works-hl-swatch')">
         </div>
         <div class="et-sep"></div>
-        <button class="et-btn" onclick="wfmt('ul')">• 列表</button>
-        <button class="et-btn" onclick="wfmt('ol')">1. 列表</button>
+        <button class="et-btn" onclick="wfmt('ul')" title="无序列表">• 无序</button>
+        <button class="et-btn" onclick="wfmt('ol')" title="有序列表">1. 有序</button>
         <button class="et-btn" onclick="wfmt('blockquote')">❝ 引用</button>
         <button class="et-btn" onclick="wfmt('hr')">— 分割线</button>
         <button class="et-btn" onclick="wexec('indent')" title="增加缩进">→|</button>
@@ -646,8 +653,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
           <input type="color" id="blog-hl-color" class="et-hidden-input" value="#ffe600" oninput="applyHighlight(this.value,'editor-content','blog-hl-swatch')">
         </div>
         <div class="et-sep"></div>
-        <button class="et-btn" onclick="fmt('ul')" title="无序列表">• 列表</button>
-        <button class="et-btn" onclick="fmt('ol')" title="有序列表">1. 列表</button>
+        <button class="et-btn" onclick="fmt('ul')" title="无序列表">• 无序</button>
+        <button class="et-btn" onclick="fmt('ol')" title="有序列表">1. 有序</button>
         <button class="et-btn" onclick="fmt('blockquote')" title="引用">❝ 引用</button>
         <button class="et-btn" onclick="fmt('hr')" title="分割线">— 分割线</button>
         <button class="et-btn" onclick="exec('indent')" title="增加缩进">→|</button>
@@ -1262,7 +1269,7 @@ function selectPost(i){
   document.getElementById('post-cat').value=p.cat||'';
   document.getElementById('post-tags').value=(p.tags||[]).join(', ');
   document.getElementById('post-date').value=p.date||new Date().toISOString().slice(0,10);
-  document.getElementById('editor-content').innerHTML=p.content||'';
+  document.getElementById('editor-content').innerHTML=_sanitizePastedHTML(p.content||'');
   coverData=p.cover||null;
   const prev=document.getElementById('cover-preview');
   if(coverData){prev.src=coverData;prev.style.display='block';}
@@ -1348,7 +1355,7 @@ function saveCurrentPost(isDraft=true){
   p.cat=document.getElementById('post-cat').value||'未分类';
   p.tags=document.getElementById('post-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
   p.date=document.getElementById('post-date').value||new Date().toISOString().slice(0,10);
-  p.content=document.getElementById('editor-content').innerHTML;
+  p.content=_sanitizePastedHTML(document.getElementById('editor-content').innerHTML);
   p.cover=coverData;
   // 优先以 UI 切换的状态为准；isDraft 参数只在无 UI 时作为默认值
   const uiStatus = document.getElementById('btn-pub');
@@ -1425,7 +1432,90 @@ function _saveEditorSelection(edId){
   });
 });
 
-/* paste cleaner: strip Word/mso junk, fix table widths */
+function _unwrapEl(el){
+  const parent=el.parentNode;
+  if(!parent) return;
+  while(el.firstChild) parent.insertBefore(el.firstChild,el);
+  parent.removeChild(el);
+}
+
+function _sanitizePastedHTML(html){
+  if(!html) return '';
+  try{
+    html=String(html)
+      .replace(/<!--\s*StartFragment\s*-->/gi,'')
+      .replace(/<!--\s*EndFragment\s*-->/gi,'')
+      .replace(/<!--[\s\S]*?-->/g,'')
+      .replace(/<o:p[^>]*>[\s\S]*?<\/o:p>/gi,'')
+      .replace(/<w:[^>]+>[\s\S]*?<\/w:[^>]+>/gi,'')
+      .replace(/mso-[a-z\-]+\s*:[^;"']*;?/gi,'')
+      .replace(/\s*style="\s*"/gi,'')
+      .replace(/(<table[^>]*)\s+width="\d+[^"]*"/gi,'$1')
+      .replace(/(<table[^>]*style="[^"]*)width\s*:\s*\d+px/gi,'$1width:100%');
+
+    const doc=new DOMParser().parseFromString('<div id="__sanroot">'+html+'</div>','text/html');
+    const root=doc.getElementById('__sanroot');
+    if(!root) return html;
+
+    root.querySelectorAll('script,style,meta,link').forEach(el=>el.remove());
+    root.querySelectorAll('[data-lark-html-role],[data-page-id],[data-docx-has-block-data],byte-sheet-html-origin').forEach(_unwrapEl);
+
+    root.querySelectorAll('div.ace-line, div[class*="old-record-id"], div[class*="ace-line"]').forEach(el=>{
+      if(el.closest('li,blockquote,pre,td,th,figure')){
+        _unwrapEl(el);
+        return;
+      }
+      const p=doc.createElement('p');
+      p.innerHTML=el.innerHTML;
+      el.replaceWith(p);
+    });
+
+    root.querySelectorAll('li > div, blockquote > div').forEach(el=>{
+      if(!el.querySelector('ul,ol,table,pre,figure,blockquote')) _unwrapEl(el);
+    });
+
+    root.querySelectorAll('[data-type="divider"]').forEach(el=>{
+      const hr=el.querySelector('hr')||doc.createElement('hr');
+      el.replaceWith(hr);
+    });
+
+    root.querySelectorAll('*').forEach(el=>{
+      [...el.attributes].forEach(attr=>{
+        const n=attr.name, v=attr.value||'';
+        if(n.startsWith('data-') || n==='record-id' || n.startsWith('old-record')){
+          el.removeAttribute(n);
+          return;
+        }
+        if(n==='class'){
+          const kept=v.split(/\s+/).filter(c=>c && !/^(ace-line|old-record-id\S*|list-bullet\d*|list-number\d*)$/.test(c));
+          if(kept.length) el.className=kept.join(' ');
+          else el.removeAttribute('class');
+        }
+      });
+    });
+
+    root.querySelectorAll('p').forEach(p=>{
+      const t=(p.textContent||'').replace(/\u00a0/g,' ').trim();
+      if(!t && !p.querySelector('img,figure,br,table')) p.remove();
+    });
+
+    root.querySelectorAll('table').forEach(t=>{
+      if(!t.closest('.table-wrap')){
+        const wrap=doc.createElement('div');
+        wrap.className='table-wrap';
+        t.replaceWith(wrap);
+        wrap.appendChild(t);
+      }
+    });
+
+    return root.innerHTML;
+  }catch(err){
+    console.warn('sanitize failed', err);
+    return String(html).replace(/<!--\s*StartFragment\s*-->/gi,'').replace(/<!--\s*EndFragment\s*-->/gi,'');
+  }
+}
+
+/* paste cleaner: strip Word/飞书 junk, fix table widths */
 function _cleanPaste(edId){
   return function(e){
     e.preventDefault();
@@ -1435,16 +1525,7 @@ function _cleanPaste(edId){
       document.execCommand('insertText',false,txt);
       return;
     }
-    // Remove mso-* and Office namespace junk
-    html=html.replace(/<o:p[^>]*>[\s\S]*?<\/o:p>/gi,'');
-    html=html.replace(/<w:[^>]+>[\s\S]*?<\/w:[^>]+>/gi,'');
-    html=html.replace(/mso-[a-z\-]+\s*:[^;"]*/gi,'');
-    html=html.replace(/\s*style="\s*"/gi,'');
-    // Strip fixed pixel widths on tables so margin:auto works
-    html=html.replace(/(<table[^>]*)\s+width="\d+[^"]*"/gi,'$1');
-    html=html.replace(/(<table[^>]*style="[^"]*)width\s*:\s*\d+px/gi,'$1width:100%');
-    // Wrap table in a div.table-wrap for easier targeting
-    html=html.replace(/(<table[\s\S]*?<\/table>)/gi,'<div class="table-wrap">$1</div>');
+    html=_sanitizePastedHTML(html);
     document.getElementById(edId).focus();
     document.execCommand('insertHTML',false,html);
   };
@@ -1802,6 +1883,81 @@ function exec(cmd,val=null){
 }
 
 
+function _closestEditorBlock(ed, node){
+  if(!node) return null;
+  if(node.nodeType===3) node=node.parentElement;
+  while(node && node!==ed){
+    if(/^(P|DIV|H[1-6]|LI|BLOCKQUOTE)$/.test(node.tagName)) return node;
+    node=node.parentElement;
+  }
+  return null;
+}
+
+function _toggleList(ed, type){
+  if(!ed) return;
+  ed.focus();
+  const sel=window.getSelection();
+  const listTag=type==='ol'?'OL':'UL';
+  let existing=null;
+  if(sel && sel.anchorNode){
+    let n=sel.anchorNode;
+    if(n.nodeType===3) n=n.parentElement;
+    if(n && n.closest) existing=n.closest('ul,ol');
+    if(existing && !ed.contains(existing)) existing=null;
+  }
+  if(existing){
+    if(existing.tagName===listTag){
+      const frag=document.createDocumentFragment();
+      [...existing.children].forEach(li=>{
+        const p=document.createElement('p');
+        p.innerHTML=li.innerHTML;
+        frag.appendChild(p);
+      });
+      existing.replaceWith(frag);
+      return;
+    }
+    const next=document.createElement(type);
+    next.innerHTML=existing.innerHTML;
+    existing.replaceWith(next);
+    return;
+  }
+  const cmd=type==='ol'?'insertOrderedList':'insertUnorderedList';
+  const before=ed.querySelectorAll('ul,ol').length;
+  document.execCommand(cmd,false,null);
+  if(ed.querySelectorAll('ul,ol').length!==before) return;
+
+  const blocks=[];
+  if(sel && sel.rangeCount && !sel.isCollapsed){
+    const range=sel.getRangeAt(0);
+    const walker=document.createTreeWalker(ed, NodeFilter.SHOW_ELEMENT, {
+      acceptNode(node){
+        if(!/^(P|DIV|H[1-6])$/.test(node.tagName)) return NodeFilter.FILTER_SKIP;
+        if(!range.intersectsNode(node)) return NodeFilter.FILTER_SKIP;
+        if(node.closest('ul,ol,pre,table')) return NodeFilter.FILTER_SKIP;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    let cur;
+    while((cur=walker.nextNode())) blocks.push(cur);
+  }
+  if(!blocks.length){
+    const one=_closestEditorBlock(ed, sel && sel.anchorNode);
+    if(one && one!==ed) blocks.push(one);
+  }
+  if(!blocks.length){
+    document.execCommand('insertHTML',false,'<'+type+'><li>列表项</li></'+type+'><p><br></p>');
+    return;
+  }
+  const list=document.createElement(type);
+  blocks.forEach((block,i)=>{
+    const li=document.createElement('li');
+    li.innerHTML=block.innerHTML || '列表项';
+    list.appendChild(li);
+    if(i===0) block.replaceWith(list);
+    else block.remove();
+  });
+}
+
 function fmt(type){
   const ed=document.getElementById('editor-content');
   ed.focus();
@@ -1811,8 +1967,8 @@ function fmt(type){
   if(type==='h1'){node=document.createElement('h1');node.textContent=text||'标题一';}
   else if(type==='h2'){node=document.createElement('h2');node.textContent=text||'标题二';}
   else if(type==='h3'){node=document.createElement('h3');node.textContent=text||'标题三';}
-  else if(type==='ul'){document.execCommand('insertUnorderedList');return;}
-  else if(type==='ol'){document.execCommand('insertOrderedList');return;}
+  else if(type==='ul'){_toggleList(ed,'ul');return;}
+  else if(type==='ol'){_toggleList(ed,'ol');return;}
   else if(type==='blockquote'){
     node=document.createElement('blockquote');node.textContent=text||'引用内容';
   }
@@ -2231,7 +2387,7 @@ function selectWork(i){
   document.getElementById('works-date').value = w.date||new Date().toISOString().slice(0,10);
   document.getElementById('works-status').value = w.draft===false?'published':'draft';
   document.getElementById('works-link').value = w.link||'';
-  document.getElementById('works-editor-content').innerHTML = w.content||'';
+  document.getElementById('works-editor-content').innerHTML = _sanitizePastedHTML(w.content||'');
   worksCoverData = w.img||null;
   worksCoverFullData = w.imgFull||null;
   const prev = document.getElementById('works-cover-preview');
@@ -2256,7 +2412,7 @@ function saveCurrentWork(isDraft=null){
   const statusVal = document.getElementById('works-status').value;
   w.draft = isDraft !== null ? isDraft : (statusVal==='published'?false:true);
   w.link = document.getElementById('works-link').value;
-  w.content = document.getElementById('works-editor-content').innerHTML;
+  w.content = _sanitizePastedHTML(document.getElementById('works-editor-content').innerHTML);
   w.img = worksCoverData;
   w.imgFull = worksCoverFullData||worksCoverData;
   w.slug = slugify(w.title);
@@ -2301,7 +2457,8 @@ async function handleWorksCover(input){
   if(!GH.user||!GH.repo||!GH.token){ showToast('err','请先配置 GitHub 才能上传图片'); input.value=''; return; }
   showToast('info','⟳ 上传封面中...');
   try{
-    const [thumbUrl, fullUrl] = await Promise.all([uploadImageToGH(file), uploadImageToGHRaw(file)]);
+    const thumbUrl = await uploadImageToGH(file);
+    const fullUrl = await uploadImageToGHRaw(file);
     worksCoverData = thumbUrl;
     worksCoverFullData = fullUrl;
     const prev = document.getElementById('works-cover-preview');
@@ -2328,8 +2485,8 @@ function wfmt(type){
   let node;
   if(type==='h2'){node=document.createElement('h2');node.textContent=text||'标题二';}
   else if(type==='h3'){node=document.createElement('h3');node.textContent=text||'标题三';}
-  else if(type==='ul'){document.execCommand('insertUnorderedList');return;}
-  else if(type==='ol'){document.execCommand('insertOrderedList');return;}
+  else if(type==='ul'){_toggleList(ed,'ul');return;}
+  else if(type==='ol'){_toggleList(ed,'ol');return;}
   else if(type==='blockquote'){node=document.createElement('blockquote');node.textContent=text||'引用内容';}
   else if(type==='hr'){document.execCommand('insertHTML',false,'<hr><p><br></p>');return;}
   if(node){ const p=document.createElement('p'); p.appendChild(document.createTextNode('')); const frag=document.createDocumentFragment(); frag.appendChild(node); frag.appendChild(p); document.execCommand('insertHTML',false,node.outerHTML+'<p><br></p>'); }
@@ -2853,16 +3010,24 @@ async function uploadBlobToGH(blob, ext){
     reader.onerror=rej;
     reader.readAsDataURL(blob);
   });
-  const fname='images/'+Date.now()+'-'+Math.random().toString(36).slice(2,7)+'.'+ext;
+  const fname='images/'+Date.now()+'-'+(++_imgSeq)+'-'+Math.random().toString(36).slice(2,7)+'.'+ext;
   const apiUrl=`https://api.github.com/repos/${GH.user}/${GH.repo}/contents/${fname}`;
   const headers={'Authorization':`token ${GH.token}`,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'};
-  const res=await fetch(apiUrl,{method:'PUT',headers,body:JSON.stringify({message:'upload image: '+fname,content:base64})});
-  if(!res.ok){
-    const d=await res.json().catch(()=>({}));
-    if(res.status===401) throw new Error('GitHub Token 无效');
-    if(res.status===403) throw new Error('Token 权限不足');
-    throw new Error(d.message||'HTTP '+res.status);
-  }
+  await ghEnqueue(async ()=>{
+    let lastErr=null;
+    for(let attempt=0; attempt<4; attempt++){
+      const res=await fetch(apiUrl,{method:'PUT',headers,body:JSON.stringify({message:'upload image: '+fname,content:base64})});
+      if(res.ok) return;
+      const d=await res.json().catch(()=>({}));
+      if(res.status===401) throw new Error('GitHub Token 无效');
+      if(res.status===403) throw new Error('Token 权限不足');
+      lastErr=d.message||('HTTP '+res.status);
+      const conflict=res.status===409||res.status===422||/is at|expected|sha/i.test(lastErr||'');
+      if(!conflict || attempt===3) throw new Error(lastErr);
+      await new Promise(r=>setTimeout(r,280*(attempt+1)));
+    }
+    throw new Error(lastErr||'上传失败');
+  });
   return `https://cdn.jsdelivr.net/gh/${GH.user}/${GH.repo}@main/${fname}`;
 }
 
@@ -3005,18 +3170,38 @@ function pushLog(msg,type='info'){
   body.scrollTop=body.scrollHeight;
 }
 
+let _ghWriteChain=Promise.resolve();
+function ghEnqueue(task){
+  const run=_ghWriteChain.then(task,task);
+  _ghWriteChain=run.catch(()=>{});
+  return run;
+}
+
 async function ghPut(path,content,msg){
+  return ghEnqueue(()=>_ghPutOnce(path,content,msg));
+}
+
+async function _ghPutOnce(path,content,msg){
   const apiBase=`https://api.github.com/repos/${GH.user}/${GH.repo}/contents/${path}`;
   const headers={'Authorization':`token ${GH.token}`,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'};
   const encoded=btoa(unescape(encodeURIComponent(content)));
-  let sha=null;
-  const getRes=await fetch(apiBase,{headers});
-  if(getRes.ok){const d=await getRes.json();sha=d.sha;}
-  else if(getRes.status===401){throw new Error('Token 无效，请检查 GitHub 配置');}
-  else if(getRes.status===403){throw new Error('Token 权限不足，请勾选 repo 权限');}
-  const body={message:msg,content:encoded,...(sha?{sha}:{})};
-  const putRes=await fetch(apiBase,{method:'PUT',headers,body:JSON.stringify(body)});
-  if(!putRes.ok){const d=await putRes.json().catch(()=>({}));throw new Error(d.message||'推送失败 HTTP '+putRes.status);}
+  let lastErr=null;
+  for(let attempt=0; attempt<4; attempt++){
+    let sha=null;
+    const getRes=await fetch(apiBase,{headers});
+    if(getRes.ok){const d=await getRes.json();sha=d.sha;}
+    else if(getRes.status===401){throw new Error('Token 无效，请检查 GitHub 配置');}
+    else if(getRes.status===403){throw new Error('Token 权限不足，请勾选 repo 权限');}
+    const body={message:msg,content:encoded,...(sha?{sha}:{})};
+    const putRes=await fetch(apiBase,{method:'PUT',headers,body:JSON.stringify(body)});
+    if(putRes.ok) return;
+    const d=await putRes.json().catch(()=>({}));
+    lastErr=d.message||('推送失败 HTTP '+putRes.status);
+    const conflict=putRes.status===409||putRes.status===422||/is at|expected|sha/i.test(lastErr||'');
+    if(!conflict || attempt===3) throw new Error(lastErr);
+    await new Promise(r=>setTimeout(r,250*(attempt+1)));
+  }
+  throw new Error(lastErr||'推送失败');
 }
 
 /* ══════════════════════════════════════
@@ -3495,6 +3680,7 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
 
 function cleanContent(html){
   if(!html)return '';
+  html=_sanitizePastedHTML(html);
   // 清理编辑态属性（figcaption contenteditable 等）
   html=html.replace(/\s*contenteditable="[^"]*"/gi,'');
   html=html.replace(/\s*spellcheck="[^"]*"/gi,'');
@@ -3544,8 +3730,12 @@ ${BASE_CSS}
 .post-body p{margin:0 0 ${pgap};line-height:${lineHeight};color:var(--text);}
 .post-body strong{color:#fff;font-weight:700;}
 .post-body em{color:var(--cyan);font-style:italic;}
-.post-body ul,.post-body ol{margin:8px 0 16px 28px;}
-.post-body li{margin-bottom:8px;line-height:${lineHeight};}
+.post-body ul,.post-body ol{margin:8px 0 16px;padding-left:1.7em;}
+.post-body ul{list-style:disc outside;}
+.post-body ol{list-style:decimal outside;}
+.post-body li{margin-bottom:8px;line-height:${lineHeight};padding-left:.15em;}
+.post-body li>div,.post-body li>p{margin:0;}
+.post-body .ace-line{margin:0 0 ${pgap};line-height:${lineHeight};color:var(--text);}
 .post-body a{color:var(--cyan);border-bottom:1px solid rgba(0,245,255,.3);text-decoration:none;}
 .post-body blockquote{border-left:3px solid var(--cyan);padding:12px 20px;margin:20px 0;background:rgba(0,245,255,.04);color:var(--muted);}
 .post-body hr{border:none;border-top:1px solid rgba(0,245,255,.15);margin:40px 0;}
@@ -3698,8 +3888,15 @@ function buildWorkDetailHTML(w){
     +'.wd-body h2{font-size:22px;font-weight:700;color:#fff;margin:32px 0 12px;padding-left:12px;border-left:3px solid var(--magenta);}\n'
     +'.wd-body h3{font-size:18px;font-weight:700;color:#fff;margin:24px 0 10px;padding-left:10px;border-left:2px solid var(--cyan);}\n'
     +'.wd-body p{margin:0 0 '+pgap+';line-height:'+lineHeight+';color:var(--text);}\n'
-    +'.wd-body ul{margin:8px 0 '+pgap+' 24px;}\n'
-    +'.wd-body li{margin-bottom:8px;line-height:'+lineHeight+';color:var(--text);}\n'
+    +'.wd-body a{color:var(--cyan);border-bottom:1px solid rgba(0,245,255,.3);text-decoration:none;}\n'
+    +'.wd-body strong{color:#fff;font-weight:700;}\n'
+    +'.wd-body blockquote{border-left:3px solid var(--cyan);padding:12px 20px;margin:20px 0;background:rgba(0,245,255,.04);color:var(--muted);line-height:'+lineHeight+';}\n'
+    +'.wd-body ul,.wd-body ol{margin:8px 0 '+pgap+';padding-left:1.7em;}\n'
+    +'.wd-body ul{list-style:disc outside;}\n'
+    +'.wd-body ol{list-style:decimal outside;}\n'
+    +'.wd-body li{margin-bottom:8px;line-height:'+lineHeight+';color:var(--text);padding-left:.15em;}\n'
+    +'.wd-body li>div,.wd-body li>p{margin:0;}\n'
+    +'.wd-body .ace-line,.wd-body > div:not(.table-wrap):not(.video-embed){margin:0 0 '+pgap+';line-height:'+lineHeight+';color:var(--text);}\n'
     +'.wd-body img{max-width:100%;border:1px solid rgba(0,245,255,.15);margin:'+pgap+' auto;display:block;}\n'
     +'.wd-body .table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:'+pgap+' 0;}\n'
     +'.wd-body table{width:100%;min-width:560px;border-collapse:collapse;margin:'+pgap+' 0;font-size:14px;}\n'
@@ -3717,7 +3914,7 @@ function buildWorkDetailHTML(w){
     +'  .wd-cover{max-height:320px;}\n'
     +'  .wd-body h2{font-size:20px;margin:26px 0 10px;padding-left:10px;}\n'
     +'  .wd-body h3{font-size:17px;margin:22px 0 8px;padding-left:8px;}\n'
-    +'  .wd-body ul{margin-left:20px;}\n'
+    +'  .wd-body ul,.wd-body ol{padding-left:1.4em;}\n'
     +'  .wd-body table{font-size:13px;min-width:480px;}\n'
     +'  .wd-body table td,.wd-body table th{padding:8px 10px;}\n'
     +'  .wd-body pre{width:100vw;position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;border-left:none;border-right:none;overflow-x:auto;-webkit-overflow-scrolling:touch;box-sizing:border-box;padding:12px 5.5vw;font-size:12px;}\n'
@@ -4408,6 +4605,7 @@ async function compressImage(file, maxWidth=800, quality=0.85){
   });
 }
 
+let _imgSeq=0;
 async function uploadImageToGH(file, compress=true, suffix='', maxWidth=800, quality=0.85){
   let dataToUpload = file;
   let ext = file.name.split('.').pop().toLowerCase()||'jpg';
@@ -4427,7 +4625,7 @@ async function uploadImageToGH(file, compress=true, suffix='', maxWidth=800, qua
   });
 
   // Build a unique filename
-  const fname='images/'+Date.now()+'-'+Math.random().toString(36).slice(2,7)+(suffix?'-'+suffix:'')+'.'+ext;
+  const fname='images/'+Date.now()+'-'+(++_imgSeq)+'-'+Math.random().toString(36).slice(2,7)+(suffix?'-'+suffix:'')+'.'+ext;
   const apiUrl=`https://api.github.com/repos/${GH.user}/${GH.repo}/contents/${fname}`;
   const headers={
     'Authorization':`token ${GH.token}`,
@@ -4435,28 +4633,30 @@ async function uploadImageToGH(file, compress=true, suffix='', maxWidth=800, qua
     'Accept':'application/vnd.github.v3+json'
   };
 
-  const res=await fetch(apiUrl,{
-    method:'PUT',
-    headers,
-    body:JSON.stringify({
-      message:'upload image: '+fname,
-      content:base64
-    })
+  await ghEnqueue(async ()=>{
+    let lastErr=null;
+    for(let attempt=0; attempt<4; attempt++){
+      const res=await fetch(apiUrl,{
+        method:'PUT',
+        headers,
+        body:JSON.stringify({
+          message:'upload image: '+fname,
+          content:base64
+        })
+      });
+      if(res.ok) return;
+      const d=await res.json().catch(()=>({}));
+      if(res.status===401) throw new Error('GitHub Token 无效');
+      if(res.status===403) throw new Error('Token 权限不足，请勾选 repo');
+      lastErr=d.message||('HTTP '+res.status);
+      const conflict=res.status===409||res.status===422||/is at|expected|sha/i.test(lastErr||'');
+      if(!conflict || attempt===3) throw new Error(lastErr);
+      await new Promise(r=>setTimeout(r,280*(attempt+1)));
+    }
+    throw new Error(lastErr||'上传失败');
   });
 
-  if(!res.ok){
-    const d=await res.json().catch(()=>({}));
-    if(res.status===401) throw new Error('GitHub Token 无效');
-    if(res.status===403) throw new Error('Token 权限不足，请勾选 repo');
-    if(res.status===422) throw new Error('文件已存在');
-    throw new Error(d.message||'HTTP '+res.status);
-  }
-
-  // Return the raw GitHub Pages URL
-  const data=await res.json();
-  // Use jsdelivr CDN for faster loading in China
-  const rawUrl=`https://cdn.jsdelivr.net/gh/${GH.user}/${GH.repo}@main/${fname}`;
-  return rawUrl;
+  return `https://cdn.jsdelivr.net/gh/${GH.user}/${GH.repo}@main/${fname}`;
 }
 
 // Upload original image without compression
