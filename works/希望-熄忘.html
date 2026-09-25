@@ -43,8 +43,15 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
 .wd-body h2{font-size:22px;font-weight:700;color:#fff;margin:32px 0 12px;padding-left:12px;border-left:3px solid var(--magenta);}
 .wd-body h3{font-size:18px;font-weight:700;color:#fff;margin:24px 0 10px;padding-left:10px;border-left:2px solid var(--cyan);}
 .wd-body p{margin:0 0 16px;line-height:1.9;color:var(--text);}
-.wd-body ul{margin:8px 0 16px 24px;}
-.wd-body li{margin-bottom:8px;line-height:1.9;color:var(--text);}
+.wd-body a{color:var(--cyan);border-bottom:1px solid rgba(0,245,255,.3);text-decoration:none;}
+.wd-body strong{color:#fff;font-weight:700;}
+.wd-body blockquote{border-left:3px solid var(--cyan);padding:12px 20px;margin:20px 0;background:rgba(0,245,255,.04);color:var(--muted);line-height:1.9;}
+.wd-body ul,.wd-body ol{margin:8px 0 16px;padding-left:1.7em;}
+.wd-body ul{list-style:disc outside;}
+.wd-body ol{list-style:decimal outside;}
+.wd-body li{margin-bottom:8px;line-height:1.9;color:var(--text);padding-left:.15em;}
+.wd-body li>div,.wd-body li>p{margin:0;}
+.wd-body .ace-line,.wd-body > div:not(.table-wrap):not(.video-embed){margin:0 0 16px;line-height:1.9;color:var(--text);}
 .wd-body img{max-width:100%;border:1px solid rgba(0,245,255,.15);margin:16px auto;display:block;}
 .wd-body .table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:16px 0;}
 .wd-body table{width:100%;min-width:560px;border-collapse:collapse;margin:16px 0;font-size:14px;}
@@ -62,7 +69,7 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
   .wd-cover{max-height:320px;}
   .wd-body h2{font-size:20px;margin:26px 0 10px;padding-left:10px;}
   .wd-body h3{font-size:17px;margin:22px 0 8px;padding-left:8px;}
-  .wd-body ul{margin-left:20px;}
+  .wd-body ul,.wd-body ol{padding-left:1.4em;}
   .wd-body table{font-size:13px;min-width:480px;}
   .wd-body table td,.wd-body table th{padding:8px 10px;}
   .wd-body pre{width:100vw;position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;border-left:none;border-right:none;overflow-x:auto;-webkit-overflow-scrolling:touch;box-sizing:border-box;padding:12px 5.5vw;font-size:12px;}
