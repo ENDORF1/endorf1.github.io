@@ -3411,7 +3411,9 @@ async function patchHomeHTML(){
   const publishedWorks = works.filter(w=>w.draft===false&&w.title).slice(0,6);
   const worksHTML = publishedWorks.length > 0 ? publishedWorks.map(w=>{
     const slug=w.slug||slugify(w.title);
+    const cover = w.img ? '<img class="proj-cover" src="'+esc(w.img)+'" alt="'+esc(w.title||'')+'" style="object-position:'+esc(w.imgPos||'50% 50%')+'">' : '';
     return '<a class="proj-card" href="/works/'+esc(slug)+'.html">'
+      +cover
       +'<div class="card-controls"><div class="card-drag-handle">\u283f\u283f</div>'
       +'<button class="card-delete" onclick="this.closest(\'.proj-card\').remove()">\u2715</button></div>'
       +'<div class="proj-tag">// '+esc(((w.tags||[])[0]?w.tags[0].toUpperCase():'PROJECT'))+'</div>'
