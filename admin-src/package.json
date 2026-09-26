@@ -1,0 +1,40 @@
+{
+  "name": "devlog-admin",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/dev-server.mjs",
+    "build": "vite build --config vite.editor.config.js && vite build && node scripts/finalize-build.mjs",
+    "migrate": "node scripts/migrate-published.mjs",
+    "test": "node scripts/e2e.mjs",
+    "test:built": "node scripts/e2e.mjs --built"
+  },
+  "dependencies": {
+    "@floating-ui/dom": "^1.8.0",
+    "@tiptap/core": "^3.31.3",
+    "@tiptap/extension-bubble-menu": "^3.31.3",
+    "@tiptap/extension-code-block-lowlight": "^3.31.3",
+    "@tiptap/extension-list": "^3.31.3",
+    "@tiptap/extension-subscript": "^3.31.3",
+    "@tiptap/extension-superscript": "^3.31.3",
+    "@tiptap/extension-table": "^3.31.3",
+    "@tiptap/extension-text-align": "^3.31.3",
+    "@tiptap/extension-text-style": "^3.31.3",
+    "@tiptap/extensions": "^3.31.3",
+    "@tiptap/html": "^3.31.3",
+    "@tiptap/pm": "^3.31.3",
+    "@tiptap/starter-kit": "^3.31.3",
+    "@tiptap/suggestion": "^3.31.3",
+    "highlight.js": "^11.12.0",
+    "lowlight": "^3.3.0",
+    "marked": "^18.0.14",
+    "preact": "^10.29.8"
+  },
+  "devDependencies": {
+    "jsdom": "^30.1.1",
+    "playwright-core": "^1.63.0",
+    "vite": "^8.3.1",
+    "vite-plugin-singlefile": "^2.3.3"
+  }
+}

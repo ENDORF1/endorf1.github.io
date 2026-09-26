@@ -1,0 +1,4 @@
+node_modules/
+admin-src/dist/
+admin-src/dist-editor/
+admin-src/.tmp/
