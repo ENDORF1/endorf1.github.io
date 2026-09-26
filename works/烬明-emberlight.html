@@ -2,10 +2,16 @@
 <html lang="zh"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>烬明 EMBERLIGHT · 游戏开发 · _DEV.LOG</title>
+<meta name="generator" content="devlog-admin 2">
+<meta name="description" content="这是一款名叫烬明的游戏，是一个用于参加名为Gwueble Jam（ Gwueble Jam - 2026 - itch.io ） 的game jam的小项目。 这是开箱即玩的网址 EmberLight by While(1)。（可能需要梯…">
+<meta property="og:description" content="这是一款名叫烬明的游戏，是一个用于参加名为Gwueble Jam（ Gwueble Jam - 2026 - itch.io ） 的game jam的小项目。 这是开箱即玩的网址 EmberLight by While(1)。（可能需要梯…">
+<meta property="og:title" content="烬明 EMBERLIGHT · 游戏开发 · _DEV.LOG">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1790371293768-1-e6t8q.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Noto+Sans+SC:wght@300;400;700&family=Fira+Code:wght@400;500&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Noto+Sans+SC:wght@300;400;700&family=Fira+Code:wght@400;500&display=swap"></noscript>
 <style>
-
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Noto+Sans+SC:wght@300;400;700&family=Fira+Code:wght@400;500&display=swap');
-:root{--bg:#030810;--dim:#0a1628;--text:#c8e0f0;--muted:#3a5a7a;--cyan:#00f5ff;--magenta:#ff006e;--yellow:#ffe600;--glow-c:0 0 8px #00f5ff88,0 0 24px #00f5ff44;--glow-m:0 0 8px #ff006e88,0 0 24px #ff006e44;}
+:root{--bg:#030810;--dim:#0a1628;--text:#c8e0f0;--muted:#3a5a7a;--cyan:#00f5ff;--magenta:#ff006e;--yellow:#ffe600;--glow-c:0 0 8px #00f5ff88,0 0 24px #00f5ff44;--glow-m:0 0 8px #ff006e88,0 0 24px #ff006e44;--doc-width:720px;--doc-fs:15px;--doc-lh:1.9;--doc-pgap:16px;--doc-code-fs:13px;--doc-indent:0;}
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:'Noto Sans SC',sans-serif;overflow-x:hidden;}
@@ -21,46 +27,62 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:cent
 .nav-links a:hover{color:var(--cyan);}
 .nav-links a:hover::after{width:100%;}
 .page-wrap{position:relative;z-index:1;padding:88px 10vw 80px;}
-@media (max-width: 768px){
-nav{padding:14px 16px;align-items:flex-start;gap:12px;}
-.nav-logo{font-size:15px;letter-spacing:3px;}
-.nav-links{gap:12px;flex-wrap:wrap;justify-content:flex-end;}
-.nav-links a{font-size:11px;letter-spacing:1px;}
-.page-wrap{padding:84px 5.5vw 56px;}
-}
-
 .back-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--cyan);text-decoration:none;letter-spacing:2px;padding:8px 18px;border:1px solid rgba(0,245,255,.35);background:rgba(0,245,255,.05);transition:all .2s;}
 .back-btn:hover{color:#fff;border-color:var(--cyan);background:rgba(0,245,255,.12);}
-.nav-btns{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px;}
-@media(max-width:768px){.nav-btns{margin-bottom:24px;}.back-btn{font-size:10px;letter-spacing:1px;padding:7px 14px;}}
-.wd-header{width:min(100%, 720px);max-width:100%;margin:0 auto 40px;}
+.nav-btns{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:40px;}
+.page-post .nav-btns,.page-work .nav-btns{margin-bottom:32px;}
+
+.page-title{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;}
+.page-heading{font-size:42px;font-weight:700;color:#fff;margin-bottom:48px;}
+.page-heading.has-count{margin-bottom:12px;}
+.page-count{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:2px;margin-bottom:48px;}
+.list-empty{font-family:'Share Tech Mono',monospace;color:var(--muted);font-size:13px;letter-spacing:2px;}
+
+.blog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px;}
+.blog-card{background:#0a1628;border:1px solid rgba(0,245,255,.1);text-decoration:none;display:block;transition:border-color .3s,transform .3s;position:relative;overflow:hidden;}
+.blog-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--magenta));transform:scaleX(0);transform-origin:left;transition:transform .4s;}
+.blog-card:hover{border-color:rgba(0,245,255,.4);transform:translateY(-4px);}
+.blog-card:hover::before{transform:scaleX(1);}
+.bc-cover{width:100%;height:180px;object-fit:cover;border-bottom:1px solid rgba(0,245,255,.1);display:block;}
+.bc-cover-ph{width:100%;height:180px;background:rgba(0,245,255,.04);border-bottom:1px solid rgba(0,245,255,.1);}
+.bc-body{padding:20px;}
+.bc-cat{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--magenta);letter-spacing:3px;display:block;margin-bottom:8px;}
+.bc-title{font-size:18px;font-weight:700;color:#fff;margin-bottom:10px;line-height:1.4;}
+.bc-meta{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;display:flex;gap:10px;flex-wrap:wrap;}
+
+.works-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px;}
+.work-card{background:#0a1628;border:1px solid rgba(0,245,255,.1);transition:border-color .3s,transform .3s;display:block;text-decoration:none;cursor:pointer;}
+.work-card:hover{border-color:rgba(0,245,255,.4);transform:translateY(-4px);}
+.wc-img{width:100%;height:200px;object-fit:cover;border-bottom:1px solid rgba(0,245,255,.1);display:block;}
+.wc-img-ph{width:100%;height:200px;background:rgba(0,245,255,.04);border-bottom:1px solid rgba(0,245,255,.1);}
+.wc-body{padding:24px;}
+.wc-title{font-size:20px;font-weight:700;color:#fff;margin-bottom:10px;}
+.wc-desc{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:14px;}
+.wc-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.wc-tag{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--cyan);border:1px solid rgba(0,245,255,.3);padding:3px 8px;letter-spacing:1px;}
+
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;}
+.gallery-card{background:#0a1628;border:1px solid rgba(255,0,110,.1);transition:border-color .3s,transform .3s;display:block;text-decoration:none;cursor:pointer;}
+.gallery-card:hover{border-color:rgba(255,0,110,.5);transform:translateY(-4px);}
+.gc-img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;}
+.gc-img-ph{width:100%;aspect-ratio:3/4;background:rgba(255,0,110,.04);}
+.gc-body{padding:16px;}
+.gc-type{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--magenta);letter-spacing:3px;margin-bottom:6px;}
+.gc-title{font-size:16px;font-weight:700;color:#fff;margin-bottom:6px;}
+.gc-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+
+.post-header{width:min(100%,var(--doc-width));max-width:100%;margin:0 auto 40px;}
+.post-cat{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--magenta);letter-spacing:4px;margin-bottom:16px;display:block;}
+.post-title{font-size:clamp(28px,5vw,48px);font-weight:700;color:#fff;line-height:1.2;margin-bottom:16px;}
+.post-meta{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:2px;display:flex;gap:20px;flex-wrap:wrap;}
+.post-cover{display:block;width:min(100%,var(--doc-width));max-width:100%;max-height:400px;object-fit:cover;border:1px solid rgba(0,245,255,.15);margin:0 auto 40px;}
+
+.wd-header{width:min(100%,var(--doc-width));max-width:100%;margin:0 auto 40px;}
 .wd-tag{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;display:block;}
 .wd-title{font-size:clamp(28px,5vw,48px);font-weight:700;color:#fff;margin-bottom:16px;}
 .wd-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px;}
 .wd-tag-item{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--cyan);border:1px solid rgba(0,245,255,.3);padding:3px 8px;letter-spacing:1px;}
-.wd-cover{width:min(100%, 720px);max-width:100%;max-height:500px;object-fit:cover;border:1px solid rgba(0,245,255,.15);display:block;margin:0 auto 20px;}
-.wd-body{width:min(100%, 720px);max-width:100%;margin:0 auto;font-size:15px;overflow-wrap:anywhere;}
-.wd-body h2{font-size:22px;font-weight:700;color:#fff;margin:32px 0 12px;padding-left:12px;border-left:3px solid var(--magenta);}
-.wd-body h3{font-size:18px;font-weight:700;color:#fff;margin:24px 0 10px;padding-left:10px;border-left:2px solid var(--cyan);}
-.wd-body p{margin:0 0 20px;line-height:2.0;color:var(--text);}
-.wd-body a{color:var(--cyan);border-bottom:1px solid rgba(0,245,255,.3);text-decoration:none;}
-.wd-body strong{color:#fff;font-weight:700;}
-.wd-body blockquote{border-left:3px solid var(--cyan);padding:12px 20px;margin:20px 0;background:rgba(0,245,255,.04);color:var(--muted);line-height:2.0;}
-.wd-body ul,.wd-body ol{margin:8px 0 20px;padding-left:1.7em;}
-.wd-body ul{list-style:disc outside;}
-.wd-body ol{list-style:decimal outside;}
-.wd-body li{margin-bottom:8px;line-height:2.0;color:var(--text);padding-left:.15em;}
-.wd-body li>div,.wd-body li>p{margin:0;}
-.wd-body .ace-line,.wd-body > div:not(.table-wrap):not(.video-embed){margin:0 0 20px;line-height:2.0;color:var(--text);}
-.wd-body img{max-width:100%;border:1px solid rgba(0,245,255,.15);margin:20px auto;display:block;}
-.wd-body .table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:20px 0;}
-.wd-body table{width:100%;min-width:560px;border-collapse:collapse;margin:20px 0;font-size:14px;}
-.wd-body table td,.wd-body table th{border:1px solid rgba(0,245,255,.25);padding:10px 14px;color:var(--text);line-height:1.6;}
-.wd-body table th{background:rgba(0,245,255,.06);color:#fff;font-weight:600;}
-.wd-body pre{background:#060d18;border:1px solid rgba(0,245,255,.15);padding:16px 20px;font-family:'Fira Code',monospace;font-size:13px;color:#a8c8e8;overflow-x:auto;overflow-y:hidden;margin:20px 0;white-space:pre;}
-.wd-body pre code{display:block;min-width:max-content;}
-.video-embed{position:relative;width:100%;padding-bottom:56.25%;margin:24px 0;background:#000;}
-.video-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
+.wd-cover{width:min(100%,var(--doc-width));max-width:100%;max-height:500px;object-fit:cover;border:1px solid rgba(0,245,255,.15);display:block;margin:0 auto var(--doc-pgap);}
 .play-shell{position:relative;width:min(100%,960px);margin:0 auto 28px;background:#05080f;border:1px solid rgba(0,245,255,.25);aspect-ratio:16/9;min-height:280px;overflow:hidden;}
 .play-shell .play-poster{position:absolute;inset:0;width:100%;height:100%;max-height:none;margin:0;object-fit:cover;border:none;}
 .play-poster-empty{background:rgba(0,245,255,.05);}
@@ -71,23 +93,126 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
 .play-bar{position:absolute;top:8px;right:8px;z-index:4;display:flex;gap:8px;}
 .play-bar button,.play-bar a{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--cyan);background:rgba(4,16,24,.82);border:1px solid rgba(0,245,255,.35);padding:6px 10px;text-decoration:none;cursor:pointer;}
 .play-shell.is-playing .play-poster,.play-shell.is-playing .play-launch,.play-shell.is-playing .play-hint{display:none;}
-.play-shell:fullscreen,.play-shell:-webkit-full-screen{width:100%;height:100%;max-width:none;aspect-ratio:auto;margin:0;border:none;background:#000;}
-@media (max-width: 768px){
-  .back-btn{font-size:10px;letter-spacing:1px;padding:7px 14px;}
-  .nav-btns{margin-bottom:24px;}
-  .wd-header{margin-bottom:28px;}
-  .wd-tags{margin-bottom:24px;}
-  .wd-cover{max-height:320px;}
-  .wd-body h2{font-size:20px;margin:26px 0 10px;padding-left:10px;}
-  .wd-body h3{font-size:17px;margin:22px 0 8px;padding-left:8px;}
-  .wd-body ul,.wd-body ol{padding-left:1.4em;}
-  .wd-body table{font-size:13px;min-width:480px;}
-  .wd-body table td,.wd-body table th{padding:8px 10px;}
-  .wd-body pre{width:100vw;position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;border-left:none;border-right:none;overflow-x:auto;-webkit-overflow-scrolling:touch;box-sizing:border-box;padding:12px 5.5vw;font-size:12px;}
-  .wd-body pre code{min-width:max-content;}
-  .wd-body .table-wrap{width:100vw;position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;overflow-x:auto;-webkit-overflow-scrolling:touch;box-sizing:border-box;padding:0 5.5vw;}
+.play-shell:fullscreen{width:100%;height:100%;max-width:none;aspect-ratio:auto;margin:0;border:none;background:#000;}
+.wd-link-wrap{margin-top:40px;}
+.wd-link{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border:1px solid var(--cyan);color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;text-decoration:none;transition:all .3s;}
+
+.gd-cat{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;display:block;}
+.gd-title{font-size:clamp(28px,5vw,48px);font-weight:700;color:#fff;margin-bottom:24px;}
+.gd-canvas{max-width:100%;display:block;margin:0 auto 40px;border:1px solid rgba(255,0,110,.2);user-select:none;-webkit-user-drag:none;}
+
+.doc{width:min(100%,var(--doc-width));max-width:100%;margin:0 auto;font-size:var(--doc-fs);white-space:pre-wrap;white-space:break-spaces;overflow-wrap:anywhere;-webkit-font-variant-ligatures:none;font-variant-ligatures:none;font-feature-settings:"liga" 0;}
+.doc.gd-body,.doc.about-body{margin:0;}
+.doc h1{font-size:28px;font-weight:700;color:#fff;margin:40px 0 16px;padding-left:16px;border-left:4px solid var(--cyan);}
+.doc h2{font-size:22px;font-weight:700;color:#fff;margin:32px 0 12px;padding-left:12px;border-left:3px solid var(--magenta);}
+.doc h3{font-size:18px;font-weight:700;color:#fff;margin:24px 0 10px;padding-left:10px;border-left:2px solid var(--yellow);}
+.doc h4{font-size:16px;font-weight:700;color:#fff;margin:20px 0 8px;}
+.doc.wd-body h3{border-left-color:var(--cyan);}
+.doc.about-body h1{font-size:42px;margin:0 0 32px;padding-left:20px;border-left:4px solid var(--cyan);}
+.doc p{margin:0 0 var(--doc-pgap);line-height:var(--doc-lh);color:var(--text);}
+.doc>p{text-indent:var(--doc-indent);}
+.doc [data-indent="1"]{margin-left:2em;}
+.doc [data-indent="2"]{margin-left:4em;}
+.doc [data-indent="3"]{margin-left:6em;}
+.doc [data-indent="4"]{margin-left:8em;}
+.doc [data-indent="5"]{margin-left:10em;}
+.doc [data-indent="6"]{margin-left:12em;}
+.doc strong{color:#fff;font-weight:700;}
+.doc em{color:var(--cyan);font-style:italic;}
+.doc a{color:var(--cyan);border-bottom:1px solid rgba(0,245,255,.3);text-decoration:none;}
+.doc sup,.doc sub{font-size:.75em;line-height:0;}
+.doc :not(pre)>code{font-family:'Fira Code',monospace;font-size:.88em;color:#9fe8ff;background:rgba(0,245,255,.08);border:1px solid rgba(0,245,255,.16);border-radius:3px;padding:.08em .36em;}
+.doc ul,.doc ol{margin:8px 0 16px;padding-left:1.7em;}
+.doc ul{list-style:disc outside;}
+.doc ol{list-style:decimal outside;}
+.doc ul ul{list-style-type:circle;}
+.doc ul ul ul{list-style-type:square;}
+.doc ol ol{list-style-type:lower-alpha;}
+.doc ol ol ol{list-style-type:lower-roman;}
+.doc li{margin-bottom:8px;line-height:var(--doc-lh);padding-left:.15em;}
+.doc li>p{margin:0;}
+.doc li>ul,.doc li>ol{margin:8px 0 0;}
+.doc ul[data-type="taskList"]{list-style:none;padding-left:0;}
+.doc ul[data-type="taskList"] ul[data-type="taskList"]{margin:8px 0 0;padding-left:1.7em;}
+.doc li[data-type="taskItem"]{display:flex;align-items:flex-start;gap:.55em;padding-left:0;}
+.doc li[data-type="taskItem"]>label{flex:0 0 auto;display:flex;align-items:center;height:calc(var(--doc-fs)*var(--doc-lh));user-select:none;}
+.doc li[data-type="taskItem"]>label>span{display:none;}
+.doc li[data-type="taskItem"]>div{flex:1 1 auto;min-width:0;}
+.doc li[data-type="taskItem"] input[type="checkbox"]{-webkit-appearance:none;appearance:none;width:1.05em;height:1.05em;margin:0;border:1.5px solid var(--cyan);border-radius:3px;background:transparent;display:grid;place-content:center;pointer-events:none;}
+.doc li[data-type="taskItem"] input[type="checkbox"]::after{content:'';width:.3em;height:.56em;border:solid #041018;border-width:0 2px 2px 0;transform:translateY(-.06em) rotate(45deg);opacity:0;}
+.doc li[data-type="taskItem"] input[type="checkbox"]:checked{background:var(--cyan);}
+.doc li[data-type="taskItem"] input[type="checkbox"]:checked::after{opacity:1;}
+.doc li[data-type="taskItem"][data-checked="true"]>div>p{color:var(--muted);text-decoration:line-through;}
+.doc blockquote{border-left:3px solid var(--cyan);padding:12px 20px;margin:20px 0;background:rgba(0,245,255,.04);color:var(--muted);}
+.doc blockquote p{color:inherit;}
+.doc blockquote>:last-child,.doc .callout>:last-child{margin-bottom:0;}
+.doc .callout{position:relative;margin:20px 0;padding:14px 18px 14px 50px;border:1px solid rgba(0,245,255,.28);background:rgba(0,245,255,.06);border-radius:4px;}
+.doc .callout::before{content:attr(data-emoji);position:absolute;left:17px;top:14px;font-size:1.1em;line-height:calc(var(--doc-fs)*var(--doc-lh));}
+.doc .callout[data-color="magenta"]{border-color:rgba(255,0,110,.32);background:rgba(255,0,110,.07);}
+.doc .callout[data-color="yellow"]{border-color:rgba(255,230,0,.3);background:rgba(255,230,0,.06);}
+.doc .callout[data-color="green"]{border-color:rgba(61,220,151,.32);background:rgba(61,220,151,.07);}
+.doc .callout[data-color="purple"]{border-color:rgba(179,136,255,.34);background:rgba(179,136,255,.08);}
+.doc .callout[data-color="gray"]{border-color:rgba(140,165,190,.28);background:rgba(140,165,190,.07);}
+.doc hr{border:none;border-top:1px solid rgba(0,245,255,.15);margin:40px 0;}
+.doc figure.doc-figure{display:block;width:fit-content;max-width:100%;margin:20px auto;}
+.doc figure.doc-figure[data-align="left"]{margin-left:0;}
+.doc figure.doc-figure[data-align="right"]{margin-right:0;}
+.doc figure.doc-figure img{display:block;max-width:100%;height:auto;border:1px solid rgba(0,245,255,.15);}
+.doc figure.doc-figure[data-sized] img{width:100%;}
+.doc figure.doc-figure figcaption{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:1px;line-height:1.6;margin-top:8px;padding:0 8px;text-align:center;}
+.doc .doc-embed{position:relative;width:100%;aspect-ratio:16/9;margin:24px 0;background:#000;border:1px solid rgba(0,245,255,.15);}
+.doc .doc-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+.doc pre{background:#0a0e1a;border:1px solid rgba(0,245,255,.15);margin:20px 0;overflow-x:auto;overflow-y:hidden;position:relative;white-space:pre;}
+.doc pre[data-lang]::before{content:attr(data-lang);position:absolute;top:0;right:0;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;padding:6px 12px;background:rgba(0,245,255,.05);border-bottom:1px solid rgba(0,245,255,.1);border-left:1px solid rgba(0,245,255,.1);white-space:nowrap;}
+.doc pre code{display:block;padding:16px 20px;font-family:'Fira Code',monospace;font-size:var(--doc-code-fs);line-height:1.7;color:#a8c8e8;min-width:max-content;white-space:pre;}
+.doc .tableWrapper{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:20px 0;}
+.doc table{width:100%;border-collapse:collapse;table-layout:auto;font-size:14px;}
+.doc table[style^="width"]{table-layout:fixed;}
+.doc table td,.doc table th{border:1px solid rgba(0,245,255,.25);padding:10px 14px;color:var(--text);line-height:1.6;vertical-align:top;position:relative;}
+.doc table th{background:rgba(0,245,255,.06);color:#fff;font-weight:600;}
+.doc table p{margin:0;line-height:inherit;color:inherit;}
+.doc table p+p{margin-top:6px;}
+.doc table tr:hover td{background:rgba(0,245,255,.03);}
+
+.hljs-comment,.hljs-quote{color:#4f6f8f;font-style:italic;}
+.hljs-keyword,.hljs-selector-tag,.hljs-literal,.hljs-type,.hljs-doctag{color:#ff5fa2;}
+.hljs-string,.hljs-regexp,.hljs-addition,.hljs-meta .hljs-string{color:#9ef0a6;}
+.hljs-number,.hljs-symbol,.hljs-bullet,.hljs-variable.constant_{color:#ffcb6b;}
+.hljs-title,.hljs-title.function_,.hljs-section{color:#6fd3ff;}
+.hljs-title.class_,.hljs-built_in,.hljs-class .hljs-title{color:#ffe600;}
+.hljs-attr,.hljs-attribute,.hljs-name,.hljs-selector-id,.hljs-selector-class,.hljs-property{color:#7fdbca;}
+.hljs-variable,.hljs-template-variable,.hljs-params{color:#c8e0f0;}
+.hljs-meta,.hljs-meta .hljs-keyword{color:#b388ff;}
+.hljs-deletion{color:#ff6b81;}
+.hljs-emphasis{font-style:italic;}
+.hljs-strong{font-weight:700;}
+
+@media (max-width:768px){
+nav{padding:14px 16px;align-items:flex-start;gap:12px;}
+.nav-logo{font-size:15px;letter-spacing:3px;}
+.nav-links{gap:12px;flex-wrap:wrap;justify-content:flex-end;}
+.nav-links a{font-size:11px;letter-spacing:1px;}
+.page-wrap{padding:84px 5.5vw 56px;}
+.nav-btns,.page-post .nav-btns,.page-work .nav-btns{margin-bottom:24px;}
+.back-btn{font-size:10px;letter-spacing:1px;padding:7px 14px;}
+.post-header,.wd-header{margin-bottom:28px;}
+.wd-tags{margin-bottom:24px;}
+.post-cover{max-height:280px;}
+.wd-cover{max-height:320px;}
+.doc h1{font-size:24px;margin:30px 0 14px;padding-left:12px;}
+.doc h2{font-size:20px;margin:26px 0 10px;padding-left:10px;}
+.doc h3{font-size:17px;margin:22px 0 8px;padding-left:8px;}
+.doc.about-body h1{font-size:32px;margin:0 0 24px;padding-left:16px;}
+.doc ul,.doc ol{padding-left:1.4em;}
+.doc pre{width:100vw;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;border-left:none;border-right:none;-webkit-overflow-scrolling:touch;}
+.doc pre code{padding:12px 5.5vw;font-size:12px;}
+.doc .tableWrapper{width:100vw;position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;padding:0 5.5vw;}
+.doc table{font-size:13px;}
+.doc table td,.doc table th{padding:8px 10px;}
 }
-</style></head><body>
+</style>
+</head>
+<body class="page-work">
 <nav>
   <div class="nav-logo">_<span>DEV</span>.LOG</div>
   <div class="nav-links">
@@ -98,7 +223,7 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
     <a href="/about/">关于</a>
   </div>
 </nav>
-<div class="page-wrap">
+<div class="page-wrap" style="--doc-width:720px;--doc-fs:15px;--doc-lh:2;--doc-pgap:20px;--doc-code-fs:13px;--doc-indent:0">
   <div class="nav-btns">
     <a class="back-btn" href="/">← 首页</a>
     <a class="back-btn" href="/works/">← 返回项目</a>
@@ -113,65 +238,59 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
     <button type="button" class="play-launch">▶ 开始游戏</button>
     <div class="play-hint">浏览器内直接游玩 · 点按后开始加载</div>
   </div>
-  <div class="wd-body"><div style="text-align: center;">这是一款名叫烬明的游戏，是一个用于参加名为Gwueble Jam（
-
-<a href="https://itch.io/jam/gwueble-jam-2026">Gwueble Jam - 2026 - itch.io</a>&nbsp;） 的game jam的小项目。</div><div><br></div><div style="text-align: center;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 这是开箱即玩的网址
-
-<a href="https://while1.itch.io/emberlight">EmberLight by While(1)</a>。（可能需要梯子）。<figure class="post-figure"><img src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1785086993589-93305.jpg" alt="图片"></figure><p><br></p>&nbsp; &nbsp; &nbsp; 官方给的开发周期是七天，但已然成为社畜的我，能高强度开发的时间其实只有周末两天。好在我参加的时候主题已经确定：Slow Burn，副主题则是Chair。<br>这两个主题只要切中一个就算达标。然而我那天才的大脑马上就把他们做了完美的结合--我们来烧家具吧。于是，烬明便诞生了。<br><div style="margin-left: auto; margin-right: auto; text-align: center;">拉上公司的数值策划之后，我们俩按照各自在公司的职位初步规划了一下游戏的设计：&nbsp; <br><h2>一、游戏概述</h2><p>游戏名称： 烬明</p><p>主题： Slow Burn</p><p>类型： 俯视角策略解谜游戏</p><p>平台： PC</p><p>一句话描述： 你是一团正在熄灭的余烬，在废墟中用仅剩的火焰点燃障碍、制造连锁反应，烧出一条通往终点的路。</p><h2>二、核心设定</h2><p>背景： 一场大火烧毁了一切。你是火后唯一幸存的东西——一团仍有余温的余烬。你不知道自己为什么要往前走，但你只知道，你必须走出去。</p><p>玩家身份： 一团有意识的余烬。你是火种，也是燃料。</p><p>慢燃的表达：</p><ul start="1"><li>燃料从关卡开始持续消耗，不可暂停，不可逆转</li><li>燃料快耗尽时，火焰会忽明忽暗地闪烁——你随时可能熄灭</li><li>每一次引燃障碍，都在加速消耗自己</li><li>但你不引燃障碍，就无路可走</li></ul><h2>三、核心玩法</h2><p>一句话：用仅剩的火，点燃一切能烧的，烧出一条路。</p><p>核心循环：</p><blockquote>探索场景 → 发现障碍 → 决定点燃的物品、决定点燃的顺序 → 利用火焰连锁蔓延节省燃料 → 在熄灭前到达出口</blockquote><p>只有一种核心资源：燃料。</p><ul start="1"><li>随时间持续消耗</li><li>引燃障碍时加速消耗</li><li>无法补充</li></ul><p>场景中所有障碍物都具有独特的材质。不同的材质决定其引燃成本、燃烧时长、火焰亮度。火焰的光可以蔓延——如果燃烧的物体足够亮、离得足够近，旁边的物体也会被自动引燃。这是玩家节省燃料的关键。</p><h2>四、材质系统</h2><p>场景中每个物体由材质和含量定义：</p><div class="table-wrap"><table><colgroup><col width="105"><col width="105"><col width="105"><col width="105"><col width="105"><col width="105"><col width="105"></colgroup><tbody><tr height="77"><td style="font-size: 12pt; text-align: left; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.12);"><font color="#ffffff">材质</font></td><td style="font-size: 12pt; text-align: left; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.12);"><font color="#ffffff">引燃消耗（每单位含量/秒）</font></td><td style="font-size: 12pt; text-align: left; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.12);"><font color="#ffffff">燃烧亮度</font></td><td style="font-size: 12pt; text-align: left; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.12);"><font color="#ffffff">光半径</font></td><td style="font-size: 12pt; text-align: left; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.12);"><font color="#ffffff">燃烧时长（每单位含量）</font></td><td style="font-size: 12pt; text-align: left; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.12);"><font color="#ffffff">引燃总燃料消耗</font></td><td style="font-size: 12pt; text-align: left; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.12);"><font color="#ffffff">可烧毁</font></td></tr><tr height="31"><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">木头</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">低（1.5/秒）</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">亮</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">一般</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">短（2秒）</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">少</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">是</font></td></tr><tr height="31"><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">布匹</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">中（2/秒）</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">亮</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">较大</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">短（2秒）</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">少</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">是</font></td></tr><tr height="31"><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">钢铁</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">极高（5/秒）</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">暗</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">小</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">中（1.5秒）</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">中</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">否</font></td></tr><tr height="31"><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">砖石</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">不可燃</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">无</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">无</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">—</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">—</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">否</font></td></tr></tbody></table></div><p>含量决定总成本与总时长：</p><ul start="1"><li>含量为1的木头椅子：需要3燃料引燃，燃烧2秒</li><li>含量为2的木头桌子：需要6燃料引燃，燃烧4秒</li><li>含量为1的钢铁栏杆：需要5燃料引燃，燃烧1.5秒，不可烧毁</li></ul><p>火焰连锁蔓延规则：</p><ul start="1"><li>一个物体燃烧时，其光照半径内的其他可燃物会以固定速率获得热量</li><li>如果累积热量达到其引燃需求，该物体自动被点燃</li><li>玩家不会从燃烧的物体获得热量</li><li>合理利用连锁，可以用少量燃料点燃一大片</li></ul><h2>五、关卡设计</h2><div>这可是我们游戏的灵魂啊！由我一手操办而成。</div><h3>第一关</h3><div><p>第一关的关卡设计旨在让玩家熟悉本游戏的下述机制：</p><ul><li>    热量的规划（不是所有可燃物都可以烧光的）</li><li>    玩家需要选择合适的路径</li></ul><p><br></p><figure class="post-figure"><img src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1789485259484-6tacp.jpg" alt="图片"><figcaption>然而最终还是没有实现房梁的效果。假如时间足够，做一个伪二层的立体效果该有多好啊！</figcaption></figure><h3>第二关</h3><div>第二关的关卡设计旨在让玩家熟悉本游戏的下述机制：</div><div><div><ul><li>&nbsp;&nbsp;热量的传递（引火）</li><li>&nbsp;&nbsp;热量的规划（不是所有可燃物都可以烧光的）</li></ul></div></div><p>玩家具有以下抉择：</p><ul><li>直接引燃铁门--无用功</li><li>直接引燃布---此时钢铁墙的温度不够，无法烧开水</li><li>直接引燃木头--烧开水时间太长，玩家自己熄灭</li><li>直接烧铁墙--温度不够，无法烧开水</li><li>点燃布，布引燃木头--此时钢铁墙温度够，引燃可燃物，灶台开</li></ul><p><br></p><figure class="post-figure"><img src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1789485482673-cg5dp.jpg" alt="图片"></figure><h3>第三关</h3><p>第三关的设计旨在糅合第一关和第二关的机制，作为游戏玩法的收尾。</p><ul><li>热量的传递（穿墙）</li><li>房梁的机制</li><li>热量的规划</li></ul><p><br></p><figure class="post-figure"><img src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1789485524496-4c44v.jpg" alt="图片"><figcaption><br></figcaption></figure><h3>第四关</h3><div>享受演出吧朋友！</div><ul><li>第四关的设计旨在视觉效果。通过“放烟花”的演出给游戏留下尾声。</li><li>在烟花结束之后将跳转到标题界面，并改标题为谢谢字样，给玩家留一个彩蛋。</li></ul><p><br></p><figure class="post-figure"><img src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1789485767840-wg5x4.jpg" alt="图片"></figure><figure class="post-figure"><img src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1789485791020-2xjor.jpg" alt="图片"></figure><span class="lark-record-clipboard"></span></div><h2>六、操作方式</h2><div class="table-wrap"><table><colgroup><col width="105"><col width="105"><col width="105"></colgroup><tbody><tr height="31"><td style="font-size: 12pt; text-align: left; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.12);"><font color="#ffffff">操作</font></td><td style="font-size: 12pt; text-align: left; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.12);"><font color="#ffffff">方式</font></td><td style="font-size: 12pt; text-align: left; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.12);"><font color="#ffffff">说明</font></td></tr><tr height="77"><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">移动</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">WASD / 方向键</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">在场景中行走，持续消耗燃料</font></td></tr><tr height="123"><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">引燃</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">贴近物体</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">玩家触碰可燃物时自动开始传递热量，离开则热量缓慢衰减</font></td></tr><tr height="123"><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">观察</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">鼠标悬浮</font></td><td style="font-size: 12pt; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap; border-bottom: 1pt solid rgba(0, 0, 0, 0.1);"><font color="#ffffff">显示物体的材质和大致含量（“木质/较多”、“钢铁/少量”）</font></td></tr></tbody></table></div><p>引燃交互细节：</p><ul start="1"><li>玩家靠近可燃物，热量开始从玩家传递到物体</li><li>物体被引燃后，进入燃烧状态，产生光照</li><li>光照范围内的可燃物自动获得热量，可能被连锁引燃</li><li>物体燃烧完毕后，木质/布质会烧毁，钢铁会烧红但不消失</li><li>玩家离开，热量积累暂停并缓慢衰减</li></ul><h2>七、视觉风格</h2><p>视角： 2D俯视</p><p>色调： 几乎全黑。唯一的光来自玩家自身和正在燃烧的物体。</p><p>玩家形象： 一团橙红色光点，周围有火星粒子。燃料越低，光点越小、越暗、闪烁越频繁。燃料见底时几乎是一团微弱的暗红色，间歇性明灭。</p><p>场景： 焦黑的废墟轮廓，墙壁和障碍物用简单的几何形状表示。未燃烧时几乎不可见（只有极暗的轮廓），被火光照亮时才显现细节。</p><p>火焰效果：</p><ul start="1"><li>燃烧的物体发出暖色光晕，照亮周围</li><li>连锁蔓延时，可以看到火光从一个物体传递到另一个</li><li>物体烧毁后，光晕消失，留下烧焦的残骸</li></ul><p>HUD： 无。玩家靠自身光芒的强弱和闪烁频率感知燃料余量。</p><h2>八、音频风格</h2><p>环境音： 寂静。偶有远处的噼啪声。</p><p>玩家移动： 极轻的灰烬碾压声。</p><p>引燃： 火焰升腾的呼的一声。</p><p>连锁蔓延： 火焰传递时的细微噼啪声，越来越密。</p><p>燃料见底： 心跳声逐渐清晰、变慢、变得不规律。</p><p>抵达出口： 一声悠长的、类似叹息的风声。</p><p>无背景音乐。</p><h2>九、结局</h2><p>玩家抵达出口——前门。门外不是黑暗，而是一片翻涌的、明亮的、活着的火焰。</p><p>画面：</p><ul start="1"><li>屏幕边缘被大片暖橙色光晕占据</li><li>那片大火在跳动、在呼吸、在等待</li><li>它不需要燃烧任何东西。它就是火本身。</li></ul><p>玩家动作：</p><ul start="1"><li>玩家（那团微弱的、几乎要熄灭的小火）走到门口</li><li>停顿了一瞬间——像孩子在跳进水池前深吸一口气</li><li>然后，轻轻一跃，跳入那片大火之中</li></ul><p>瞬间：</p><ul start="1"><li>玩家的火光和大火融为一体，再也分不清彼此</li><li>没有消失。没有熄灭。只是回家了。</li><li>屏幕渐亮，从黑暗变为温暖的橙黄色</li><li>一声满足的、细小的噼啪声。像是叹息。像是终于到家了。</li></ul><span class="lark-record-clipboard"></span><br><h3>小小牢骚</h3>有了想法便是招兵买马。好在组队的过程还算顺风顺水。&nbsp; 在小红书发了个帖子，很快就有着循声而来的程序和美术。确定了核心玩法之后，我们便开始热火朝天地做了起来，直到发生了很多不愉快的事情。<br>美术根本不会做2D动画，也不会使用引擎。我们提出了美术需求，却没有得到任何有效的游戏资产，就连我们游戏的封面都是我自己画的。<br>程序的确很有能力，然而态度却有很大的问题。他始终不认为这是我们的游戏，直到最后都认为是我们两位策划求他帮忙一起做游戏。然而事实上后续的维护、跑测、关卡搭建都是我们两位策划用AI一点一点搭起来的。<br>线上组队的效率的确没得说，然而在挑选共事者这方面，我得到的最大的教训是需要严格把关，宁缺毋滥。</div><div style="margin-left: auto; margin-right: auto; text-align: center;"><h3>一点教训</h3><p>有位名策划曾经说过，真正考验你能力的不是增加需求，而是在恰当的时候削减需求。这次gamejam倒是真的给了我这样的经历。<br>我们原本打算制作一个结束动画，最终因为美术没有这方面能力，没有实现。</p><p>我们原本打算制作二层的场景，让房梁能够塌陷下来填补一层的空洞，最终还是只制作了木门取代此功能。<br>我们原本打算自己绘制主角的动作动画，然后美术无法绘制出中心点恒定的待机动画，最终使用了线上的像素素材。<br>除此以外的是发布于gamejam上得到的玩家反馈。有的玩家认为引导太弱，完全不知道在玩什么。这也是解密游戏的永恒难题：给的太多，谜题本身就不够有趣，给的太少，玩家会失去方向。如果要进一步打磨游戏，我认为会在提示上下更多功夫，除了显式的文字对白，也许还可以制作场景上的提示，比如单向路径让玩家无处可选等等，奈何时间实在是不太多。。。<br>最后一点，有些玩家提出最好让游戏支持web显示，做到进入网站即开即玩----这倒是非常重要的启示。想要让更多人点开游戏，直观是必要的。我也学到了如何导出为web包并让浏览器渲染的知识。真是有趣。</p><br><br><br></div></div></div>
-  <div style="margin-top:40px;"><a href="https://while1.itch.io/ember-light" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border:1px solid var(--cyan);color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;text-decoration:none;transition:all .3s;">查看项目 →</a></div>
+  <div class="doc wd-body"><p style="text-align: center;">这是一款名叫烬明的游戏，是一个用于参加名为Gwueble Jam（ <a target="_blank" rel="noopener noreferrer" href="https://itch.io/jam/gwueble-jam-2026">Gwueble Jam - 2026 - itch.io</a>&nbsp;） 的game jam的小项目。</p><p><br></p><p style="text-align: center;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 这是开箱即玩的网址 <a target="_blank" rel="noopener noreferrer" href="https://while1.itch.io/emberlight">EmberLight by While(1)</a>。（可能需要梯子）。</p><figure class="doc-figure" data-align="center"><img src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1785086993589-93305.jpg" alt="" decoding="async"></figure><p>&nbsp; &nbsp; &nbsp; 官方给的开发周期是七天，但已然成为社畜的我，能高强度开发的时间其实只有周末两天。好在我参加的时候主题已经确定：Slow Burn，副主题则是Chair。<br>      这两个主题只要切中一个就算达标。然而我那天才的大脑马上就把他们做了完美的结合--我们来烧家具吧。于是，烬明便诞生了。</p><p>      拉上公司的数值策划之后，我们俩按照各自在公司的职位初步规划了一下游戏的设计：&nbsp;</p><h2 id="一-游戏概述" style="text-align: center;">一、游戏概述</h2><p>游戏名称： 烬明</p><p>主题： Slow Burn</p><p>类型： 俯视角策略解谜游戏</p><p>平台： PC</p><p>一句话描述： 你是一团正在熄灭的余烬，在废墟中用仅剩的火焰点燃障碍、制造连锁反应，烧出一条通往终点的路。</p><h2 id="二-核心设定" style="text-align: center;">二、核心设定</h2><p style="text-align: center;">背景： 你是一团仍有余温的余烬。你不知道自己为什么要往前走，但你只知道，你必须走出去。</p><p>玩家身份： 一团有意识的余烬。你是火种，也是燃料。</p><p>慢燃的表达：</p><ul><li><p>燃料从关卡开始持续消耗，不可暂停，不可逆转</p></li><li><p>燃料快耗尽时，火焰会忽明忽暗地闪烁——你随时可能熄灭</p></li><li><p>每一次引燃障碍，都在加速消耗自己</p></li><li><p>但你不引燃障碍，就无路可走</p></li></ul><h2 id="三-核心玩法" style="text-align: center;">三、核心玩法</h2><p>用仅剩的火，点燃一切能烧的，烧出一条路。</p><p>核心循环：</p><blockquote><p style="text-align: center;">探索场景 → 发现障碍 → 决定点燃的物品、决定点燃的顺序 → 利用火焰连锁蔓延节省燃料 → 在熄灭前到达出口</p></blockquote><p>只有一种核心资源：燃料。</p><ul><li><p>随时间持续消耗</p></li><li><p>引燃障碍时加速消耗</p></li><li><p>无法补充</p></li></ul><p style="text-align: center;">场景中所有障碍物都具有独特的材质。不同的材质决定其引燃成本、燃烧时长、火焰亮度。火焰的光可以蔓延——如果燃烧的物体足够亮、离得足够近，旁边的物体也会被自动引燃。这是玩家节省燃料的关键。</p><h2 id="四-材质系统" style="text-align: center;">四、材质系统</h2><p style="text-align: center;">场景中每个物体由材质和含量定义：</p><div class="tableWrapper"><table style="min-width: 175px;"><colgroup><col style="min-width: 25px;"><col style="min-width: 25px;"><col style="min-width: 25px;"><col style="min-width: 25px;"><col style="min-width: 25px;"><col style="min-width: 25px;"><col style="min-width: 25px;"></colgroup><tbody><tr><td colspan="1" rowspan="1"><p>材质</p></td><td colspan="1" rowspan="1"><p>引燃消耗（每单位含量/秒）</p></td><td colspan="1" rowspan="1"><p>燃烧亮度</p></td><td colspan="1" rowspan="1"><p>光半径</p></td><td colspan="1" rowspan="1"><p>燃烧时长（每单位含量）</p></td><td colspan="1" rowspan="1"><p>引燃总燃料消耗</p></td><td colspan="1" rowspan="1"><p>可烧毁</p></td></tr><tr><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">木头</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">低（1.5/秒）</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">亮</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">一般</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">短（2秒）</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">少</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">是</p></td></tr><tr><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">布匹</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">中（2/秒）</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">亮</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">较大</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">短（2秒）</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">少</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">是</p></td></tr><tr><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">钢铁</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">极高（5/秒）</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">暗</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">小</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">中（1.5秒）</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">中</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">否</p></td></tr><tr><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">砖石</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">不可燃</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">无</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">无</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">—</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">—</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">否</p></td></tr></tbody></table></div><p>含量决定总成本与总时长：</p><ul><li><p>含量为1的木头椅子：需要3燃料引燃，燃烧2秒</p></li><li><p>含量为2的木头桌子：需要6燃料引燃，燃烧4秒</p></li><li><p>含量为1的钢铁栏杆：需要5燃料引燃，燃烧1.5秒，不可烧毁</p></li></ul><p>火焰连锁蔓延规则：</p><ul><li><p>一个物体燃烧时，其光照半径内的其他可燃物会以固定速率获得热量</p></li><li><p>如果累积热量达到其引燃需求，该物体自动被点燃</p></li><li><p>玩家不会从燃烧的物体获得热量</p></li><li><p>合理利用连锁，可以用少量燃料点燃一大片</p></li></ul><h2 id="五-关卡设计" style="text-align: center;">五、关卡设计</h2><p style="text-align: center;">这可是我们游戏的灵魂啊！由我一手操办而成。</p><h3 id="第一关" style="text-align: center;">第一关</h3><p style="text-align: center;">第一关的关卡设计旨在让玩家熟悉本游戏的下述机制：</p><ul><li><p>热量的规划（不是所有可燃物都可以烧光的）</p></li><li><p>玩家需要选择合适的路径</p></li></ul><figure class="doc-figure" data-align="center"><img src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1789485259484-6tacp.jpg" alt="" decoding="async"><figcaption>然而最终还是没有实现房梁的效果。假如时间足够，做一个伪二层的立体效果该有多好啊！</figcaption></figure><h3 id="第二关" style="text-align: center;">第二关</h3><p style="text-align: center;">第二关的关卡设计旨在让玩家熟悉本游戏的下述机制：</p><ul><li><p>&nbsp;&nbsp;热量的传递（引火）</p></li><li><p>&nbsp;&nbsp;热量的规划（不是所有可燃物都可以烧光的）</p></li></ul><p style="text-align: center;">玩家具有以下抉择：</p><ul><li><p>直接引燃铁门--无用功</p></li><li><p>直接引燃布---此时钢铁墙的温度不够，无法烧开水</p></li><li><p>直接引燃木头--烧开水时间太长，玩家自己熄灭</p></li><li><p>直接烧铁墙--温度不够，无法烧开水</p></li><li><p>点燃布，布引燃木头--此时钢铁墙温度够，引燃可燃物，灶台开</p></li></ul><figure class="doc-figure" data-align="center"><img src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1789485482673-cg5dp.jpg" alt="" decoding="async"></figure><h3 id="第三关" style="text-align: center;">第三关</h3><p style="text-align: center;">第三关的设计旨在糅合第一关和第二关的机制，作为游戏玩法的收尾。</p><ul><li><p>热量的传递（穿墙）</p></li><li><p>房梁的机制</p></li><li><p>热量的规划</p></li></ul><figure class="doc-figure" data-align="center"><img src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1789485524496-4c44v.jpg" alt="" decoding="async"></figure><h3 id="第四关" style="text-align: center;">第四关</h3><p style="text-align: center;">享受演出吧朋友！</p><ul><li><p>第四关的设计旨在视觉效果。通过“放烟花”的演出给游戏留下尾声。</p></li><li><p>在烟花结束之后将跳转到标题界面，并改标题为谢谢字样，给玩家留一个彩蛋。</p></li></ul><figure class="doc-figure" data-align="center"><img src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1789485767840-wg5x4.jpg" alt="" decoding="async"></figure><figure class="doc-figure" data-align="center"><img src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1789485791020-2xjor.jpg" alt="" decoding="async"></figure><h2 id="六-操作方式" style="text-align: center;">六、操作方式</h2><div class="tableWrapper"><table style="min-width: 75px;"><colgroup><col style="min-width: 25px;"><col style="min-width: 25px;"><col style="min-width: 25px;"></colgroup><tbody><tr><td colspan="1" rowspan="1"><p>操作</p></td><td colspan="1" rowspan="1"><p>方式</p></td><td colspan="1" rowspan="1"><p>说明</p></td></tr><tr><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">移动</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">WASD / 方向键</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">在场景中行走，持续消耗燃料</p></td></tr><tr><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">引燃</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">贴近物体</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">玩家触碰可燃物时自动开始传递热量，离开则热量缓慢衰减</p></td></tr><tr><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">观察</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">鼠标悬浮</p></td><td colspan="1" rowspan="1" style="text-align: center;"><p style="text-align: center;">显示物体的材质和大致含量（“木质/较多”、“钢铁/少量”）</p></td></tr></tbody></table></div><p style="text-align: center;">引燃交互细节：</p><ul><li><p>玩家靠近可燃物，热量开始从玩家传递到物体</p></li><li><p>物体被引燃后，进入燃烧状态，产生光照</p></li><li><p>光照范围内的可燃物自动获得热量，可能被连锁引燃</p></li><li><p>物体燃烧完毕后，木质/布质会烧毁，钢铁会烧红但不消失</p></li><li><p>玩家离开，热量积累暂停并缓慢衰减</p></li></ul><h2 id="七-视觉风格" style="text-align: center;">七、视觉风格</h2><p style="text-align: center;">视角： 2D俯视</p><p>色调： 几乎全黑。唯一的光来自玩家自身和正在燃烧的物体。</p><p>玩家形象： 一团橙红色光点，周围有火星粒子。燃料越低，光点越小、越暗、闪烁越频繁。燃料见底时几乎是一团微弱的暗红色，间歇性明灭。</p><p>场景： 焦黑的废墟轮廓，墙壁和障碍物用简单的几何形状表示。未燃烧时几乎不可见（只有极暗的轮廓），被火光照亮时才显现细节。</p><p style="text-align: center;">火焰效果：</p><ul><li><p>燃烧的物体发出暖色光晕，照亮周围</p></li><li><p>连锁蔓延时，可以看到火光从一个物体传递到另一个</p></li><li><p>物体烧毁后，光晕消失，留下烧焦的残骸</p></li></ul><p>HUD： 无。玩家靠自身光芒的强弱和闪烁频率感知燃料余量。</p><h2 id="八-音频风格" style="text-align: center;">八、音频风格</h2><p>环境音： 寂静。偶有远处的噼啪声。</p><p>玩家移动： 极轻的灰烬碾压声。</p><p>引燃： 火焰升腾的呼的一声。</p><p>连锁蔓延： 火焰传递时的细微噼啪声，越来越密。</p><p>燃料见底： 心跳声逐渐清晰、变慢、变得不规律。</p><p>抵达出口： 一声悠长的、类似叹息的风声。</p><p>无背景音乐。</p><h2 id="九-结局" style="text-align: center;">九、结局</h2><p>玩家抵达出口——前门。门外不是黑暗，而是一片翻涌的、明亮的、活着的火焰。</p><p>画面：</p><ul><li><p>屏幕边缘被大片暖橙色光晕占据</p></li><li><p>那片大火在跳动、在呼吸、在等待</p></li><li><p>它不需要燃烧任何东西。它就是火本身。</p></li></ul><p>玩家动作：</p><ul><li><p>玩家（那团微弱的、几乎要熄灭的小火）走到门口</p></li><li><p>停顿了一瞬间——像孩子在跳进水池前深吸一口气</p></li><li><p>然后，轻轻一跃，跳入那片大火之中</p></li></ul><p>瞬间：</p><ul><li><p>玩家的火光和大火融为一体，再也分不清彼此</p></li><li><p>没有消失。没有熄灭。只是回家了。</p></li><li><p>屏幕渐亮，从黑暗变为温暖的橙黄色</p></li><li><p>一声满足的、细小的噼啪声。像是叹息。像是终于到家了。</p></li></ul><h3 id="小小牢骚" style="text-align: center;">小小牢骚</h3><p>       有了想法便是招兵买马。好在组队的过程还算顺风顺水。&nbsp; 在小红书发了个帖子，很快就有着循声而来的程序和美术。确定了核心玩法之后，我们便开始热火朝天地做了起来，直到发生了很多不愉快的事情。<br>      美术根本不会做2D动画，也不会使用引擎。我们提出了美术需求，却没有得到任何有效的游戏资产，就连我们游戏的封面都是我自己画的。<br>      程序的确很有能力，然而态度却有很大的问题。他始终不认为这是我们的游戏，直到最后都认为是我们两位策划求他帮忙一起做游戏。然而事实上后续的维护、跑测、关卡搭建都是我们两位策划用AI一点一点搭起来的。<br>     线上组队的效率的确没得说，然而在挑选共事者这方面，我得到的最大的教训是需要严格把关，宁缺毋滥。</p><h3 id="一点教训" style="text-align: center;">一点教训</h3><p>   有位名策划曾经说过，真正考验你能力的不是增加需求，而是在恰当的时候削减需求。这次gamejam倒是真的给了我这样的经历。</p><ul><li><p>我们原本打算制作一个结束动画，最终因为美术没有这方面能力，没有实现。</p></li><li><p>我们原本打算制作二层的场景，让房梁能够塌陷下来填补一层的空洞，最终还是只制作了木门取代此功能。</p></li><li><p>我们原本打算自己绘制主角的动作动画，然后美术无法绘制出中心点恒定的待机动画，最终使用了线上的像素素材。</p></li></ul><p><br>        除此以外的是发布于gamejam上得到的玩家反馈。有的玩家认为引导太弱，完全不知道在玩什么。这也是解密游戏的永恒难题：给的太多，谜题本身就不够有趣，给的太少，玩家会失去方向。如果要进一步打磨游戏，我认为会在提示上下更多功夫，除了显式的文字对白，也许还可以制作场景上的提示，比如单向路径让玩家无处可选等等，奈何时间实在是不太多...<br>       最后一点，有些玩家提出最好让游戏支持web显示，做到进入网站即开即玩----这倒是非常重要的启示。想要让更多人点开游戏，直观是必要的。我也学到了如何导出为web包并让浏览器渲染的知识。真是有趣。</p></div>
+  <div class="wd-link-wrap"><a class="wd-link" href="https://while1.itch.io/ember-light" target="_blank" rel="noopener">查看项目 →</a></div>
 </div>
 <script>
 (function(){
   document.addEventListener('contextmenu',function(e){e.preventDefault();});
   document.addEventListener('dragstart',function(e){if(e.target.tagName==='IMG')e.preventDefault();});
   document.addEventListener('keydown',function(e){
+    if(!e.key)return;
     if((e.ctrlKey||e.metaKey)&&(e.key==='s'||e.key==='S'||e.key==='p'||e.key==='P'))e.preventDefault();
     if(e.key==='PrintScreen')e.preventDefault();
   });
-  var cover=document.querySelector('.wd-cover[data-full-src]');
-  if(cover){
-    var full=cover.getAttribute('data-full-src');
-    var thumb=cover.getAttribute('src');
-    if(full&&full!==thumb){
-      var swap=function(){
-        var img=new Image();
-        img.decoding='async';
-        img.onload=function(){cover.src=full;};
-        img.src=full;
-      };
-      if('requestIdleCallback' in window) requestIdleCallback(swap,{timeout:1500});
-      else setTimeout(swap,300);
-    }
-  }
 })();
-</script><script>
+</script>
+<script>
 (function(){
-  var shell=document.querySelector(".play-shell");
-  if(!shell) return;
-  var btn=shell.querySelector(".play-launch");
-  if(!btn) return;
-  btn.addEventListener("click", function(){
-    if(shell.querySelector(".play-frame")) return;
-    var src=shell.getAttribute("data-src");
-    var frame=document.createElement("iframe");
-    frame.className="play-frame";
+  var cover=document.querySelector('.wd-cover[data-full-src]');
+  if(!cover)return;
+  var full=cover.getAttribute('data-full-src'),thumb=cover.getAttribute('src');
+  if(!full||full===thumb)return;
+  var swap=function(){var img=new Image();img.decoding='async';img.onload=function(){cover.src=full;};img.src=full;};
+  if('requestIdleCallback' in window)requestIdleCallback(swap,{timeout:1500});else setTimeout(swap,300);
+})();
+</script>
+<script>
+(function(){
+  var shell=document.querySelector('.play-shell');
+  if(!shell)return;
+  var btn=shell.querySelector('.play-launch');
+  if(!btn)return;
+  btn.addEventListener('click',function(){
+    if(shell.querySelector('.play-frame'))return;
+    var src=shell.getAttribute('data-src');
+    var frame=document.createElement('iframe');
+    frame.className='play-frame';
     frame.src=src;
-    frame.title="在线游玩";
-    frame.setAttribute("allow","autoplay; fullscreen; gamepad; pointer-lock");
-    frame.setAttribute("allowfullscreen","");
-    shell.classList.add("is-playing");
+    frame.title='在线游玩';
+    frame.setAttribute('allow','autoplay; fullscreen; gamepad; pointer-lock');
+    frame.setAttribute('allowfullscreen','');
+    shell.classList.add('is-playing');
     shell.appendChild(frame);
-    var bar=document.createElement("div");
-    bar.className="play-bar";
-    bar.innerHTML="<button type=\"button\" data-act=\"fs\">全屏</button><a href=\""+src+"\" target=\"_blank\" rel=\"noopener\">新标签</a>";
+    var bar=document.createElement('div');
+    bar.className='play-bar';
+    var fs=document.createElement('button');fs.type='button';fs.textContent='全屏';
+    var open=document.createElement('a');open.href=src;open.target='_blank';open.rel='noopener';open.textContent='新标签';
+    bar.appendChild(fs);bar.appendChild(open);
     shell.appendChild(bar);
-    bar.querySelector("[data-act=fs]").addEventListener("click", function(){
-      if(document.fullscreenElement) document.exitFullscreen();
-      else if(shell.requestFullscreen) shell.requestFullscreen();
+    fs.addEventListener('click',function(){
+      if(document.fullscreenElement)document.exitFullscreen();
+      else if(shell.requestFullscreen)shell.requestFullscreen();
     });
-    frame.addEventListener("load", function(){ try{ frame.focus(); }catch(e){} });
+    frame.addEventListener('load',function(){try{frame.focus();}catch(e){}});
   });
 })();
 </script>
-
 </body></html>

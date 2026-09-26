@@ -1,0 +1,909 @@
+{
+ "format": 1,
+ "rev": 1,
+ "updatedAt": "2026-09-26T19:20:32.502Z",
+ "posts": [
+  {
+   "id": "p_1r2pfl05uwt",
+   "slug": "dugeon-hunters-游戏体验报告",
+   "title": "《Dugeon Hunters》游戏体验报告",
+   "cat": "游戏体验报告",
+   "tags": [
+    "独立游戏，RPG",
+    "刷宝射击"
+   ],
+   "date": "2026-05-06",
+   "cover": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1778070530129-bfeqh.jpg",
+   "coverPos": "50% 50%",
+   "layout": {
+    "width": 720,
+    "fs": 15,
+    "lh": 1.9,
+    "pgap": 16,
+    "codeFs": 13,
+    "indent": false
+   },
+   "hash": "22j8jcpv5lz",
+   "publishedAt": "2026-09-26T08:40:04.158Z",
+   "path": "blog/dugeon-hunters-游戏体验报告.html"
+  },
+  {
+   "id": "p_12cfqfrcccq",
+   "slug": "地牢猎人-dungeon-hunters-核心玩法循环拆解",
+   "title": "地牢猎人（Dungeon Hunters）核心玩法循环拆解",
+   "cat": "玩法拆解",
+   "tags": [
+    "独立游戏，RPG",
+    "刷宝射击"
+   ],
+   "date": "2026-04-28",
+   "cover": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1777389644637-nw1z1.jpg",
+   "coverPos": "50% 50%",
+   "layout": {
+    "width": 720,
+    "fs": 15,
+    "lh": 1.9,
+    "pgap": 16,
+    "codeFs": 13,
+    "indent": false
+   },
+   "hash": "1r9eg7c3f9h",
+   "publishedAt": "2026-09-26T08:40:04.158Z",
+   "path": "blog/地牢猎人-dungeon-hunters-核心玩法循环拆解.html"
+  },
+  {
+   "id": "p_18wy1t71cqf",
+   "slug": "杀戮尖塔-slay-the-spire-核心玩法循环拆解",
+   "title": "杀戮尖塔（Slay the Spire）核心玩法循环拆解",
+   "cat": "玩法拆解",
+   "tags": [
+    "Roguelike，独立游戏，DeckBuilding"
+   ],
+   "date": "2026-04-07",
+   "cover": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775517204243-rbjlr.jpg",
+   "coverPos": "50% 50%",
+   "layout": {
+    "width": 1000,
+    "fs": 16,
+    "lh": 1.9,
+    "pgap": 16,
+    "codeFs": 13,
+    "indent": false
+   },
+   "hash": "d7zxq7cmks",
+   "publishedAt": "2026-09-26T08:40:04.158Z",
+   "path": "blog/杀戮尖塔-slay-the-spire-核心玩法循环拆解.html"
+  }
+ ],
+ "works": [
+  {
+   "id": "w_11lpd1ai3em",
+   "slug": "烬明-emberlight",
+   "title": "烬明 EMBERLIGHT",
+   "tags": [
+    "COMPLETED",
+    "QUIZ"
+   ],
+   "date": "",
+   "desc": "",
+   "cover": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1790371293768-1-e6t8q.jpg",
+   "coverFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1790371296299-2-zqa1s-full.png",
+   "coverPos": "50% 50%",
+   "play": "/play/emberlight/index.html",
+   "link": "https://while1.itch.io/ember-light",
+   "layout": {
+    "width": 720,
+    "fs": 15,
+    "lh": 2,
+    "pgap": 20,
+    "codeFs": 13,
+    "indent": false
+   },
+   "hash": "n8oez9uhy2",
+   "publishedAt": "2026-09-26T19:20:32.502Z",
+   "path": "works/烬明-emberlight.html"
+  },
+  {
+   "id": "w_1nrpsgqsj7w",
+   "slug": "希望-熄忘",
+   "title": "希望 熄忘",
+   "tags": [
+    "IN PROGRESS",
+    "ROGUELIKE",
+    "CARDGAME",
+    "UNITY"
+   ],
+   "date": "",
+   "desc": "",
+   "cover": "",
+   "coverFull": "",
+   "coverPos": "50% 50%",
+   "play": "",
+   "link": "",
+   "layout": {
+    "width": 720,
+    "fs": 15,
+    "lh": 1.9,
+    "pgap": 16,
+    "codeFs": 13,
+    "indent": false
+   },
+   "hash": "rqip0ro7ry",
+   "publishedAt": "2026-09-26T08:40:04.158Z",
+   "path": "works/希望-熄忘.html"
+  }
+ ],
+ "gallery": [
+  {
+   "id": "c_205t6eixosx",
+   "slug": "illust",
+   "name": "原创作品",
+   "items": [
+    {
+     "id": "g_1d7sixpcmt",
+     "slug": "endora",
+     "title": "ENDORA",
+     "desc": "祈愿拯救世界之人。",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775513024283-ke9yr.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775513027401-trhv0-full.png",
+     "imgPos": "50.9% 20.2%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_205t6eixosx",
+     "hash": "n1s9fj9aa2",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/illust/endora.html"
+    },
+    {
+     "id": "g_1r22azd00i8",
+     "slug": "eudora",
+     "title": "EUDORA",
+     "desc": "起誓沉默世界之人。",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775513170282-rt1ij.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775513173337-9m9j5-full.png",
+     "imgPos": "51.4% 23.3%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_205t6eixosx",
+     "hash": "2bq5sss7dwz",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/illust/eudora.html"
+    },
+    {
+     "id": "g_1hvhlsz7g8x",
+     "slug": "柩世熄忘",
+     "title": "柩世熄忘",
+     "desc": "埋葬世界于柩中之物。",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775513733047-sqnxe.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775513736062-ehovq-full.png",
+     "imgPos": "51.2% 21.9%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_205t6eixosx",
+     "hash": "1mcf5gjlqic",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/illust/柩世熄忘.html"
+    },
+    {
+     "id": "g_2bfwqr6cb1n",
+     "slug": "模型a",
+     "title": "模型A",
+     "desc": "降低噪声。",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514359495-051c5.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514362417-fijep-full.png",
+     "imgPos": "52.1% 28.6%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_205t6eixosx",
+     "hash": "xoncba8o70",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/illust/模型a.html"
+    },
+    {
+     "id": "g_58mhpw8f40",
+     "slug": "兵器a",
+     "title": "兵器A",
+     "desc": "它仍然记得第一次踏上战场的那天。",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1776448903279-ljr2e.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1776448908598-ejrxr-full.png",
+     "imgPos": "50% 16.9%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_205t6eixosx",
+     "hash": "5toutqjuwt",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/illust/兵器a.html"
+    },
+    {
+     "id": "g_11nwtzitbi1",
+     "slug": "模型b",
+     "title": "模型B",
+     "desc": "计算混沌。",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514416739-eewja.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514419029-fafsh-full.png",
+     "imgPos": "49.1% 61.7%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_205t6eixosx",
+     "hash": "qi71ddix2a",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/illust/模型b.html"
+    },
+    {
+     "id": "g_14kwb38ymo4",
+     "slug": "合翼卫",
+     "title": "合翼卫",
+     "desc": "手持大剑的战士。",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514452914-nztqc.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514456005-gn7qp-full.png",
+     "imgPos": "50.7% 30.8%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_205t6eixosx",
+     "hash": "2a058k92zuz",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/illust/合翼卫.html"
+    },
+    {
+     "id": "g_1ltpcymgl9a",
+     "slug": "fg204",
+     "title": "FG204",
+     "desc": "行走在钢铁丛林中的机器人。胸腔中跳动的是心脏吗？",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514807324-hm5ye.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514810601-o5y8r-full.png",
+     "imgPos": "49.1% 24.1%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_205t6eixosx",
+     "hash": "1vf4h335b4",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/illust/fg204.html"
+    },
+    {
+     "id": "g_4kh5ma2jng",
+     "slug": "back",
+     "title": "Back",
+     "desc": "嘘...一切都快结束了...",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1783238055659-wwu9w.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1783238064131-y1ppg-full.png",
+     "imgPos": "50.7% 27.4%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_205t6eixosx",
+     "hash": "2e0iaa27wxg",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/illust/back.html"
+    },
+    {
+     "id": "g_1ziedp5k4s0",
+     "slug": "braindead",
+     "title": "BRAINDEAD",
+     "desc": "我是它的心脏。",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515211651-de4s5.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515214537-jc4q2-full.png",
+     "imgPos": "50% 27.2%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_205t6eixosx",
+     "hash": "2dn2vcsma8o",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/illust/braindead.html"
+    },
+    {
+     "id": "g_26w7p0z1f74",
+     "slug": "h-e-r",
+     "title": "H.E.R.",
+     "desc": "它来了。",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515024966-5w1ny.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515027795-ihs4s-full.png",
+     "imgPos": "50.7% 21.9%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_205t6eixosx",
+     "hash": "nhls7idra5",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/illust/h-e-r.html"
+    },
+    {
+     "id": "g_1wvr203xgc7",
+     "slug": "绿皮",
+     "title": "绿皮",
+     "desc": "他到底有着什么样的故事？",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515702197-vzzbc.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515705434-zcvs6-full.png",
+     "imgPos": "48.1% 23%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_205t6eixosx",
+     "hash": "l8gzkt4iou",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/illust/绿皮.html"
+    },
+    {
+     "id": "g_28jbhv4zyhx",
+     "slug": "鸡煲",
+     "title": "鸡煲",
+     "desc": "百般武艺。",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514568510-br4py.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514571571-jpwr8-full.png",
+     "imgPos": "60% 20.8%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_205t6eixosx",
+     "hash": "18ghdp5pr2k",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/illust/鸡煲.html"
+    },
+    {
+     "id": "g_1s6horxg4",
+     "slug": "莫辛",
+     "title": "莫辛",
+     "desc": "战损的机械龙。",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514721313-1vfi8.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514723763-6ozfw-full.png",
+     "imgPos": "53.9% 54.1%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_205t6eixosx",
+     "hash": "2613k7y71kn",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/illust/莫辛.html"
+    },
+    {
+     "id": "g_jmkyep9dea",
+     "slug": "战车vii",
+     "title": "战车VII",
+     "desc": "愿您所向披靡。",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515172664-ygjal.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515176179-9zskj-full.jpg",
+     "imgPos": "51.9% 30.2%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_205t6eixosx",
+     "hash": "1067sdz4xc4",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/illust/战车vii.html"
+    }
+   ]
+  },
+  {
+   "id": "c_1vq68ywygsl",
+   "slug": "fanwork",
+   "name": "同人作品",
+   "items": [
+    {
+     "id": "g_1g8ubkv1996",
+     "slug": "魔神凯撒其二",
+     "title": "魔神凯撒其二",
+     "desc": "",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1783238010907-7k9qg.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1783238013820-immhr-full.png",
+     "imgPos": "51.2% 64.7%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_1vq68ywygsl",
+     "hash": "17h4980f3cr",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/fanwork/魔神凯撒其二.html"
+    },
+    {
+     "id": "g_2feu5mtdbr9",
+     "slug": "魔神凯撒其一",
+     "title": "魔神凯撒其一",
+     "desc": "",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1781175327173-9j57k.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1781175332667-2rx5g-full.png",
+     "imgPos": "56.3% 33%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_1vq68ywygsl",
+     "hash": "xvjqosclxi",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/fanwork/魔神凯撒其一.html"
+    },
+    {
+     "id": "g_1b52qfuvh2a",
+     "slug": "完美亚历山大",
+     "title": "完美亚历山大",
+     "desc": "见证三机合神。",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775523526618-yh1ry.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775523530472-o30l5-full.gif",
+     "imgPos": "53.3% 44.4%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_1vq68ywygsl",
+     "hash": "1ok6t4momld",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/fanwork/完美亚历山大.html"
+    },
+    {
+     "id": "g_2blq0bzpucv",
+     "slug": "拉斯提-电磁加农炮",
+     "title": "拉斯提--电磁加农炮",
+     "desc": "I WONT MISS",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775523574557-ol90z.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775523577339-rqrxa-full.gif",
+     "imgPos": "85% 44.3%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_1vq68ywygsl",
+     "hash": "wizhomrkiz",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/fanwork/拉斯提-电磁加农炮.html"
+    },
+    {
+     "id": "g_w5fi7tcxgb",
+     "slug": "拉斯提",
+     "title": "拉斯提",
+     "desc": "飞得更高的，是我！",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515860318-ddgze.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515862578-d2m0p-full.png",
+     "imgPos": "65.8% 34.1%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_1vq68ywygsl",
+     "hash": "1cjsudv2i83",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/fanwork/拉斯提.html"
+    },
+    {
+     "id": "g_1w8c7qrl0xo",
+     "slug": "冰剑龙-铠皇龙",
+     "title": "冰剑龙 铠皇龙",
+     "desc": "献给漏风全抗 遗言雷击的你",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1781175405765-6zll8.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1781175408902-q6vbp-full.png",
+     "imgPos": "43.7% 48.8%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_1vq68ywygsl",
+     "hash": "1arcxirtgkn",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/fanwork/冰剑龙-铠皇龙.html"
+    },
+    {
+     "id": "g_qk9wo5tsqy",
+     "slug": "cel-240",
+     "title": "CEL-240",
+     "desc": "“女武神”",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775516791763-4u3m6.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775516793870-pr01x-full.png",
+     "imgPos": "49.8% 60.8%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_1vq68ywygsl",
+     "hash": "g3o4imtmp9",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/fanwork/cel-240.html"
+    },
+    {
+     "id": "g_w6ivfeu6t7",
+     "slug": "nightfall",
+     "title": "Nightfall",
+     "desc": "栖于“枝桠”之上的渡鸦。",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775516610747-i3ek1.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775516613620-43uck-full.png",
+     "imgPos": "50.7% 36.9%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_1vq68ywygsl",
+     "hash": "enw9r56dhl",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/fanwork/nightfall.html"
+    },
+    {
+     "id": "g_e3t1z85uua",
+     "slug": "hal-826",
+     "title": "HAL-826",
+     "desc": "“621--我还有最后一份工作，就是让你自由。”",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775516392482-2eyzu.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775516395174-bepnt-full.png",
+     "imgPos": "56.5% 24.1%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_1vq68ywygsl",
+     "hash": "7b26fq8d87",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/fanwork/hal-826.html"
+    },
+    {
+     "id": "g_22mmywv37ky",
+     "slug": "饲主",
+     "title": "“饲主”",
+     "desc": "“钱...是你赚到的...去做手术...过上普通人的生活...”",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775516446600-5e6at.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775516448710-9mqwj-full.png",
+     "imgPos": "52.1% 30.2%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_1vq68ywygsl",
+     "hash": "7gysdjxtvy",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/fanwork/饲主.html"
+    },
+    {
+     "id": "g_20bdfmwl30n",
+     "slug": "擎天柱",
+     "title": "擎天柱",
+     "desc": "或许应该叫倾天柱？",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515606214-torsp.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515609599-2xsd3-full.png",
+     "imgPos": "49.8% 25.8%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_1vq68ywygsl",
+     "hash": "25p65oz42av",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/fanwork/擎天柱.html"
+    },
+    {
+     "id": "g_24uiwe3zgf8",
+     "slug": "威震天",
+     "title": "威震天",
+     "desc": "或许应该叫卫镇天？",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515815876-ici2s.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515819732-x6q72-full.png",
+     "imgPos": "50.5% 27.4%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_1vq68ywygsl",
+     "hash": "1v6m7zvdw06",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/fanwork/威震天.html"
+    },
+    {
+     "id": "g_55ri5lpgm",
+     "slug": "声波",
+     "title": "声波",
+     "desc": "...",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775516531264-0ps82.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775516533507-4y45u-full.png",
+     "imgPos": "60.2% 33%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_1vq68ywygsl",
+     "hash": "1zjtsq918ve",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/fanwork/声波.html"
+    },
+    {
+     "id": "g_12m4zlijx40",
+     "slug": "岩窟王",
+     "title": "岩窟王",
+     "desc": "虎啊，煌煌燎燃！",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775516193221-8mw5j.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775516196134-icui6-full.png",
+     "imgPos": "50.7% 9.1%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_1vq68ywygsl",
+     "hash": "1vccb03470h",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/fanwork/岩窟王.html"
+    },
+    {
+     "id": "g_1q4op5vf2w",
+     "slug": "天龙流星-dra",
+     "title": "天龙流星--DRA",
+     "desc": "流星辉巧群。",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775516695056-96d9r.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775516697814-vjdy6-full.png",
+     "imgPos": "51.9% 22.4%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_1vq68ywygsl",
+     "hash": "2abd42i83rl",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/fanwork/天龙流星-dra.html"
+    }
+   ]
+  },
+  {
+   "id": "c_2et9rjkkj5v",
+   "slug": "merch",
+   "name": "漫展周边",
+   "items": [
+    {
+     "id": "g_19mp22m4y3i",
+     "slug": "战车vii",
+     "title": "战车VII",
+     "desc": "愿您所向披靡。",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775513227346-0fng6.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775513230422-o7pp1-full.jpg",
+     "imgPos": "50.5% 16.9%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_2et9rjkkj5v",
+     "hash": "2b5b7xuht5i",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/merch/战车vii.html"
+    },
+    {
+     "id": "g_1ohpn4b8zxd",
+     "slug": "cq02",
+     "title": "CQ02",
+     "desc": "摊主之旅的起点。",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775516930968-xodmg.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775516932965-0bb2f-full.jpg",
+     "imgPos": "51.4% 36.1%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_2et9rjkkj5v",
+     "hash": "1blczmf2bwq",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/merch/cq02.html"
+    },
+    {
+     "id": "g_ltx7zyu5jb",
+     "slug": "拉斯提立牌",
+     "title": "拉斯提立牌",
+     "desc": "飞得更高的，是我！",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775516956724-3np2w.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775516959489-7h2uu-full.jpg",
+     "imgPos": "50.5% 45%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_2et9rjkkj5v",
+     "hash": "26xussv8tzl",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/merch/拉斯提立牌.html"
+    },
+    {
+     "id": "g_2al11cvvgxp",
+     "slug": "humble-bundle",
+     "title": "HUMBLE BUNDLE",
+     "desc": "打包带走。",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775516888176-xuzq5.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775516890258-e5gqn-full.jpg",
+     "imgPos": "51.2% 36.3%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_2et9rjkkj5v",
+     "hash": "1sukdi8uh11",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/merch/humble-bundle.html"
+    },
+    {
+     "id": "g_uqg583ui35",
+     "slug": "冥骸合龙",
+     "title": "冥骸合龙",
+     "desc": "5000打点，一人一拳。",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775516989760-ojaet.jpg",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775516991897-wyulj-full.jpg",
+     "imgPos": "50.5% 41.1%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_2et9rjkkj5v",
+     "hash": "vjh90zc7o7",
+     "publishedAt": "2026-09-26T08:40:04.158Z",
+     "path": "gallery/merch/冥骸合龙.html"
+    }
+   ]
+  }
+ ],
+ "about": {
+  "id": "about",
+  "title": "关于我",
+  "layout": {
+   "width": 720,
+   "fs": 16,
+   "lh": 1.9,
+   "pgap": 16,
+   "codeFs": 13,
+   "indent": false
+  },
+  "hash": "ka21ubdh75",
+  "publishedAt": "2026-09-26T08:40:04.158Z",
+  "path": "about/index.html"
+ }
+}

@@ -2,10 +2,13 @@
 <html lang="zh"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>原创作品 · 同人画廊 · _DEV.LOG</title>
+<meta name="generator" content="devlog-admin 2">
+<meta property="og:title" content="原创作品 · 同人画廊 · _DEV.LOG">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Noto+Sans+SC:wght@300;400;700&family=Fira+Code:wght@400;500&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Noto+Sans+SC:wght@300;400;700&family=Fira+Code:wght@400;500&display=swap"></noscript>
 <style>
-
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Noto+Sans+SC:wght@300;400;700&family=Fira+Code:wght@400;500&display=swap');
-:root{--bg:#030810;--dim:#0a1628;--text:#c8e0f0;--muted:#3a5a7a;--cyan:#00f5ff;--magenta:#ff006e;--yellow:#ffe600;--glow-c:0 0 8px #00f5ff88,0 0 24px #00f5ff44;--glow-m:0 0 8px #ff006e88,0 0 24px #ff006e44;}
+:root{--bg:#030810;--dim:#0a1628;--text:#c8e0f0;--muted:#3a5a7a;--cyan:#00f5ff;--magenta:#ff006e;--yellow:#ffe600;--glow-c:0 0 8px #00f5ff88,0 0 24px #00f5ff44;--glow-m:0 0 8px #ff006e88,0 0 24px #ff006e44;--doc-width:720px;--doc-fs:15px;--doc-lh:1.9;--doc-pgap:16px;--doc-code-fs:13px;--doc-indent:0;}
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:'Noto Sans SC',sans-serif;overflow-x:hidden;}
@@ -21,24 +24,42 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:cent
 .nav-links a:hover{color:var(--cyan);}
 .nav-links a:hover::after{width:100%;}
 .page-wrap{position:relative;z-index:1;padding:88px 10vw 80px;}
-@media (max-width: 768px){
-nav{padding:14px 16px;align-items:flex-start;gap:12px;}
-.nav-logo{font-size:15px;letter-spacing:3px;}
-.nav-links{gap:12px;flex-wrap:wrap;justify-content:flex-end;}
-.nav-links a{font-size:11px;letter-spacing:1px;}
-.page-wrap{padding:84px 5.5vw 56px;}
-}
-
-.page-title{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;}
-.page-heading{font-size:42px;font-weight:700;color:#fff;margin-bottom:12px;}
-.page-count{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:2px;margin-bottom:48px;}
-.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--cyan);text-decoration:none;letter-spacing:2px;padding:8px 18px;border:1px solid rgba(0,245,255,.35);background:rgba(0,245,255,.05);transition:all .2s;margin-right:10px;}
+.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--cyan);text-decoration:none;letter-spacing:2px;padding:8px 18px;border:1px solid rgba(0,245,255,.35);background:rgba(0,245,255,.05);transition:all .2s;}
 .back-btn:hover{color:#fff;border-color:var(--cyan);background:rgba(0,245,255,.12);}
 .nav-btns{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:40px;}
-.nav-btns .back-btn{margin-right:0;}
-@media(max-width:768px){.nav-btns{margin-bottom:24px;}.back-btn{font-size:10px;letter-spacing:1px;padding:7px 14px;}}
+.page-post .nav-btns,.page-work .nav-btns{margin-bottom:32px;}
+
+.page-title{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;}
+.page-heading{font-size:42px;font-weight:700;color:#fff;margin-bottom:48px;}
+.page-heading.has-count{margin-bottom:12px;}
+.page-count{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:2px;margin-bottom:48px;}
+.list-empty{font-family:'Share Tech Mono',monospace;color:var(--muted);font-size:13px;letter-spacing:2px;}
+
+.blog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px;}
+.blog-card{background:#0a1628;border:1px solid rgba(0,245,255,.1);text-decoration:none;display:block;transition:border-color .3s,transform .3s;position:relative;overflow:hidden;}
+.blog-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--magenta));transform:scaleX(0);transform-origin:left;transition:transform .4s;}
+.blog-card:hover{border-color:rgba(0,245,255,.4);transform:translateY(-4px);}
+.blog-card:hover::before{transform:scaleX(1);}
+.bc-cover{width:100%;height:180px;object-fit:cover;border-bottom:1px solid rgba(0,245,255,.1);display:block;}
+.bc-cover-ph{width:100%;height:180px;background:rgba(0,245,255,.04);border-bottom:1px solid rgba(0,245,255,.1);}
+.bc-body{padding:20px;}
+.bc-cat{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--magenta);letter-spacing:3px;display:block;margin-bottom:8px;}
+.bc-title{font-size:18px;font-weight:700;color:#fff;margin-bottom:10px;line-height:1.4;}
+.bc-meta{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;display:flex;gap:10px;flex-wrap:wrap;}
+
+.works-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px;}
+.work-card{background:#0a1628;border:1px solid rgba(0,245,255,.1);transition:border-color .3s,transform .3s;display:block;text-decoration:none;cursor:pointer;}
+.work-card:hover{border-color:rgba(0,245,255,.4);transform:translateY(-4px);}
+.wc-img{width:100%;height:200px;object-fit:cover;border-bottom:1px solid rgba(0,245,255,.1);display:block;}
+.wc-img-ph{width:100%;height:200px;background:rgba(0,245,255,.04);border-bottom:1px solid rgba(0,245,255,.1);}
+.wc-body{padding:24px;}
+.wc-title{font-size:20px;font-weight:700;color:#fff;margin-bottom:10px;}
+.wc-desc{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:14px;}
+.wc-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.wc-tag{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--cyan);border:1px solid rgba(0,245,255,.3);padding:3px 8px;letter-spacing:1px;}
+
 .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;}
-.gallery-card{background:#0a1628;border:1px solid rgba(255,0,110,.1);transition:border-color .3s,transform .3s;display:block;text-decoration:none;}
+.gallery-card{background:#0a1628;border:1px solid rgba(255,0,110,.1);transition:border-color .3s,transform .3s;display:block;text-decoration:none;cursor:pointer;}
 .gallery-card:hover{border-color:rgba(255,0,110,.5);transform:translateY(-4px);}
 .gc-img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;}
 .gc-img-ph{width:100%;aspect-ratio:3/4;background:rgba(255,0,110,.04);}
@@ -46,7 +67,149 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
 .gc-type{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--magenta);letter-spacing:3px;margin-bottom:6px;}
 .gc-title{font-size:16px;font-weight:700;color:#fff;margin-bottom:6px;}
 .gc-desc{font-size:13px;color:var(--muted);line-height:1.6;}
-</style></head><body>
+
+.post-header{width:min(100%,var(--doc-width));max-width:100%;margin:0 auto 40px;}
+.post-cat{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--magenta);letter-spacing:4px;margin-bottom:16px;display:block;}
+.post-title{font-size:clamp(28px,5vw,48px);font-weight:700;color:#fff;line-height:1.2;margin-bottom:16px;}
+.post-meta{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:2px;display:flex;gap:20px;flex-wrap:wrap;}
+.post-cover{display:block;width:min(100%,var(--doc-width));max-width:100%;max-height:400px;object-fit:cover;border:1px solid rgba(0,245,255,.15);margin:0 auto 40px;}
+
+.wd-header{width:min(100%,var(--doc-width));max-width:100%;margin:0 auto 40px;}
+.wd-tag{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;display:block;}
+.wd-title{font-size:clamp(28px,5vw,48px);font-weight:700;color:#fff;margin-bottom:16px;}
+.wd-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px;}
+.wd-tag-item{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--cyan);border:1px solid rgba(0,245,255,.3);padding:3px 8px;letter-spacing:1px;}
+.wd-cover{width:min(100%,var(--doc-width));max-width:100%;max-height:500px;object-fit:cover;border:1px solid rgba(0,245,255,.15);display:block;margin:0 auto var(--doc-pgap);}
+.play-shell{position:relative;width:min(100%,960px);margin:0 auto 28px;background:#05080f;border:1px solid rgba(0,245,255,.25);aspect-ratio:16/9;min-height:280px;overflow:hidden;}
+.play-shell .play-poster{position:absolute;inset:0;width:100%;height:100%;max-height:none;margin:0;object-fit:cover;border:none;}
+.play-poster-empty{background:rgba(0,245,255,.05);}
+.play-launch{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);z-index:2;font-family:'Share Tech Mono',monospace;font-size:14px;letter-spacing:3px;color:#041018;background:var(--cyan);border:none;padding:14px 28px;cursor:pointer;}
+.play-launch:hover{background:#fff;}
+.play-hint{position:absolute;left:0;right:0;bottom:18px;text-align:center;z-index:2;font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:1px;color:#d7fff6;text-shadow:0 1px 8px #000;}
+.play-frame{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000;z-index:3;}
+.play-bar{position:absolute;top:8px;right:8px;z-index:4;display:flex;gap:8px;}
+.play-bar button,.play-bar a{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--cyan);background:rgba(4,16,24,.82);border:1px solid rgba(0,245,255,.35);padding:6px 10px;text-decoration:none;cursor:pointer;}
+.play-shell.is-playing .play-poster,.play-shell.is-playing .play-launch,.play-shell.is-playing .play-hint{display:none;}
+.play-shell:fullscreen{width:100%;height:100%;max-width:none;aspect-ratio:auto;margin:0;border:none;background:#000;}
+.wd-link-wrap{margin-top:40px;}
+.wd-link{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border:1px solid var(--cyan);color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;text-decoration:none;transition:all .3s;}
+
+.gd-cat{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--magenta);letter-spacing:4px;margin-bottom:12px;display:block;}
+.gd-title{font-size:clamp(28px,5vw,48px);font-weight:700;color:#fff;margin-bottom:24px;}
+.gd-canvas{max-width:100%;display:block;margin:0 auto 40px;border:1px solid rgba(255,0,110,.2);user-select:none;-webkit-user-drag:none;}
+
+.doc{width:min(100%,var(--doc-width));max-width:100%;margin:0 auto;font-size:var(--doc-fs);white-space:pre-wrap;white-space:break-spaces;overflow-wrap:anywhere;-webkit-font-variant-ligatures:none;font-variant-ligatures:none;font-feature-settings:"liga" 0;}
+.doc.gd-body,.doc.about-body{margin:0;}
+.doc h1{font-size:28px;font-weight:700;color:#fff;margin:40px 0 16px;padding-left:16px;border-left:4px solid var(--cyan);}
+.doc h2{font-size:22px;font-weight:700;color:#fff;margin:32px 0 12px;padding-left:12px;border-left:3px solid var(--magenta);}
+.doc h3{font-size:18px;font-weight:700;color:#fff;margin:24px 0 10px;padding-left:10px;border-left:2px solid var(--yellow);}
+.doc h4{font-size:16px;font-weight:700;color:#fff;margin:20px 0 8px;}
+.doc.wd-body h3{border-left-color:var(--cyan);}
+.doc.about-body h1{font-size:42px;margin:0 0 32px;padding-left:20px;border-left:4px solid var(--cyan);}
+.doc p{margin:0 0 var(--doc-pgap);line-height:var(--doc-lh);color:var(--text);}
+.doc>p{text-indent:var(--doc-indent);}
+.doc [data-indent="1"]{margin-left:2em;}
+.doc [data-indent="2"]{margin-left:4em;}
+.doc [data-indent="3"]{margin-left:6em;}
+.doc [data-indent="4"]{margin-left:8em;}
+.doc [data-indent="5"]{margin-left:10em;}
+.doc [data-indent="6"]{margin-left:12em;}
+.doc strong{color:#fff;font-weight:700;}
+.doc em{color:var(--cyan);font-style:italic;}
+.doc a{color:var(--cyan);border-bottom:1px solid rgba(0,245,255,.3);text-decoration:none;}
+.doc sup,.doc sub{font-size:.75em;line-height:0;}
+.doc :not(pre)>code{font-family:'Fira Code',monospace;font-size:.88em;color:#9fe8ff;background:rgba(0,245,255,.08);border:1px solid rgba(0,245,255,.16);border-radius:3px;padding:.08em .36em;}
+.doc ul,.doc ol{margin:8px 0 16px;padding-left:1.7em;}
+.doc ul{list-style:disc outside;}
+.doc ol{list-style:decimal outside;}
+.doc ul ul{list-style-type:circle;}
+.doc ul ul ul{list-style-type:square;}
+.doc ol ol{list-style-type:lower-alpha;}
+.doc ol ol ol{list-style-type:lower-roman;}
+.doc li{margin-bottom:8px;line-height:var(--doc-lh);padding-left:.15em;}
+.doc li>p{margin:0;}
+.doc li>ul,.doc li>ol{margin:8px 0 0;}
+.doc ul[data-type="taskList"]{list-style:none;padding-left:0;}
+.doc ul[data-type="taskList"] ul[data-type="taskList"]{margin:8px 0 0;padding-left:1.7em;}
+.doc li[data-type="taskItem"]{display:flex;align-items:flex-start;gap:.55em;padding-left:0;}
+.doc li[data-type="taskItem"]>label{flex:0 0 auto;display:flex;align-items:center;height:calc(var(--doc-fs)*var(--doc-lh));user-select:none;}
+.doc li[data-type="taskItem"]>label>span{display:none;}
+.doc li[data-type="taskItem"]>div{flex:1 1 auto;min-width:0;}
+.doc li[data-type="taskItem"] input[type="checkbox"]{-webkit-appearance:none;appearance:none;width:1.05em;height:1.05em;margin:0;border:1.5px solid var(--cyan);border-radius:3px;background:transparent;display:grid;place-content:center;pointer-events:none;}
+.doc li[data-type="taskItem"] input[type="checkbox"]::after{content:'';width:.3em;height:.56em;border:solid #041018;border-width:0 2px 2px 0;transform:translateY(-.06em) rotate(45deg);opacity:0;}
+.doc li[data-type="taskItem"] input[type="checkbox"]:checked{background:var(--cyan);}
+.doc li[data-type="taskItem"] input[type="checkbox"]:checked::after{opacity:1;}
+.doc li[data-type="taskItem"][data-checked="true"]>div>p{color:var(--muted);text-decoration:line-through;}
+.doc blockquote{border-left:3px solid var(--cyan);padding:12px 20px;margin:20px 0;background:rgba(0,245,255,.04);color:var(--muted);}
+.doc blockquote p{color:inherit;}
+.doc blockquote>:last-child,.doc .callout>:last-child{margin-bottom:0;}
+.doc .callout{position:relative;margin:20px 0;padding:14px 18px 14px 50px;border:1px solid rgba(0,245,255,.28);background:rgba(0,245,255,.06);border-radius:4px;}
+.doc .callout::before{content:attr(data-emoji);position:absolute;left:17px;top:14px;font-size:1.1em;line-height:calc(var(--doc-fs)*var(--doc-lh));}
+.doc .callout[data-color="magenta"]{border-color:rgba(255,0,110,.32);background:rgba(255,0,110,.07);}
+.doc .callout[data-color="yellow"]{border-color:rgba(255,230,0,.3);background:rgba(255,230,0,.06);}
+.doc .callout[data-color="green"]{border-color:rgba(61,220,151,.32);background:rgba(61,220,151,.07);}
+.doc .callout[data-color="purple"]{border-color:rgba(179,136,255,.34);background:rgba(179,136,255,.08);}
+.doc .callout[data-color="gray"]{border-color:rgba(140,165,190,.28);background:rgba(140,165,190,.07);}
+.doc hr{border:none;border-top:1px solid rgba(0,245,255,.15);margin:40px 0;}
+.doc figure.doc-figure{display:block;width:fit-content;max-width:100%;margin:20px auto;}
+.doc figure.doc-figure[data-align="left"]{margin-left:0;}
+.doc figure.doc-figure[data-align="right"]{margin-right:0;}
+.doc figure.doc-figure img{display:block;max-width:100%;height:auto;border:1px solid rgba(0,245,255,.15);}
+.doc figure.doc-figure[data-sized] img{width:100%;}
+.doc figure.doc-figure figcaption{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:1px;line-height:1.6;margin-top:8px;padding:0 8px;text-align:center;}
+.doc .doc-embed{position:relative;width:100%;aspect-ratio:16/9;margin:24px 0;background:#000;border:1px solid rgba(0,245,255,.15);}
+.doc .doc-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+.doc pre{background:#0a0e1a;border:1px solid rgba(0,245,255,.15);margin:20px 0;overflow-x:auto;overflow-y:hidden;position:relative;white-space:pre;}
+.doc pre[data-lang]::before{content:attr(data-lang);position:absolute;top:0;right:0;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;padding:6px 12px;background:rgba(0,245,255,.05);border-bottom:1px solid rgba(0,245,255,.1);border-left:1px solid rgba(0,245,255,.1);white-space:nowrap;}
+.doc pre code{display:block;padding:16px 20px;font-family:'Fira Code',monospace;font-size:var(--doc-code-fs);line-height:1.7;color:#a8c8e8;min-width:max-content;white-space:pre;}
+.doc .tableWrapper{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:20px 0;}
+.doc table{width:100%;border-collapse:collapse;table-layout:auto;font-size:14px;}
+.doc table[style^="width"]{table-layout:fixed;}
+.doc table td,.doc table th{border:1px solid rgba(0,245,255,.25);padding:10px 14px;color:var(--text);line-height:1.6;vertical-align:top;position:relative;}
+.doc table th{background:rgba(0,245,255,.06);color:#fff;font-weight:600;}
+.doc table p{margin:0;line-height:inherit;color:inherit;}
+.doc table p+p{margin-top:6px;}
+.doc table tr:hover td{background:rgba(0,245,255,.03);}
+
+.hljs-comment,.hljs-quote{color:#4f6f8f;font-style:italic;}
+.hljs-keyword,.hljs-selector-tag,.hljs-literal,.hljs-type,.hljs-doctag{color:#ff5fa2;}
+.hljs-string,.hljs-regexp,.hljs-addition,.hljs-meta .hljs-string{color:#9ef0a6;}
+.hljs-number,.hljs-symbol,.hljs-bullet,.hljs-variable.constant_{color:#ffcb6b;}
+.hljs-title,.hljs-title.function_,.hljs-section{color:#6fd3ff;}
+.hljs-title.class_,.hljs-built_in,.hljs-class .hljs-title{color:#ffe600;}
+.hljs-attr,.hljs-attribute,.hljs-name,.hljs-selector-id,.hljs-selector-class,.hljs-property{color:#7fdbca;}
+.hljs-variable,.hljs-template-variable,.hljs-params{color:#c8e0f0;}
+.hljs-meta,.hljs-meta .hljs-keyword{color:#b388ff;}
+.hljs-deletion{color:#ff6b81;}
+.hljs-emphasis{font-style:italic;}
+.hljs-strong{font-weight:700;}
+
+@media (max-width:768px){
+nav{padding:14px 16px;align-items:flex-start;gap:12px;}
+.nav-logo{font-size:15px;letter-spacing:3px;}
+.nav-links{gap:12px;flex-wrap:wrap;justify-content:flex-end;}
+.nav-links a{font-size:11px;letter-spacing:1px;}
+.page-wrap{padding:84px 5.5vw 56px;}
+.nav-btns,.page-post .nav-btns,.page-work .nav-btns{margin-bottom:24px;}
+.back-btn{font-size:10px;letter-spacing:1px;padding:7px 14px;}
+.post-header,.wd-header{margin-bottom:28px;}
+.wd-tags{margin-bottom:24px;}
+.post-cover{max-height:280px;}
+.wd-cover{max-height:320px;}
+.doc h1{font-size:24px;margin:30px 0 14px;padding-left:12px;}
+.doc h2{font-size:20px;margin:26px 0 10px;padding-left:10px;}
+.doc h3{font-size:17px;margin:22px 0 8px;padding-left:8px;}
+.doc.about-body h1{font-size:32px;margin:0 0 24px;padding-left:16px;}
+.doc ul,.doc ol{padding-left:1.4em;}
+.doc pre{width:100vw;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;border-left:none;border-right:none;-webkit-overflow-scrolling:touch;}
+.doc pre code{padding:12px 5.5vw;font-size:12px;}
+.doc .tableWrapper{width:100vw;position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;padding:0 5.5vw;}
+.doc table{font-size:13px;}
+.doc table td,.doc table th{padding:8px 10px;}
+}
+</style>
+</head>
+<body class="page-list">
 <nav>
   <div class="nav-logo">_<span>DEV</span>.LOG</div>
   <div class="nav-links">
@@ -63,11 +226,11 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
     <a class="back-btn" href="/gallery/">← 返回画廊</a>
   </div>
   <div class="page-title">// GALLERY · 原创作品</div>
-  <h1 class="page-heading">原创作品</h1>
+  <h1 class="page-heading has-count">原创作品</h1>
   <div class="page-count">15 件作品</div>
   <div class="gallery-grid">
     <a class="gallery-card" href="/gallery/illust/endora.html" data-full="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775513027401-trhv0-full.png">
-      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775513024283-ke9yr.jpg" style="object-position:50.9% 20.2%" alt="">
+      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775513024283-ke9yr.jpg" style="object-position:50.9% 20.2%" alt="" loading="lazy" decoding="async">
       <div class="gc-body">
         <div class="gc-type">// WORK</div>
         <div class="gc-title">ENDORA</div>
@@ -75,7 +238,7 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
       </div>
     </a>
     <a class="gallery-card" href="/gallery/illust/eudora.html" data-full="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775513173337-9m9j5-full.png">
-      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775513170282-rt1ij.jpg" style="object-position:51.4% 23.3%" alt="">
+      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775513170282-rt1ij.jpg" style="object-position:51.4% 23.3%" alt="" loading="lazy" decoding="async">
       <div class="gc-body">
         <div class="gc-type">// WORK</div>
         <div class="gc-title">EUDORA</div>
@@ -83,7 +246,7 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
       </div>
     </a>
     <a class="gallery-card" href="/gallery/illust/柩世熄忘.html" data-full="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775513736062-ehovq-full.png">
-      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775513733047-sqnxe.jpg" style="object-position:51.2% 21.9%" alt="">
+      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775513733047-sqnxe.jpg" style="object-position:51.2% 21.9%" alt="" loading="lazy" decoding="async">
       <div class="gc-body">
         <div class="gc-type">// WORK</div>
         <div class="gc-title">柩世熄忘</div>
@@ -91,7 +254,7 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
       </div>
     </a>
     <a class="gallery-card" href="/gallery/illust/模型a.html" data-full="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514362417-fijep-full.png">
-      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514359495-051c5.jpg" style="object-position:52.1% 28.6%" alt="">
+      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514359495-051c5.jpg" style="object-position:52.1% 28.6%" alt="" loading="lazy" decoding="async">
       <div class="gc-body">
         <div class="gc-type">// WORK</div>
         <div class="gc-title">模型A</div>
@@ -99,7 +262,7 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
       </div>
     </a>
     <a class="gallery-card" href="/gallery/illust/兵器a.html" data-full="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1776448908598-ejrxr-full.png">
-      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1776448903279-ljr2e.jpg" style="object-position:50.0% 16.9%" alt="">
+      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1776448903279-ljr2e.jpg" style="object-position:50% 16.9%" alt="" loading="lazy" decoding="async">
       <div class="gc-body">
         <div class="gc-type">// WORK</div>
         <div class="gc-title">兵器A</div>
@@ -107,7 +270,7 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
       </div>
     </a>
     <a class="gallery-card" href="/gallery/illust/模型b.html" data-full="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514419029-fafsh-full.png">
-      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514416739-eewja.jpg" style="object-position:49.1% 61.7%" alt="">
+      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514416739-eewja.jpg" style="object-position:49.1% 61.7%" alt="" loading="lazy" decoding="async">
       <div class="gc-body">
         <div class="gc-type">// WORK</div>
         <div class="gc-title">模型B</div>
@@ -115,7 +278,7 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
       </div>
     </a>
     <a class="gallery-card" href="/gallery/illust/合翼卫.html" data-full="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514456005-gn7qp-full.png">
-      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514452914-nztqc.jpg" style="object-position:50.7% 30.8%" alt="">
+      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514452914-nztqc.jpg" style="object-position:50.7% 30.8%" alt="" loading="lazy" decoding="async">
       <div class="gc-body">
         <div class="gc-type">// WORK</div>
         <div class="gc-title">合翼卫</div>
@@ -123,7 +286,7 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
       </div>
     </a>
     <a class="gallery-card" href="/gallery/illust/fg204.html" data-full="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514810601-o5y8r-full.png">
-      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514807324-hm5ye.jpg" style="object-position:49.1% 24.1%" alt="">
+      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514807324-hm5ye.jpg" style="object-position:49.1% 24.1%" alt="" loading="lazy" decoding="async">
       <div class="gc-body">
         <div class="gc-type">// WORK</div>
         <div class="gc-title">FG204</div>
@@ -131,7 +294,7 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
       </div>
     </a>
     <a class="gallery-card" href="/gallery/illust/back.html" data-full="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1783238064131-y1ppg-full.png">
-      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1783238055659-wwu9w.jpg" style="object-position:50.7% 27.4%" alt="">
+      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1783238055659-wwu9w.jpg" style="object-position:50.7% 27.4%" alt="" loading="lazy" decoding="async">
       <div class="gc-body">
         <div class="gc-type">// WORK</div>
         <div class="gc-title">Back</div>
@@ -139,7 +302,7 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
       </div>
     </a>
     <a class="gallery-card" href="/gallery/illust/braindead.html" data-full="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515214537-jc4q2-full.png">
-      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515211651-de4s5.jpg" style="object-position:50.0% 27.2%" alt="">
+      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515211651-de4s5.jpg" style="object-position:50% 27.2%" alt="" loading="lazy" decoding="async">
       <div class="gc-body">
         <div class="gc-type">// WORK</div>
         <div class="gc-title">BRAINDEAD</div>
@@ -147,7 +310,7 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
       </div>
     </a>
     <a class="gallery-card" href="/gallery/illust/h-e-r.html" data-full="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515027795-ihs4s-full.png">
-      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515024966-5w1ny.jpg" style="object-position:50.7% 21.9%" alt="">
+      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515024966-5w1ny.jpg" style="object-position:50.7% 21.9%" alt="" loading="lazy" decoding="async">
       <div class="gc-body">
         <div class="gc-type">// WORK</div>
         <div class="gc-title">H.E.R.</div>
@@ -155,7 +318,7 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
       </div>
     </a>
     <a class="gallery-card" href="/gallery/illust/绿皮.html" data-full="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515705434-zcvs6-full.png">
-      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515702197-vzzbc.jpg" style="object-position:48.1% 23.0%" alt="">
+      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515702197-vzzbc.jpg" style="object-position:48.1% 23%" alt="" loading="lazy" decoding="async">
       <div class="gc-body">
         <div class="gc-type">// WORK</div>
         <div class="gc-title">绿皮</div>
@@ -163,7 +326,7 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
       </div>
     </a>
     <a class="gallery-card" href="/gallery/illust/鸡煲.html" data-full="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514571571-jpwr8-full.png">
-      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514568510-br4py.jpg" style="object-position:60.0% 20.8%" alt="">
+      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514568510-br4py.jpg" style="object-position:60% 20.8%" alt="" loading="lazy" decoding="async">
       <div class="gc-body">
         <div class="gc-type">// WORK</div>
         <div class="gc-title">鸡煲</div>
@@ -171,7 +334,7 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
       </div>
     </a>
     <a class="gallery-card" href="/gallery/illust/莫辛.html" data-full="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514723763-6ozfw-full.png">
-      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514721313-1vfi8.jpg" style="object-position:53.9% 54.1%" alt="">
+      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775514721313-1vfi8.jpg" style="object-position:53.9% 54.1%" alt="" loading="lazy" decoding="async">
       <div class="gc-body">
         <div class="gc-type">// WORK</div>
         <div class="gc-title">莫辛</div>
@@ -179,7 +342,7 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
       </div>
     </a>
     <a class="gallery-card" href="/gallery/illust/战车vii.html" data-full="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515176179-9zskj-full.jpg">
-      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515172664-ygjal.jpg" style="object-position:51.9% 30.2%" alt="">
+      <img class="gc-img" src="https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1775515172664-ygjal.jpg" style="object-position:51.9% 30.2%" alt="" loading="lazy" decoding="async">
       <div class="gc-body">
         <div class="gc-type">// WORK</div>
         <div class="gc-title">战车VII</div>
@@ -192,30 +355,25 @@ nav{padding:14px 16px;align-items:flex-start;gap:12px;}
   document.addEventListener('contextmenu',function(e){e.preventDefault();});
   document.addEventListener('dragstart',function(e){if(e.target.tagName==='IMG')e.preventDefault();});
   document.addEventListener('keydown',function(e){
+    if(!e.key)return;
     if((e.ctrlKey||e.metaKey)&&(e.key==='s'||e.key==='S'||e.key==='p'||e.key==='P'))e.preventDefault();
     if(e.key==='PrintScreen')e.preventDefault();
   });
-  // 页面加载完成后，利用浏览器空闲时间依次预加载所有原图
+})();
+</script>
+<script>
+(function(){
   var urls=[];
-  document.querySelectorAll('.gallery-card[data-full]').forEach(function(card){
-    if(card.dataset.full) urls.push(card.dataset.full);
-  });
-  if(urls.length===0) return;
+  document.querySelectorAll('.gallery-card[data-full]').forEach(function(card){if(card.dataset.full)urls.push(card.dataset.full);});
+  if(!urls.length)return;
   var idx=0;
-  function loadNext(){
-    if(idx>=urls.length) return;
+  function next(){
+    if(idx>=urls.length)return;
     var img=new Image();
-    img.onload=img.onerror=function(){
-      idx++;
-      if(idx<urls.length){
-        if('requestIdleCallback' in window) requestIdleCallback(loadNext,{timeout:2000});
-        else setTimeout(loadNext,200);
-      }
-    };
+    img.onload=img.onerror=function(){idx++;if(idx<urls.length){if('requestIdleCallback' in window)requestIdleCallback(next,{timeout:2000});else setTimeout(next,200);}};
     img.src=urls[idx];
   }
-  if('requestIdleCallback' in window) requestIdleCallback(loadNext,{timeout:1000});
-  else setTimeout(loadNext,500);
+  if('requestIdleCallback' in window)requestIdleCallback(next,{timeout:1000});else setTimeout(next,500);
 })();
 </script>
 </body></html>
