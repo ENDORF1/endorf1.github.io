@@ -1,7 +1,7 @@
 {
  "format": 1,
- "rev": 1,
- "updatedAt": "2026-09-26T19:20:32.502Z",
+ "rev": 2,
+ "updatedAt": "2026-09-26T19:22:26.069Z",
  "posts": [
   {
    "id": "p_1r2pfl05uwt",
@@ -461,6 +461,27 @@
    "slug": "fanwork",
    "name": "同人作品",
    "items": [
+    {
+     "id": "g_muiryu8fm3ha1f",
+     "slug": "贝阿朵丽丝",
+     "title": "贝阿朵丽丝",
+     "desc": "不灭的群青",
+     "img": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1790450498076-bb0lop.webp",
+     "imgFull": "https://cdn.jsdelivr.net/gh/ENDORF1/endorf1.github.io@main/images/1790450498769-p7n4xk.webp",
+     "imgPos": "50% 50%",
+     "layout": {
+      "width": 720,
+      "fs": 16,
+      "lh": 1.9,
+      "pgap": 16,
+      "codeFs": 13,
+      "indent": false
+     },
+     "catId": "c_1vq68ywygsl",
+     "hash": "193cluvxzhw",
+     "publishedAt": "2026-09-26T19:22:26.069Z",
+     "path": "gallery/fanwork/贝阿朵丽丝.html"
+    },
     {
      "id": "g_1g8ubkv1996",
      "slug": "魔神凯撒其二",
