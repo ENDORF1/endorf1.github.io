@@ -26,7 +26,7 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani','Noto Sans SC
 body.edit-mode{cursor:default;}
 body.edit-mode a{pointer-events:none;}
 body.edit-mode a *{pointer-events:auto;}
-body.edit-mode []{pointer-events:auto;}
+body.edit-mode [contenteditable=true]{pointer-events:auto;}
 body.edit-mode button{pointer-events:auto;}
 body.edit-mode input{pointer-events:auto;}
 body.edit-mode .cursor,body.edit-mode .cursor-ring{display:none;}
@@ -63,8 +63,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:cent
 .hero-name .line2{color:transparent;-webkit-text-stroke:1px var(--cyan);display:block;filter:drop-shadow(0 0 20px var(--cyan));}
 .hero-sub{margin-top:24px;font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--muted);letter-spacing:2px;line-height:1.8;max-width:500px;animation:fadeIn 1s .4s ease both;}
 .hero-sub .hl{color:var(--cyan);}
-#hero-sub[]{outline:1px dashed rgba(0,245,255,.35);cursor:text;}
-#hero-sub[]:focus{outline:1px solid var(--cyan);background:rgba(0,245,255,.07);box-shadow:0 0 12px rgba(0,245,255,.12);}
+#hero-sub[contenteditable=true]{outline:1px dashed rgba(0,245,255,.35);cursor:text;}
+#hero-sub[contenteditable=true]:focus{outline:1px solid var(--cyan);background:rgba(0,245,255,.07);box-shadow:0 0 12px rgba(0,245,255,.12);}
 .hero-btns{margin-top:40px;display:flex;gap:16px;animation:fadeIn 1s .6s ease both;}
 .btn-primary{padding:12px 28px;background:transparent;border:1px solid var(--cyan);color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;cursor:none;text-decoration:none;position:relative;overflow:hidden;transition:color .3s;}
 .btn-primary::before{content:'';position:absolute;inset:0;background:var(--cyan);transform:translateX(-101%);transition:transform .3s ease;}
@@ -270,9 +270,9 @@ body.edit-mode #edit-toggle{display:none;}
 #save-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
 /* editable */
-body.edit-mode []{outline:1px dashed rgba(0,245,255,.35);cursor:text;min-width:20px;min-height:1em;transition:outline-color .2s,background .2s;}
-body.edit-mode []:hover{outline-color:var(--cyan);background:rgba(0,245,255,.05);}
-body.edit-mode []:focus{outline:1px solid var(--cyan);background:rgba(0,245,255,.07);box-shadow:0 0 12px rgba(0,245,255,.12);}
+body.edit-mode [contenteditable=true]{outline:1px dashed rgba(0,245,255,.35);cursor:text;min-width:20px;min-height:1em;transition:outline-color .2s,background .2s;}
+body.edit-mode [contenteditable=true]:hover{outline-color:var(--cyan);background:rgba(0,245,255,.05);}
+body.edit-mode [contenteditable=true]:focus{outline:1px solid var(--cyan);background:rgba(0,245,255,.07);box-shadow:0 0 12px rgba(0,245,255,.12);}
 
 /* drag states */
 .is-dragging{opacity:.35!important;}
@@ -1669,7 +1669,7 @@ function loadDynamicPosts(){
 
   // 如果已有静态内容（admin 推送写入的），直接保留，不从 localStorage 覆盖
   const existingItems = [...list.querySelectorAll('.post-item')];
-  if(existingItems.length > 0) return;
+  if(existingItems.length > 0 || list.querySelector('.no-posts-placeholder')) return;
 
   if(posts.length === 0){
     list.innerHTML = '<div class="no-posts-placeholder" style="font-family:var(--font-mono);font-size:12px;color:var(--muted);letter-spacing:2px;padding:20px 24px;">// 暂无已发布文章 · 请在后台发布文章后推送</div>';
